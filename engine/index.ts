@@ -1,4 +1,8 @@
 export { analyzeArchitecture } from './analyze'
+export { recommendOperatingModel } from './operating-model'
+export { stressTestArchitecture } from './stress'
 export { DEFAULT_ASSESSMENT, BENCHMARK_SCENARIOS } from './scenarios'
 export { PLATFORMS } from './platforms'
 export type * from './types'
+export type { OperatingModelAdvice, OperatingModelLevel } from './operating-model'
+export type { StressScenario } from './stress'
