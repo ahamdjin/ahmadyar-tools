@@ -9,8 +9,6 @@ import type {
 } from './types'
 
 const clamp = (value: number, min = 0, max = 100) => Math.max(min, Math.min(max, value))
-const normalize = (value: number) => clamp(value) / 100
-
 const impactValue = { low: 20, medium: 45, high: 72, critical: 100 } as const
 const maintenanceValue = { low: 22, medium: 58, high: 92 } as const
 const stabilityValue = { changing: 35, 'mostly-stable': 72, stable: 100 } as const
@@ -70,7 +68,13 @@ function priorityWeight(priorities: Priority[], priority: Priority) {
   return priorities.includes(priority) ? 1.35 : 1
 }
 
-function scorePlatform(platform: PlatformProfile, input: AssessmentInput, complexity: number, scale: number, risk: number): PlatformResult {
+function scorePlatform(
+  platform: PlatformProfile,
+  input: AssessmentInput,
+  complexity: number,
+  scale: number,
+  risk: number,
+): PlatformResult {
   let eligible = true
   const reasons: string[] = []
   const cautions: string[] = []
@@ -85,16 +89,13 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, comple
   }
 
   const simplicityNeed = 100 - complexity
-  const integrationNeed = input.integrationNeed === 'standard' ? 72 : input.integrationNeed === 'broad' ? 96 : 88
   const integrationFit = input.integrationNeed === 'custom'
     ? platform.customApiFit
     : Math.round(platform.standardIntegrationBreadth * 0.82 + platform.customApiFit * (input.customApi ? 0.18 : 0))
-
   const ownershipFit = platform.teamFit[input.team]
   const complexityFit = complexity < 46
     ? Math.round(platform.simpleWorkflowFit * 0.76 + (100 - Math.abs(platform.technicalDepth - Math.max(18, 100 - simplicityNeed))) * 0.24)
     : Math.round(platform.complexWorkflowFit * 0.82 + (100 - Math.abs(platform.technicalDepth - Math.max(35, complexity))) * 0.18)
-
   const scaleFit = Math.round(platform.scaleFit * 0.78 + (100 - Math.abs(platform.scaleFit - scale)) * 0.22)
   const reliabilityFit = Math.round(platform.reliabilityFit * 0.76 + (100 - Math.abs(platform.reliabilityFit - risk)) * 0.24)
   const controlFit = input.selfHosting === 'required'
@@ -118,7 +119,7 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, comple
     ecosystem: ecosystemFit,
   }
 
-  const weights = {
+  const weights: Record<keyof DimensionScores, number> = {
     ownership: 16 * priorityWeight(input.priorities, 'ease'),
     simplicity: (complexity < 46 ? 13 : 5) * priorityWeight(input.priorities, 'speed'),
     integration: 16,
@@ -140,7 +141,6 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, comple
   if (input.priorities.includes('cost')) score = score * 0.88 + platform.costAtScaleFit * 0.12
   if (input.governance) score = score * 0.88 + platform.governanceFit * 0.12
 
-  // Strong context bonuses and anti-overengineering penalties.
   if (platform.id === 'crm-native' && input.crmCentered && complexity < 50 && input.appsPerWorkflow <= 3) {
     score += 13
     reasons.push('Most of the workflow can stay inside the CRM, which removes an unnecessary automation layer.')
@@ -207,10 +207,10 @@ function buildSafeguards(input: AssessmentInput) {
   return items.length ? items : ['Keep a visible execution history and a simple manual recovery path for failed runs.']
 }
 
-function architectureSummary(kind: ArchitectureKind, primary: PlatformResult, input: AssessmentInput) {
+function architectureSummary(kind: ArchitectureKind, primary: PlatformResult) {
   if (kind === 'native-automation') return `Keep the center of gravity in the CRM. ${primary.name} is the cleanest first choice because another automation layer would add more maintenance than capability right now.`
   if (kind === 'application') return `Treat this as software architecture, not a giant workflow. ${primary.name} should own the stateful or transactional core, with automation tools used around the edges where they stay replaceable.`
-  if (kind === 'human-in-the-loop') return `Automate preparation, routing, and repetitive work, but keep explicit human approval around the decisions where mistakes are expensive or AI confidence is uncertain.`
+  if (kind === 'human-in-the-loop') return 'Automate preparation, routing, and repetitive work, but keep explicit human approval around the decisions where mistakes are expensive or AI confidence is uncertain.'
   if (kind === 'data-pipeline') return `Design this as a repeatable data-processing system with batching, checkpoints, replay, and monitoring. ${primary.name} is the strongest current fit for the orchestration layer.`
   if (kind === 'orchestration') return `${primary.name} is the strongest orchestration fit for the workflow shape you described. Keep systems of record native and use the orchestration layer only for cross-system logic.`
   return `${primary.name} is the best starting point for this integration workload. Keep the architecture simple until branching, scale, or custom APIs genuinely require a deeper layer.`
@@ -228,14 +228,19 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
 
   const primary = ranking.find((item) => item.eligible) ?? ranking[0]
   const alternatives = ranking.filter((item) => item.eligible && item.id !== primary.id).slice(0, 2)
-
   const platformMix = [primary.id]
   if (input.crmCentered && primary.id !== 'crm-native') platformMix.unshift('crm-native')
   if (kind === 'application' && primary.id !== 'custom-code') platformMix.push('custom-code')
 
-  const technicalMismatch = Math.max(0, PLATFORMS.find((item) => item.id === primary.id)!.technicalDepth - maintenanceValue[input.maintenance])
+  const technicalDepth = PLATFORMS.find((item) => item.id === primary.id)?.technicalDepth ?? 50
+  const technicalMismatch = Math.max(0, technicalDepth - maintenanceValue[input.maintenance])
   const maintenanceBurden = Math.round(clamp(technicalMismatch * 0.55 + input.futureWorkflows * 0.55 + complexity * 0.22))
-  const automationPotential = Math.round(clamp(stabilityValue[input.processStability] * 0.42 + (100 - Math.min(100, risk * 0.45)) * 0.18 + Math.min(100, input.monthlyRuns / 160) * 0.2 + Math.min(100, input.currentWorkflows * 7) * 0.2))
+  const automationPotential = Math.round(clamp(
+    stabilityValue[input.processStability] * 0.42 +
+    (100 - Math.min(100, risk * 0.45)) * 0.18 +
+    Math.min(100, input.monthlyRuns / 160) * 0.2 +
+    Math.min(100, input.currentWorkflows * 7) * 0.2,
+  ))
 
   const margin = primary.score - (alternatives[0]?.score ?? 0)
   let confidence = 72 + Math.min(16, margin * 1.5)
@@ -275,7 +280,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
     alternatives,
     platformMix: [...new Set(platformMix)],
     metrics: { automationPotential, complexity, scale, reliabilityRisk: risk, maintenanceBurden, confidence },
-    summary: architectureSummary(kind, primary, input),
+    summary: architectureSummary(kind, primary),
     keepNative,
     orchestrationResponsibilities,
     safeguards: buildSafeguards(input),
