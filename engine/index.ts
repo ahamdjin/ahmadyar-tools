@@ -6,6 +6,8 @@ export const POPULAR_APP_IDS: readonly string[] = POPULAR_APP_IDS_SOURCE
 export { inferEnvironment, getQuestionPlan } from './discovery'
 export { assessDecisionStability } from './decision-stability'
 export type { DecisionStability } from './decision-stability'
+export { assessProcessReadiness } from './process-readiness'
+export type { ProcessDisposition, ProcessReadiness } from './process-readiness'
 export { recommendOperatingModel } from './operating-model'
 export { PLATFORMS } from './platforms'
 export { DEFAULT_ASSESSMENT, BENCHMARK_SCENARIOS } from './scenarios'
