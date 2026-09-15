@@ -47,6 +47,7 @@ body:has(.advisor-viewport) .site-header {
 
 body:has(.advisor-viewport) .site-main {
   width: 100%;
+  max-width: none !important;
   flex: none;
 }
 
@@ -61,10 +62,13 @@ body:has(.advisor-viewport) .site-footer {
   position: relative;
   z-index: 10;
   display: flex;
-  width: 100%;
+  width: 100vw !important;
+  max-width: 100vw !important;
   height: 100vh;
   height: 100dvh;
   min-height: 100svh;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
@@ -86,26 +90,33 @@ body:has(.advisor-viewport) .site-footer {
   padding-bottom: 10px;
 }
 
-.advisor-viewport > section {
+/* The component historically carried a 960px width utility. Force the app canvas
+   to the viewport here so route/layout wrappers can never collapse it again. */
+.advisor-viewport > section,
+.advisor-viewport > section[class*='w-[min(94vw,960px)]'] {
   position: static !important;
   left: auto !important;
   display: flex;
-  min-width: 0;
+  min-width: 0 !important;
   min-height: 0;
-  width: 100% !important;
-  max-width: none !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
   margin: 0 !important;
+  margin-left: calc(-1 * max(14px, env(safe-area-inset-left))) !important;
   flex: 1 1 0%;
   align-self: stretch;
   transform: none !important;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
 }
 
 .advisor-viewport > section > div:first-child {
   width: 100%;
   flex: none;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .advisor-viewport > section > div:nth-child(2) {
@@ -116,15 +127,15 @@ body:has(.advisor-viewport) .site-footer {
   flex: 1 1 0%;
   overflow-x: hidden;
   overflow-y: auto;
-  overscroll-behavior: auto;
-  padding-right: 4px;
+  overscroll-behavior: contain;
+  padding-right: 8px;
   scrollbar-width: thin;
 }
 
 .advisor-viewport > section > div:last-child {
   width: 100%;
   flex: none;
-  margin-top: 10px;
+  margin-top: 8px;
   padding-top: 8px;
 }
 
@@ -136,6 +147,36 @@ body:has(.advisor-viewport) .site-footer {
   border-color: transparent !important;
 }
 
+/* Give the system picker a desktop layout that actually uses the available
+   canvas, without turning it into a dashboard. */
+@media (min-width: 1024px) {
+  .advisor-viewport section:has(input[placeholder^='Search HubSpot']) > div {
+    max-width: none;
+  }
+
+  .advisor-viewport section:has(input[placeholder^='Search HubSpot']) .mt-5.grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 28px;
+  }
+
+  .advisor-viewport section:has(input[placeholder^='Search HubSpot']) button[class*='min-h-14'] {
+    border-bottom-color: transparent !important;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .advisor-viewport section:has(input[placeholder^='Search HubSpot']) button[class*='min-h-14']:hover {
+    background: color-mix(in srgb, currentColor 5%, transparent);
+  }
+}
+
+@media (min-width: 1440px) {
+  .advisor-viewport section:has(input[placeholder^='Search HubSpot']) .mt-5.grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 .advisor-guide {
   width: min(92vw, 1080px);
   margin-left: auto;
@@ -145,6 +186,13 @@ body:has(.advisor-viewport) .site-footer {
 @media (min-width: 640px) {
   .advisor-viewport {
     padding: max(18px, env(safe-area-inset-top)) 24px max(16px, env(safe-area-inset-bottom));
+  }
+
+  .advisor-viewport > section,
+  .advisor-viewport > section[class*='w-[min(94vw,960px)]'] {
+    margin-left: -24px !important;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
