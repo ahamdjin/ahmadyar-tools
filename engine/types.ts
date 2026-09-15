@@ -12,6 +12,10 @@ export type PortfolioShape = 'mostly-simple' | 'mixed' | 'advanced' | 'product-l
 export type ChangeFrequency = 'rare' | 'monthly' | 'weekly' | 'daily'
 export type PlatformId =
   | 'crm-native'
+  | 'hubspot-native'
+  | 'gohighlevel-native'
+  | 'salesforce-flow'
+  | 'shopify-flow'
   | 'zapier'
   | 'make'
   | 'n8n-cloud'
@@ -19,6 +23,7 @@ export type PlatformId =
   | 'power-automate'
   | 'activepieces'
   | 'pipedream'
+  | 'trigger-dev'
   | 'workato'
   | 'tray'
   | 'mulesoft'
@@ -47,6 +52,7 @@ export type AssessmentInput = {
   integrationNeed: IntegrationNeed
   branching: BranchingNeed
   loopsOrBatching: boolean
+  durableJobs: boolean
   humanApprovals: boolean
   customApi: boolean
   aiSteps: boolean
@@ -85,6 +91,9 @@ export type PlatformResult = {
   dimensions: DimensionScores
   reasons: string[]
   cautions: string[]
+  strengths: string[]
+  tradeoffs: string[]
+  winsWhen: string[]
   costPressure: number
   supportFit: number
 }
