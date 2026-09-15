@@ -89,16 +89,25 @@ test('shadow systems reduce reporting and adoption health', () => {
   assert.ok(shadowed.issues.some((issue) => issue.id === 'adoption'))
 })
 
-test('CRM health route uses the dedicated diagnostic inside the portfolio frame', () => {
+test('CRM health route uses a viewport-sized diagnostic workspace', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const component = readFileSync('components/crm-health-check.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
-  const frame = readFileSync('components/route-frame.tsx', 'utf8')
   assert.match(page, /crm-health-viewport/)
   assert.match(page, /<CrmHealthCheck \/>/)
   assert.match(component, /Search 140\+ systems/)
   assert.match(component, /Fix the leaks in this order/)
-  assert.match(css, /\.crm-health-workspace/)
-  assert.match(frame, /max-w-screen-sm/)
-  assert.doesNotMatch(frame, /IMMERSIVE_TOOL_PATHS/)
+  assert.match(css, /\.crm-health-viewport[\s\S]*100dvw/)
+  assert.match(css, /\.crm-health-workspace > \.crm-health-check[\s\S]*max-width:\s*1240px/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+})
+
+test('CRM health model has a dated vendor research basis', () => {
+  const research = readFileSync('docs/research/crm-health-2026-09.md', 'utf8')
+  assert.match(research, /HubSpot/)
+  assert.match(research, /Salesforce/)
+  assert.match(research, /HighLevel/)
+  assert.match(research, /Identity comes before routing/)
+  assert.match(research, /weights are product heuristics|weights are product heuristics/i)
+  assert.match(research, /Vendor capabilities, editions, beta features, and names change/)
 })
