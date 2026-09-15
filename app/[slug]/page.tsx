@@ -43,6 +43,22 @@ export default async function ToolPage({ params }: Props) {
     isAccessibleForFree: true,
   }
 
+  if (tool.slug === 'automation-architecture-advisor') {
+    return (
+      <div className="advisor-viewport tool-reveal">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+        <div className="advisor-toolbar">
+          <BackLink />
+          <div className="min-w-0 text-right">
+            <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Automation tool</p>
+            <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
+          </div>
+        </div>
+        <ArchitectureAdvisor />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-12 pb-8 tool-reveal">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
@@ -52,7 +68,7 @@ export default async function ToolPage({ params }: Props) {
         <h1 className="text-3xl font-medium tracking-[-0.05em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{tool.title}</h1>
         <p className="max-w-xl text-sm leading-7 text-zinc-500 dark:text-zinc-400">{tool.description}</p>
       </section>
-      {tool.slug === 'automation-architecture-advisor' ? <ArchitectureAdvisor /> : <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor'>} />}
+      <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor'>} />
     </div>
   )
 }
