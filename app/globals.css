@@ -10,20 +10,9 @@
     border-color: var(--color-zinc-200, currentColor);
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    margin: 0;
-  }
-
-  button,
-  input,
-  select,
-  textarea {
-    font: inherit;
-  }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; overflow-x: clip; }
+  button, input, select, textarea { font: inherit; }
 }
 
 @keyframes tool-fade-in {
@@ -31,14 +20,235 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.tool-reveal {
-  animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+.tool-reveal { animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* The portfolio remains narrow for reading, but interactive tools are real
+   applications. Their stage centers against the browser viewport rather than
+   inheriting the article column's width or clipping boundary. */
+.advisor-viewport,
+.crm-health-viewport,
+.onboarding-viewport,
+.routing-viewport,
+.roi-viewport,
+.followup-viewport {
+  position: relative;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(calc(100dvw - 2rem), 1600px) !important;
+  max-width: 1600px !important;
+  min-width: 0;
+  height: calc(100dvh - 9rem);
+  min-height: 640px;
+  margin: 0;
+  overflow: visible;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.advisor-toolbar,
+.crm-health-toolbar,
+.onboarding-toolbar,
+.routing-toolbar,
+.roi-toolbar,
+.followup-toolbar {
+  display: flex;
+  width: min(100%, 1400px);
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 clamp(0rem, 1vw, 1rem) 16px;
+}
+
+.advisor-workspace,
+.crm-health-workspace,
+.onboarding-workspace,
+.routing-workspace,
+.roi-workspace,
+.followup-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 1400px);
+  min-width: 0;
+  min-height: 0;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: visible;
+}
+
+/* The Advisor still contains an older 960px breakout class in its component.
+   Neutralize it here so the outer application shell owns positioning. */
+.advisor-workspace > section {
+  position: static !important;
+  left: auto !important;
+  transform: none !important;
+  translate: none !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100%;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.advisor-workspace > section > div:first-child,
+.advisor-workspace > section > div:nth-child(2),
+.advisor-workspace > section > div:last-child {
+  width: min(100%, 1240px);
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.advisor-workspace > section > div:first-child { margin-bottom: 14px; }
+.advisor-workspace > section > div:nth-child(2) {
+  min-height: 0 !important;
+  max-width: 1240px;
+  overflow-x: clip;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px clamp(0px, 0.75vw, 10px) 28px;
+  scrollbar-width: thin;
+}
+.advisor-workspace > section > div:last-child { margin-top: 10px; padding-top: 10px; }
+
+.crm-health-workspace > .crm-health-check,
+.onboarding-workspace > .onboarding-planner,
+.routing-workspace > .routing-check,
+.roi-workspace > .roi-calculator,
+.followup-workspace > .followup-check {
+  width: min(100%, 1240px);
+  max-width: 1240px;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.advisor-viewport [class~='border-y'],
+.advisor-viewport [class~='border-t'],
+.advisor-viewport [class~='border-t-2'],
+.advisor-viewport [class~='border-b'],
+.advisor-viewport [class~='border-l'],
+.crm-health-viewport [class~='border-y'],
+.crm-health-viewport [class~='border-t'],
+.crm-health-viewport [class~='border-t-2'],
+.crm-health-viewport [class~='border-b'],
+.crm-health-viewport [class~='border-l'],
+.onboarding-viewport [class~='border-y'],
+.onboarding-viewport [class~='border-t'],
+.onboarding-viewport [class~='border-t-2'],
+.onboarding-viewport [class~='border-b'],
+.onboarding-viewport [class~='border-l'],
+.routing-viewport [class~='border-y'],
+.routing-viewport [class~='border-t'],
+.routing-viewport [class~='border-t-2'],
+.routing-viewport [class~='border-b'],
+.routing-viewport [class~='border-l'],
+.roi-viewport [class~='border-y'],
+.roi-viewport [class~='border-t'],
+.roi-viewport [class~='border-t-2'],
+.roi-viewport [class~='border-b'],
+.roi-viewport [class~='border-l'],
+.followup-viewport [class~='border-y'],
+.followup-viewport [class~='border-t'],
+.followup-viewport [class~='border-t-2'],
+.followup-viewport [class~='border-b'],
+.followup-viewport [class~='border-l'] {
+  border-color: transparent !important;
+}
+
+/* Long-form guidance below the interactive stage remains readable article
+   width even though the product UI above is allowed to use the screen. */
+.advisor-guide,
+.crm-health-guide,
+.onboarding-guide,
+.routing-guide,
+.roi-guide,
+.followup-guide {
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-frame :where(
+  [class*='text-6xl'],
+  [class*='text-7xl'],
+  [class*='text-8xl'],
+  [class*='text-9xl']
+) {
+  font-size: 3rem !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 900px) {
+  .advisor-viewport,
+  .crm-health-viewport,
+  .onboarding-viewport,
+  .routing-viewport,
+  .roi-viewport,
+  .followup-viewport {
+    width: calc(100dvw - 1.5rem) !important;
+  }
+
+  .advisor-workspace > section > div:first-child,
+  .advisor-workspace > section > div:nth-child(2),
+  .advisor-workspace > section > div:last-child,
+  .crm-health-workspace > .crm-health-check,
+  .onboarding-workspace > .onboarding-planner,
+  .routing-workspace > .routing-check,
+  .roi-workspace > .roi-calculator,
+  .followup-workspace > .followup-check {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 639px) {
+  .advisor-viewport,
+  .crm-health-viewport,
+  .onboarding-viewport,
+  .routing-viewport,
+  .roi-viewport,
+  .followup-viewport {
+    width: calc(100dvw - 1rem) !important;
+    height: calc(100dvh - 7.5rem);
+    min-height: 520px;
+  }
+
+  .advisor-toolbar,
+  .crm-health-toolbar,
+  .onboarding-toolbar,
+  .routing-toolbar,
+  .roi-toolbar,
+  .followup-toolbar {
+    gap: 10px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    padding-bottom: 10px;
+  }
+
+  .advisor-workspace > section > div:nth-child(2) {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .tool-reveal { animation: none; }
 }
 
-input[type='range'] {
-  accent-color: currentColor;
-}
+input[type='range'] { accent-color: currentColor; }
