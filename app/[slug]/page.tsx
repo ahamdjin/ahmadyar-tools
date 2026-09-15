@@ -7,6 +7,8 @@ import { AutomationRoiCalculator } from '@/components/automation-roi-calculator'
 import { AUTOMATION_ROI_FAQS, AutomationRoiSeoContent } from '@/components/automation-roi-seo-content'
 import { CrmHealthCheck } from '@/components/crm-health-check'
 import { CRM_HEALTH_FAQS, CrmHealthSeoContent } from '@/components/crm-health-seo-content'
+import { LeadFollowUpPlanner } from '@/components/lead-follow-up-planner'
+import { LEAD_FOLLOW_UP_FAQS, LeadFollowUpSeoContent } from '@/components/lead-follow-up-seo-content'
 import { LeadRoutingBuilder } from '@/components/lead-routing-builder'
 import { LEAD_ROUTING_FAQS, LeadRoutingSeoContent } from '@/components/lead-routing-seo-content'
 import { OnboardingPlanner } from '@/components/onboarding-planner'
@@ -27,6 +29,8 @@ const LEAD_ROUTING_TITLE = 'Lead Routing Rules Builder | Design Reliable Assignm
 const LEAD_ROUTING_DESCRIPTION = 'Build and test lead-routing logic for existing accounts, duplicates, territories, products, round robin, capacity, availability, fallbacks, response SLAs, reassignment, and auditability.'
 const AUTOMATION_ROI_TITLE = 'Automation ROI Calculator | Payback, Savings & Build Decision'
 const AUTOMATION_ROI_DESCRIPTION = 'Calculate automation ROI using real volume, handling time, human review, exceptions, value capture, error cost, build cost, software, maintenance, payback, break-even volume and a conservative stress case.'
+const LEAD_FOLLOW_UP_TITLE = 'Lead Follow-Up Automation Planner | Cadence, SLA & Stop Rules'
+const LEAD_FOLLOW_UP_DESCRIPTION = 'Design lead follow-up automation with response SLAs, email, SMS, calls or WhatsApp, reply and booking stop rules, consent, opt-out, ownership, human handoff, monitoring and CRM-native architecture.'
 
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c')
@@ -42,6 +46,7 @@ function dedicatedMetadata(slug: string) {
   if (slug === 'client-onboarding-automation-planner') return { title: ONBOARDING_TITLE, description: ONBOARDING_DESCRIPTION }
   if (slug === 'lead-routing-rules-builder') return { title: LEAD_ROUTING_TITLE, description: LEAD_ROUTING_DESCRIPTION }
   if (slug === 'automation-roi-calculator') return { title: AUTOMATION_ROI_TITLE, description: AUTOMATION_ROI_DESCRIPTION }
+  if (slug === 'lead-follow-up-automation-planner') return { title: LEAD_FOLLOW_UP_TITLE, description: LEAD_FOLLOW_UP_DESCRIPTION }
   return null
 }
 
@@ -189,6 +194,16 @@ export default async function ToolPage({ params }: Props) {
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
     return <><div className="roi-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(AUTOMATION_ROI_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="roi-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">ROI calculator</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="roi-workspace"><AutomationRoiCalculator /></div></div><AutomationRoiSeoContent /></>
+  }
+
+  if (tool.slug === 'lead-follow-up-automation-planner') {
+    const webpageJsonLd = {
+      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_FOLLOW_UP_TITLE, url: canonical, description: LEAD_FOLLOW_UP_DESCRIPTION, dateModified: '2026-09-15',
+      about: [{ '@type': 'Thing', name: 'Lead follow-up automation' }, { '@type': 'Thing', name: 'Sales cadence' }, { '@type': 'Thing', name: 'Speed to lead' }, { '@type': 'Thing', name: 'CRM automation' }],
+      mentions: ['HubSpot', 'GoHighLevel', 'Salesforce'].map((name) => ({ '@type': 'SoftwareApplication', name })),
+      isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
+    }
+    return <><div className="followup-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_FOLLOW_UP_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="followup-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Follow-up planner</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="followup-workspace"><LeadFollowUpPlanner /></div></div><LeadFollowUpSeoContent /></>
   }
 
   notFound()
