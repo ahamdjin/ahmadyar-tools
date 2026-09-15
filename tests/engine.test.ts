@@ -1,32 +1,32 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { analyzeArchitecture, BENCHMARK_SCENARIOS, DEFAULT_ASSESSMENT } from '../engine'
+import { analyzeArchitecture, BENCHMARK_SCENARIOS, DEFAULT_ASSESSMENT, PLATFORMS } from '../engine'
 
 test('benchmark scenarios choose the intended architecture family', () => {
+  const mismatches: string[] = []
+
   for (const scenario of BENCHMARK_SCENARIOS) {
     const result = analyzeArchitecture(scenario.input)
-
-    if (scenario.name === 'developer event and API workflows') {
-      assert.ok(
-        ['pipedream', 'n8n-cloud'].includes(result.primary.id),
-        `${scenario.name}: expected Pipedream or n8n Cloud, got ${result.primary.id}`,
-      )
-      assert.ok(
-        result.ranking.slice(0, 2).some((item) => item.id === 'pipedream'),
-        `${scenario.name}: Pipedream should remain a top-two recommendation for a developer-owned event/API workload`,
-      )
-      continue
+    if (result.primary.id !== scenario.expectedPrimary) {
+      mismatches.push(`${scenario.name}: expected ${scenario.expectedPrimary}, got ${result.primary.id} (${result.ranking.slice(0, 3).map((item) => `${item.id}:${item.score}`).join(', ')})`)
     }
-
-    assert.equal(result.primary.id, scenario.expectedPrimary, `${scenario.name}: expected ${scenario.expectedPrimary}, got ${result.primary.id}`)
   }
+
+  assert.deepEqual(mismatches, [])
+})
+
+test('every modeled platform has a benchmark where it can win', () => {
+  const expectedWinners = new Set(BENCHMARK_SCENARIOS.map((scenario) => scenario.expectedPrimary))
+  const missing = PLATFORMS.map((platform) => platform.id).filter((id) => !expectedWinners.has(id))
+  assert.deepEqual(missing, [])
 })
 
 test('self-hosting requirement eliminates managed-only platforms', () => {
   const result = analyzeArchitecture({
     ...DEFAULT_ASSESSMENT,
     selectedApps: ['postgresql', 'openai', 'hubspot'],
+    primarySystemId: 'hubspot',
     selfHosting: 'required',
     technicalOwner: 'developer',
     team: 'developer',
@@ -34,14 +34,14 @@ test('self-hosting requirement eliminates managed-only platforms', () => {
     customApi: true,
     portfolioShape: 'advanced',
   })
-  for (const id of ['zapier', 'make', 'crm-native', 'power-automate', 'n8n-cloud', 'pipedream', 'workato', 'tray']) {
+  for (const id of ['hubspot-native', 'zapier', 'make', 'power-automate', 'n8n-cloud', 'pipedream', 'workato', 'tray']) {
     const platform = result.ranking.find((item) => item.id === id)
     assert.equal(platform?.eligible, false, `${id} should be ineligible when self-hosting is required`)
   }
-  assert.ok(['n8n-self-hosted', 'activepieces', 'custom-code'].includes(result.primary.id))
+  assert.ok(['n8n-self-hosted', 'activepieces', 'trigger-dev', 'custom-code'].includes(result.primary.id))
 })
 
-test('simple CRM work does not default to technical orchestration', () => {
+test('simple HubSpot work stays in HubSpot instead of defaulting to orchestration', () => {
   const result = analyzeArchitecture({
     ...DEFAULT_ASSESSMENT,
     selectedApps: ['hubspot', 'slack'],
@@ -57,9 +57,27 @@ test('simple CRM work does not default to technical orchestration', () => {
     team: 'business',
     maintenance: 'low',
   })
-  assert.equal(result.primary.id, 'crm-native')
+  assert.equal(result.primary.id, 'hubspot-native')
   assert.ok((result.ranking.find((item) => item.id === 'n8n-cloud')?.score ?? 100) < result.primary.score)
   assert.match(result.primary.name, /HubSpot native automation/)
+})
+
+test('GoHighLevel can win when the workflow belongs inside GoHighLevel', () => {
+  const result = analyzeArchitecture({
+    ...DEFAULT_ASSESSMENT,
+    selectedApps: ['gohighlevel', 'facebook-leads', 'google-calendar'],
+    primarySystemId: 'gohighlevel',
+    currentWorkflows: 6,
+    futureWorkflows: 14,
+    appsPerWorkflow: 3,
+    typicalSteps: 6,
+    portfolioShape: 'mostly-simple',
+    crmCentered: true,
+    technicalOwner: 'power-user',
+    team: 'business',
+    branching: 'simple',
+  })
+  assert.equal(result.primary.id, 'gohighlevel-native')
 })
 
 test('critical duplicate-unsafe flows produce safeguards', () => {
