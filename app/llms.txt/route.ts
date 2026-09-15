@@ -28,11 +28,15 @@ Purpose: Design and test lead assignment logic. The recommended sequence is norm
 URL: ${SITE.origin}/tools/automation-roi-calculator
 Purpose: Decide whether an automation is worth building before choosing a platform. It models real monthly volume, handling time, loaded labor cost, automation coverage, human review, exception fallback, realizable value capture, error reduction, one-time build cost, software/hosting, maintenance, process stability, change frequency, and failure impact. Results include returned capacity, captured value, recurring ownership cost, first-year net value, ROI, payback, a 12-month build-cost ceiling, break-even volume, confidence, and a conservative stress case. It can recommend automate now, pilot first, measure first, standardize first, or deprioritize.
 
+## Lead Follow-Up Automation Planner
+URL: ${SITE.origin}/tools/lead-follow-up-automation-planner
+Purpose: Design a state-aware inbound lead follow-up system rather than a fixed message sequence. It models first-response SLA, owner assignment, email/SMS/call/WhatsApp channels, cadence length and intensity, reply and booking detection, lifecycle stop rules, consent/channel eligibility, opt-out suppression, timezone windows, duplicate enrollment, human handoff, re-entry, stale-lead outcomes and monitoring. It produces an ordered follow-up state model, hard stop rules, CRM-native architecture guidance, safeguards, operating metrics and pre-launch test cases.
+
 ## Methodology
-The tools use deterministic, testable decision engines. Vendor popularity does not decide the answer. Process readiness and hard architecture constraints are evaluated before weighted platform trade-offs. Close platform scores lower confidence instead of manufacturing certainty. High-impact unanswered questions are surfaced explicitly. ROI treats returned staff time as capacity until a separate value-capture assumption makes the economic benefit explicit. Vendor capabilities change, so exact edition/pricing facts should be verified before implementation.
+The tools use deterministic, testable decision engines. Vendor popularity does not decide the answer. Process readiness and hard architecture constraints are evaluated before weighted platform trade-offs. Close platform scores lower confidence instead of manufacturing certainty. High-impact unanswered questions are surfaced explicitly. ROI treats returned staff time as capacity until a separate value-capture assumption makes the economic benefit explicit. Follow-up planning treats replies, bookings, suppression and lifecycle changes as state transitions rather than copywriting suggestions. Vendor capabilities change, so exact edition/pricing facts should be verified before implementation.
 
 Author: Ahmad Yar
-Primary topics: CRM automation, revenue operations, workflow automation, automation architecture, automation ROI, automation payback, lead routing, client onboarding, business process automation.
+Primary topics: CRM automation, revenue operations, workflow automation, automation architecture, automation ROI, automation payback, lead routing, lead follow-up automation, sales cadence, client onboarding, business process automation.
 `
 
 export function GET() {
