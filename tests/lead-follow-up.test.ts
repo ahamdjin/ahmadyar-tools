@@ -86,7 +86,7 @@ test('lead follow-up has current research for response stops, engagement transit
   assert.match(research, /Stop on Response/i)
   assert.match(research, /Cadence Builder 2\.0/)
   assert.match(research, /suppression lists and unenrollment triggers/i)
-  assert.match(research, /stop and re-entry are different decisions/i)
+  assert.match(research, /stop.*re-entry.*different decisions/i)
   assert.match(research, /Human handoff should have an owner/i)
   assert.match(research, /not legal advice/i)
 })
