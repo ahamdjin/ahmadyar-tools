@@ -27,6 +27,13 @@ export const TOOLS = [
     status: 'advanced',
     description: 'Design and test routing precedence, existing-account protection, duplicates, eligibility, round robin or capacity, fallback, response SLAs, reassignment, and auditability.',
   },
+  {
+    slug: 'automation-roi-calculator',
+    title: 'Automation ROI Calculator',
+    shortTitle: 'ROI Calculator',
+    status: 'advanced',
+    description: 'Decide whether an automation is worth building using real volume, handling time, review, exceptions, value capture, error cost, build cost, maintenance, payback, and a conservative stress case.',
+  },
 ] as const
 
 export type ToolSlug = (typeof TOOLS)[number]['slug']
