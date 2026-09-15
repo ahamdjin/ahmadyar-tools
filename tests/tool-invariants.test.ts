@@ -3,6 +3,7 @@ import test from 'node:test'
 
 import { analyzeAutomationRoi, DEFAULT_AUTOMATION_ROI_INPUT, type RoiBaselineSource, type RoiProcessStability } from '../engine/automation-roi'
 import { analyzeCrmHealth, DEFAULT_CRM_HEALTH_INPUT, type CrmHealthLevel } from '../engine/crm-health'
+import { analyzeLeadFollowUp, DEFAULT_LEAD_FOLLOW_UP_INPUT, type FollowUpLevel } from '../engine/lead-follow-up'
 import {
   analyzeLeadRouting,
   DEFAULT_LEAD_ROUTING_INPUT,
@@ -175,6 +176,43 @@ test('automation ROI remains bounded and conservative across baseline quality an
         unique(result.reasons, 'ROI reasons')
         unique(result.risks, 'ROI risks')
       }
+    }
+  }
+})
+
+test('lead follow-up stays bounded and preserves stop/safety structure across maturity levels', () => {
+  const levels: FollowUpLevel[] = [0, 1, 2, 3]
+
+  for (const maturity of levels) {
+    for (const monthlyLeads of [50, 1000, 10000]) {
+      const result = analyzeLeadFollowUp({
+        ...DEFAULT_LEAD_FOLLOW_UP_INPUT,
+        crmId: 'hubspot',
+        monthlyLeads,
+        channels: ['email', 'sms', 'call'],
+        replyDetection: maturity,
+        bookingDetection: maturity,
+        lifecycleStopRules: maturity,
+        consentControl: maturity,
+        optOutControl: maturity,
+        timezoneControl: maturity,
+        duplicateControl: maturity,
+        ownerAssignment: maturity,
+        humanHandoff: maturity,
+        staleLeadHandling: maturity,
+        monitoring: maturity,
+        personalization: maturity,
+      })
+
+      bounded(result.score, 'Follow-up score')
+      bounded(result.confidence, 'Follow-up confidence')
+      for (const [metric, value] of Object.entries(result.metrics)) bounded(value, `Follow-up ${metric}`)
+      unique(result.issues.map((issue) => issue.id), 'Follow-up issues')
+      unique(result.measurement, 'Follow-up measurement fields')
+      assert.deepEqual(result.stages.map((stage) => stage.order), [1, 2, 3, 4, 5])
+      assert.ok(result.stopRules.some((rule) => /reply/i.test(rule)))
+      assert.ok(result.stopRules.some((rule) => /booking/i.test(rule)))
+      assert.ok(result.testCases.length >= 6)
     }
   }
 })
