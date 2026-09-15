@@ -35,6 +35,82 @@
   animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.advisor-viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  width: 100vw;
+  height: 100dvh;
+  flex-direction: column;
+  overflow: hidden;
+  background: white;
+  padding: 14px 16px 12px;
+}
+
+.dark .advisor-viewport {
+  background: var(--color-zinc-950);
+}
+
+.advisor-toolbar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.advisor-viewport > section {
+  position: static !important;
+  left: auto !important;
+  display: flex;
+  min-height: 0;
+  width: 100% !important;
+  flex: 1 1 0%;
+  transform: none !important;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.advisor-viewport > section > div:first-child {
+  flex: none;
+  margin-bottom: 14px;
+}
+
+.advisor-viewport > section > div:nth-child(2) {
+  min-height: 0;
+  flex: 1 1 0%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+  scrollbar-width: thin;
+}
+
+.advisor-viewport > section > div:last-child {
+  flex: none;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.advisor-viewport [class~='border-y'],
+.advisor-viewport [class~='border-t'],
+.advisor-viewport [class~='border-t-2'],
+.advisor-viewport [class~='border-b'],
+.advisor-viewport [class~='border-l'] {
+  border-color: transparent !important;
+}
+
+body:has(.advisor-viewport) {
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .advisor-viewport {
+    padding: 18px 24px 16px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tool-reveal { animation: none; }
 }
