@@ -22,17 +22,16 @@
 
 .tool-reveal { animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* Tool pages are applications. They intentionally break out of the narrow
-   portfolio text column and center themselves against the browser viewport.
-   `translate` is used instead of `transform` so the reveal animation cannot
-   accidentally cancel the horizontal centering. */
+/* The tools repository now owns a genuinely wide page frame, so application
+   surfaces no longer need viewport breakout tricks. Keep them in normal flow,
+   centered, and let the route frame provide the available width. */
 .tool-app-viewport {
   position: relative;
-  left: 50%;
-  translate: -50% 0;
-  width: min(calc(100dvw - 2rem), 1600px) !important;
-  max-width: 1600px !important;
+  width: 100%;
+  max-width: 1600px;
   min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .advisor-viewport,
@@ -44,8 +43,7 @@
   grid-template-rows: auto minmax(0, 1fr);
   height: calc(100dvh - 9rem);
   min-height: 640px;
-  margin: 0;
-  overflow: visible;
+  overflow: hidden;
   box-sizing: border-box;
   background: transparent;
 }
@@ -76,12 +74,17 @@
   min-height: 0;
   margin-left: auto;
   margin-right: auto;
-  overflow: visible;
+  overflow: hidden;
 }
 
+/* The Advisor used to contain its own viewport-width breakout. Neutralize that
+   legacy positioning at the application boundary so no child can shift left
+   or escape the centered workspace. */
 .advisor-workspace > section {
   position: static !important;
+  inset: auto !important;
   left: auto !important;
+  right: auto !important;
   transform: none !important;
   translate: none !important;
   display: grid !important;
@@ -92,17 +95,15 @@
   min-width: 0 !important;
   min-height: 0 !important;
   margin: 0 !important;
-  overflow: visible;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
-/* Progress, scrollable content, and navigation all share one visual center.
-   The app gets much more room than the portfolio, while line lengths stay
-   controlled enough to scan comfortably. */
+/* Progress, scrollable content, and navigation all share one visual center. */
 .advisor-workspace > section > div:first-child,
 .advisor-workspace > section > div:nth-child(2),
 .advisor-workspace > section > div:last-child {
-  width: min(100%, 1240px);
+  width: min(100%, 1400px);
   min-width: 0;
   margin-left: auto;
   margin-right: auto;
@@ -112,11 +113,11 @@
 
 .advisor-workspace > section > div:nth-child(2) {
   min-height: 0 !important;
-  max-width: 1240px;
-  overflow-x: clip;
+  max-width: 1400px;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 12px clamp(0px, 0.75vw, 10px) 28px;
+  padding: 12px clamp(0.25rem, 0.75vw, 0.75rem) 28px;
   scrollbar-width: thin;
 }
 
@@ -187,30 +188,16 @@
 }
 
 @media (max-width: 900px) {
-  .tool-app-viewport {
-    width: calc(100dvw - 1.5rem) !important;
-  }
-
   .advisor-toolbar,
   .crm-health-toolbar,
   .onboarding-toolbar,
   .routing-toolbar {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-  }
-
-  .advisor-workspace > section > div:first-child,
-  .advisor-workspace > section > div:nth-child(2),
-  .advisor-workspace > section > div:last-child {
-    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
 @media (max-width: 639px) {
-  .tool-app-viewport {
-    width: calc(100dvw - 1rem) !important;
-  }
-
   .advisor-viewport,
   .crm-health-viewport,
   .onboarding-viewport,
@@ -228,8 +215,8 @@
   }
 
   .advisor-workspace > section > div:nth-child(2) {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
