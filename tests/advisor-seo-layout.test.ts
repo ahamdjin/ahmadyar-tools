@@ -7,6 +7,7 @@ const css = readFileSync('app/globals.css', 'utf8')
 const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
+const roiCalculator = readFileSync('components/automation-roi-calculator.tsx', 'utf8')
 
 test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
@@ -17,11 +18,21 @@ test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
   assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
   assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*width:\s*100%/)
   assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*max-width:\s*100%/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*min-width:\s*0/)
   assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
   assert.match(css, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*100% !important/)
   assert.match(css, /\.advisor-guide,[\s\S]*\.roi-guide\s*\{[^}]*width:\s*100%/)
   assert.doesNotMatch(css, /100vw/)
   assert.doesNotMatch(css, /margin-left:\s*calc\(50% - 50vw\)/)
+})
+
+test('ROI calculator cannot force horizontal overflow on narrow screens', () => {
+  assert.match(roiCalculator, /roi-calculator grid h-full min-h-0 min-w-0/)
+  assert.match(roiCalculator, /overflow-x-hidden overflow-y-auto/)
+  assert.match(roiCalculator, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
+  assert.match(roiCalculator, /mt-4 grid min-w-0 gap-3 sm:grid-cols-2/)
+  assert.match(roiCalculator, /break-words[^"\n]*\[overflow-wrap:anywhere\]/)
+  assert.doesNotMatch(roiCalculator, /mt-4 grid grid-cols-2 gap-3/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
