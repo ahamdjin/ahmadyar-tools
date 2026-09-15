@@ -24,11 +24,15 @@ Purpose: Design a reliable sales-to-delivery onboarding flow across CRM, contrac
 URL: ${SITE.origin}/tools/lead-routing-rules-builder
 Purpose: Design and test lead assignment logic. The recommended sequence is normalize and deduplicate, protect existing relationships, apply protected priority rules, build the eligible pool, remove unavailable owners, then enforce fallback and response SLA. It models territory, product/service, segment, named accounts, round robin, capacity, availability, after-hours coverage, reassignment, auditability, monitoring, and concrete pre-launch test cases.
 
+## Automation ROI Calculator
+URL: ${SITE.origin}/tools/automation-roi-calculator
+Purpose: Decide whether an automation is worth building before choosing a platform. It models real monthly volume, handling time, loaded labor cost, automation coverage, human review, exception fallback, realizable value capture, error reduction, one-time build cost, software/hosting, maintenance, process stability, change frequency, and failure impact. Results include returned capacity, captured value, recurring ownership cost, first-year net value, ROI, payback, a 12-month build-cost ceiling, break-even volume, confidence, and a conservative stress case. It can recommend automate now, pilot first, measure first, standardize first, or deprioritize.
+
 ## Methodology
-The tools use deterministic, testable decision engines. Vendor popularity does not decide the answer. Process readiness and hard architecture constraints are evaluated before weighted platform trade-offs. Close platform scores lower confidence instead of manufacturing certainty. High-impact unanswered questions are surfaced explicitly. Vendor capabilities change, so exact edition/pricing facts should be verified before implementation.
+The tools use deterministic, testable decision engines. Vendor popularity does not decide the answer. Process readiness and hard architecture constraints are evaluated before weighted platform trade-offs. Close platform scores lower confidence instead of manufacturing certainty. High-impact unanswered questions are surfaced explicitly. ROI treats returned staff time as capacity until a separate value-capture assumption makes the economic benefit explicit. Vendor capabilities change, so exact edition/pricing facts should be verified before implementation.
 
 Author: Ahmad Yar
-Primary topics: CRM automation, revenue operations, workflow automation, automation architecture, lead routing, client onboarding, business process automation.
+Primary topics: CRM automation, revenue operations, workflow automation, automation architecture, automation ROI, automation payback, lead routing, client onboarding, business process automation.
 `
 
 export function GET() {
