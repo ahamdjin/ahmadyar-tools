@@ -1,3 +1,4 @@
+import { decisionPolicy } from './decision-policy'
 import { inferEnvironment, type DiscoveryProfile } from './discovery'
 import { appAffinityBonus, getPlatformKnowledge, PRIMARY_NATIVE_PLATFORM_BY_APP } from './platform-knowledge'
 import { PLATFORMS, type PlatformProfile } from './platforms'
@@ -21,6 +22,8 @@ const branchingValue = { none: 0, simple: 34, advanced: 86 } as const
 const ownerCapability = { none: 14, 'power-user': 38, 'automation-specialist': 72, developer: 100 } as const
 const budgetCapacity = { 'under-100': 1, '100-300': 2, '300-1000': 3, '1000-5000': 4, flexible: 5 } as const
 const portfolioBase = { 'mostly-simple': 22, mixed: 46, advanced: 72, 'product-like': 92 } as const
+
+type ScoredPlatform = PlatformResult & { decisionScore: number }
 
 function workflowComplexity(input: AssessmentInput, discovery: DiscoveryProfile) {
   let score = portfolioBase[input.portfolioShape] * 0.44
@@ -117,7 +120,7 @@ function dynamicPlatformName(platform: PlatformProfile, discovery: DiscoveryProf
   return platform.name
 }
 
-function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discovery: DiscoveryProfile, complexity: number, scale: number, risk: number): PlatformResult {
+function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discovery: DiscoveryProfile, complexity: number, scale: number, risk: number): ScoredPlatform {
   let eligible = true
   const reasons: string[] = []
   const cautions: string[] = []
@@ -220,11 +223,11 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     reasons.push('Most of the work can stay in the system of record, removing an unnecessary automation layer.')
   }
   if (platform.id === 'hubspot-native') {
-    if (primaryId === 'hubspot' && complexity < 60 && input.appsPerWorkflow <= 4 && !input.productLogic) {
+    if (primaryId === 'hubspot' && complexity < 60 && input.appsPerWorkflow <= 4 && input.integrationNeed !== 'broad' && !input.productLogic) {
       score += 26
       reasons.push('HubSpot is the system of record and can own the CRM-centered workflow without an extra orchestration layer.')
     }
-    if (input.customApi || discovery.unknownSystems >= 2 || complexity >= 68) {
+    if (input.customApi || discovery.unknownSystems >= 2 || complexity >= 68 || input.integrationNeed === 'broad') {
       score -= 14
       cautions.push('The workflow is moving beyond a HubSpot-centered boundary and may need an external orchestration layer.')
     }
@@ -240,12 +243,12 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     }
   }
   if (platform.id === 'salesforce-flow') {
-    if (primaryId === 'salesforce' && (input.governance || input.departments >= 2) && !input.productLogic) {
+    if (primaryId === 'salesforce' && (input.governance || input.departments >= 2) && input.appsPerWorkflow <= 4 && discovery.enterpriseApps.length <= 2 && !input.customApi && !input.productLogic) {
       score += 24
       reasons.push('Salesforce owns the business state and the governance needs favor keeping core CRM process logic in Flow.')
     }
-    if (discovery.unknownSystems >= 4 || input.customApi) {
-      score -= 8
+    if (discovery.unknownSystems >= 4 || input.customApi || (discovery.enterpriseApps.length >= 3 && input.appsPerWorkflow >= 5)) {
+      score -= 12
       cautions.push('A broader integration/API layer may still be needed around Salesforce for cross-system orchestration.')
     }
   }
@@ -338,7 +341,7 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     score += 16
     reasons.push('A technical integration team needs reusable API-led capabilities across a large workflow portfolio.')
   }
-  if (platform.id === 'mulesoft' && input.futureWorkflows >= 80 && discovery.enterpriseApps.length >= 3 && input.technicalOwner === 'developer' && input.governance) {
+  if (platform.id === 'mulesoft' && input.futureWorkflows >= 80 && discovery.enterpriseApps.length >= 3 && input.technicalOwner === 'developer' && input.governance && (discovery.unknownSystems >= 2 || input.selectedApps.includes('sap'))) {
     score += 24
     reasons.push('This resembles an enterprise API and integration architecture problem rather than a collection of business automations.')
   }
@@ -351,20 +354,31 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     cautions.push('Custom software creates engineering ownership before the process justifies it.')
   }
 
+  const policy = decisionPolicy(platform.id, input, discovery, complexity)
+  score += policy.adjustment
+  if (policy.reason) reasons.push(policy.reason)
+  if (policy.caution) cautions.push(policy.caution)
+
   if (input.technicalOwner === 'none' && platform.technicalRequirement >= 70) cautions.push('Day-to-day ownership is substantially more technical than the team profile you selected.')
   if (input.futureWorkflows >= 40 && platform.id === 'zapier') cautions.push('At this portfolio size, standards, governance, and usage economics need closer review.')
   if (effectiveMicrosoftFirst && platform.microsoftFit < 68) cautions.push('This is not a natural first choice for a Microsoft-centered environment.')
   if (effectiveCrmCentered && platform.crmNativeFit < 58) cautions.push('It may pull logic away from the system of record without enough benefit.')
   if (discovery.unknownSystems >= 3 && platform.customApiFit < 80) cautions.push('Several unknown/internal systems increase the chance that generic API work will be required.')
 
+  const decisionScore = eligible ? score : Math.min(score, 35)
+  const displayScore = eligible
+    ? Math.round(clamp(72 + (decisionScore - 72) * 0.55, 18, 98))
+    : Math.round(clamp(decisionScore, 10, 35))
+
   return {
     id: platform.id,
     name: dynamicPlatformName(platform, discovery),
-    score: Math.round(clamp(eligible ? score : Math.min(score, 35))),
+    score: displayScore,
+    decisionScore,
     eligible,
     dimensions,
-    reasons: reasons.slice(0, 4),
-    cautions: cautions.slice(0, 4),
+    reasons: reasons.slice(0, 5),
+    cautions: cautions.slice(0, 5),
     strengths: knowledge.strengths,
     tradeoffs: knowledge.tradeoffs,
     winsWhen: knowledge.winsWhen,
@@ -465,7 +479,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
 
   const ranking = candidateProfiles
     .map((platform) => scorePlatform(platform, input, discovery, complexity, scale, risk))
-    .sort((a, b) => (Number(b.eligible) - Number(a.eligible)) || b.score - a.score)
+    .sort((a, b) => (Number(b.eligible) - Number(a.eligible)) || b.decisionScore - a.decisionScore)
 
   const primary = ranking.find((item) => item.eligible) ?? ranking[0]
   const alternatives = ranking.filter((item) => item.eligible && item.id !== primary.id).slice(0, 3)
@@ -479,7 +493,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
   const ownershipRisk = Math.round(clamp(ownerGap + Math.max(0, input.futureWorkflows - 20) * 0.6 + (input.departments > 2 ? 8 : 0)))
   const costPressure = primary.costPressure
 
-  const margin = primary.score - (alternatives[0]?.score ?? 0)
+  const margin = primary.decisionScore - (alternatives[0]?.decisionScore ?? 0)
   let confidence = 68 + Math.min(17, margin * 1.45)
   confidence += Math.min(9, discovery.knownApps * 1.2)
   confidence -= Math.min(18, discovery.unknownSystems * 3)
