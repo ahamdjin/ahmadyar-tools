@@ -8,6 +8,7 @@ const IMMERSIVE_TOOL_PATHS = [
   '/automation-architecture-advisor',
   '/crm-automation-health-check',
   '/client-onboarding-automation-planner',
+  '/lead-routing-rules-builder',
 ] as const
 
 export function RouteFrame({ children }: { children: React.ReactNode }) {
