@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { ArchitectureAdvisor } from '@/components/architecture-advisor'
 import { ADVISOR_FAQS, AdvisorSeoContent } from '@/components/advisor-seo-content'
+import { CrmHealthCheck } from '@/components/crm-health-check'
 import { LegacyTool } from '@/components/legacy-tool'
 import { BackLink } from '@/components/site-shell'
 import { SITE } from '@/lib/site'
@@ -12,6 +13,8 @@ type Props = { params: Promise<{ slug: string }> }
 
 const ADVISOR_TITLE = 'Automation Architecture Advisor | Choose the Right Stack'
 const ADVISOR_DESCRIPTION = 'Compare HubSpot, GoHighLevel, Zapier, Make, n8n, Trigger.dev, Power Automate and more based on your systems, workflows, scale, ownership, reliability, and budget.'
+const CRM_HEALTH_TITLE = 'CRM Automation Health Check | Find Revenue Leaks'
+const CRM_HEALTH_DESCRIPTION = 'Audit lead capture, CRM data quality, routing, response, follow-up, pipeline hygiene, handoffs, reporting, adoption, and automation reliability. Built for HubSpot, GoHighLevel, Salesforce and other CRMs.'
 
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c')
@@ -27,10 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!tool) return {}
   const canonical = `${SITE.origin}/tools/${tool.slug}`
 
-  if (tool.slug === 'automation-architecture-advisor') {
+  if (tool.slug === 'automation-architecture-advisor' || tool.slug === 'crm-automation-health-check') {
+    const title = tool.slug === 'automation-architecture-advisor' ? ADVISOR_TITLE : CRM_HEALTH_TITLE
+    const description = tool.slug === 'automation-architecture-advisor' ? ADVISOR_DESCRIPTION : CRM_HEALTH_DESCRIPTION
     return {
-      title: ADVISOR_TITLE,
-      description: ADVISOR_DESCRIPTION,
+      title,
+      description,
       alternates: { canonical },
       category: 'Business automation',
       robots: {
@@ -44,18 +49,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           'max-video-preview': -1,
         },
       },
-      openGraph: {
-        title: ADVISOR_TITLE,
-        description: ADVISOR_DESCRIPTION,
-        url: canonical,
-        type: 'website',
-        siteName: SITE.name,
-      },
-      twitter: {
-        card: 'summary',
-        title: ADVISOR_TITLE,
-        description: ADVISOR_DESCRIPTION,
-      },
+      openGraph: { title, description, url: canonical, type: 'website', siteName: SITE.name },
+      twitter: { card: 'summary', title, description },
     }
   }
 
@@ -73,25 +68,22 @@ export default async function ToolPage({ params }: Props) {
   if (!tool) notFound()
 
   const canonical = `${SITE.origin}/tools/${tool.slug}`
+  const description = tool.slug === 'automation-architecture-advisor'
+    ? ADVISOR_DESCRIPTION
+    : tool.slug === 'crm-automation-health-check'
+      ? CRM_HEALTH_DESCRIPTION
+      : tool.description
   const softwareJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: tool.title,
     url: canonical,
-    description: tool.slug === 'automation-architecture-advisor' ? ADVISOR_DESCRIPTION : tool.description,
+    description,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     isAccessibleForFree: true,
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    author: {
-      '@type': 'Person',
-      name: SITE.name,
-      url: SITE.origin,
-    },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    author: { '@type': 'Person', name: SITE.name, url: SITE.origin },
   }
 
   if (tool.slug === 'automation-architecture-advisor') {
@@ -107,56 +99,20 @@ export default async function ToolPage({ params }: Props) {
         { '@type': 'Thing', name: 'Workflow automation' },
         { '@type': 'Thing', name: 'Business process automation' },
       ],
-      mentions: [
-        'HubSpot',
-        'GoHighLevel',
-        'Zapier',
-        'Make',
-        'n8n',
-        'Trigger.dev',
-        'Power Automate',
-        'Pipedream',
-        'Activepieces',
-        'Workato',
-        'Tray.ai',
-        'MuleSoft',
-      ].map((name) => ({ '@type': 'SoftwareApplication', name })),
-      isPartOf: {
-        '@type': 'WebSite',
-        name: SITE.name,
-        url: SITE.origin,
-      },
+      mentions: ['HubSpot', 'GoHighLevel', 'Zapier', 'Make', 'n8n', 'Trigger.dev', 'Power Automate', 'Pipedream', 'Activepieces', 'Workato', 'Tray.ai', 'MuleSoft'].map((name) => ({ '@type': 'SoftwareApplication', name })),
+      isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-
     const faqJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: ADVISOR_FAQS.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
-      })),
+      mainEntity: ADVISOR_FAQS.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
     }
-
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Tools',
-          item: `${SITE.origin}/tools`,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: tool.title,
-          item: canonical,
-        },
+        { '@type': 'ListItem', position: 1, name: 'Tools', item: `${SITE.origin}/tools` },
+        { '@type': 'ListItem', position: 2, name: tool.title, item: canonical },
       ],
     }
 
@@ -174,12 +130,53 @@ export default async function ToolPage({ params }: Props) {
               <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
             </div>
           </div>
-          <div className="advisor-workspace">
-            <ArchitectureAdvisor />
-          </div>
+          <div className="advisor-workspace"><ArchitectureAdvisor /></div>
         </div>
         <AdvisorSeoContent />
       </>
+    )
+  }
+
+  if (tool.slug === 'crm-automation-health-check') {
+    const webpageJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: CRM_HEALTH_TITLE,
+      url: canonical,
+      description: CRM_HEALTH_DESCRIPTION,
+      dateModified: '2026-09-15',
+      about: [
+        { '@type': 'Thing', name: 'CRM automation' },
+        { '@type': 'Thing', name: 'Lead management' },
+        { '@type': 'Thing', name: 'Revenue operations' },
+        { '@type': 'Thing', name: 'CRM data quality' },
+      ],
+      mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM', 'Close', 'Attio'].map((name) => ({ '@type': 'SoftwareApplication', name })),
+      isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
+    }
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Tools', item: `${SITE.origin}/tools` },
+        { '@type': 'ListItem', position: 2, name: tool.title, item: canonical },
+      ],
+    }
+
+    return (
+      <div className="crm-health-viewport tool-reveal">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd) }} />
+        <div className="crm-health-toolbar">
+          <BackLink />
+          <div className="min-w-0 text-right">
+            <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM diagnostic</p>
+            <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
+          </div>
+        </div>
+        <div className="crm-health-workspace"><CrmHealthCheck /></div>
+      </div>
     )
   }
 
@@ -192,7 +189,7 @@ export default async function ToolPage({ params }: Props) {
         <h1 className="text-3xl font-medium tracking-[-0.05em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{tool.title}</h1>
         <p className="max-w-xl text-sm leading-7 text-zinc-500 dark:text-zinc-400">{tool.description}</p>
       </section>
-      <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor'>} />
+      <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor' | 'crm-automation-health-check'>} />
     </div>
   )
 }
