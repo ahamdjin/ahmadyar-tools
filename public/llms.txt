@@ -1,10 +1,10 @@
 # Ahmad Yar Automation Tools
 
-Canonical site: https://ahmadyar.co/tools
+Canonical site: https://www.ahmadyar.co/tool
 
 ## Automation Architecture Advisor
 
-Canonical URL: https://ahmadyar.co/tools/automation-architecture-advisor
+Canonical URL: https://www.ahmadyar.co/tool/automation-architecture-advisor
 
 A free interactive advisor for choosing an automation architecture and platform mix based on the systems a business already uses, current and future workflow count, execution volume, workflow complexity, APIs, branching, AI, databases, durable jobs, reliability consequences, ownership, governance, hosting requirements, budget, and growth.
 
@@ -16,11 +16,13 @@ The page also includes a decision framework, platform trade-offs, architecture e
 
 ## Other tools
 
-- CRM Automation Health Check: https://ahmadyar.co/tools/crm-automation-health-check
-- Client Onboarding Automation Planner: https://ahmadyar.co/tools/client-onboarding-automation-planner
-- Lead Routing Rules Builder: https://ahmadyar.co/tools/lead-routing-rules-builder
+- CRM Automation Health Check: https://www.ahmadyar.co/tool/crm-automation-health-check
+- Client Onboarding Automation Planner: https://www.ahmadyar.co/tool/client-onboarding-automation-planner
+- Lead Routing Rules Builder: https://www.ahmadyar.co/tool/lead-routing-rules-builder
+- Automation ROI Calculator: https://www.ahmadyar.co/tool/automation-roi-calculator
+- Lead Follow-Up Automation Planner: https://www.ahmadyar.co/tool/lead-follow-up-automation-planner
 
 ## Publisher
 
 Ahmad Yar — AI Automation Consultant
-https://ahmadyar.co
+https://www.ahmadyar.co
