@@ -36,10 +36,11 @@
 }
 
 /* Immersive tool routes are rendered outside the narrow portfolio frame by
-   RouteFrame. Their canvases therefore use normal document geometry instead
-   of 100vw breakouts, negative margins, :has() shell overrides, or transforms. */
+   RouteFrame. Their canvases use normal document geometry rather than 100vw
+   breakouts, negative margins, shell :has() overrides, or translate hacks. */
 .advisor-viewport,
-.crm-health-viewport {
+.crm-health-viewport,
+.onboarding-viewport {
   position: relative;
   z-index: 10;
   display: grid;
@@ -57,12 +58,14 @@
 }
 
 .dark .advisor-viewport,
-.dark .crm-health-viewport {
+.dark .crm-health-viewport,
+.dark .onboarding-viewport {
   background: var(--color-zinc-950);
 }
 
 .advisor-toolbar,
-.crm-health-toolbar {
+.crm-health-toolbar,
+.onboarding-toolbar {
   display: flex;
   width: 100%;
   align-items: center;
@@ -72,7 +75,8 @@
 }
 
 .advisor-workspace,
-.crm-health-workspace {
+.crm-health-workspace,
+.onboarding-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   place-items: stretch center;
@@ -150,13 +154,8 @@
   }
 }
 
-.advisor-guide {
-  width: min(92vw, 1080px);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.crm-health-workspace > .crm-health-check {
+.crm-health-workspace > .crm-health-check,
+.onboarding-workspace > .onboarding-planner {
   width: min(100%, 1120px);
   max-width: 1120px;
   height: 100%;
@@ -167,7 +166,9 @@
   box-sizing: border-box;
 }
 
-.crm-health-guide {
+.advisor-guide,
+.crm-health-guide,
+.onboarding-guide {
   width: min(92vw, 1080px);
   margin-left: auto;
   margin-right: auto;
@@ -175,7 +176,8 @@
 
 @media (min-width: 640px) {
   .advisor-viewport,
-  .crm-health-viewport {
+  .crm-health-viewport,
+  .onboarding-viewport {
     padding: max(18px, env(safe-area-inset-top)) 24px max(16px, env(safe-area-inset-bottom));
   }
 }
