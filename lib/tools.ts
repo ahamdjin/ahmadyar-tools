@@ -34,6 +34,13 @@ export const TOOLS = [
     status: 'advanced',
     description: 'Decide whether an automation is worth building using real volume, handling time, review, exceptions, value capture, error cost, build cost, maintenance, payback, and a conservative stress case.',
   },
+  {
+    slug: 'lead-follow-up-automation-planner',
+    title: 'Lead Follow-Up Automation Planner',
+    shortTitle: 'Follow-Up Planner',
+    status: 'advanced',
+    description: 'Design a state-aware lead follow-up system with response SLAs, channels, cadence, reply and booking stops, consent and suppression, human handoff, monitoring, and CRM-native architecture.',
+  },
 ] as const
 
 export type ToolSlug = (typeof TOOLS)[number]['slug']
