@@ -8,20 +8,31 @@ const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 
-test('interactive tool routes expand beyond the narrow portfolio article frame', () => {
+test('interactive tool routes use the browser viewport instead of the narrow portfolio frame', () => {
   assert.match(page, /tool-app-viewport advisor-viewport/)
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
   assert.match(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.match(css, /\.site-frame:has\(\.tool-app-viewport\)\s*\{[^}]*max-width:\s*none/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*max-width:\s*1440px/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 11rem\)/)
-  assert.match(css, /\.advisor-workspace,[\s\S]*\.routing-workspace\s*\{[^}]*width:\s*min\(100%, 1280px\)/)
+  assert.match(css, /\.tool-app-viewport\s*\{[^}]*left:\s*50%/)
+  assert.match(css, /\.tool-app-viewport\s*\{[^}]*translate:\s*-50% 0/)
+  assert.match(css, /\.tool-app-viewport\s*\{[^}]*100dvw/)
+  assert.match(css, /\.tool-app-viewport\s*\{[^}]*max-width:\s*1600px !important/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 9rem\)/)
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.routing-workspace\s*\{[^}]*width:\s*min\(100%, 1400px\)/)
   assert.match(css, /\.advisor-workspace > section\s*\{[^}]*transform:\s*none !important/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*max-width:\s*900px/)
+  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*translate:\s*none !important/)
+  assert.match(css, /\.advisor-workspace > section > div:first-child,[\s\S]*width:\s*min\(100%, 1240px\)/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+  assert.doesNotMatch(css, /\.site-frame:has\(\.tool-app-viewport\)/)
+})
+
+test('tool layout reflows without horizontal content clipping', () => {
+  assert.match(css, /@media \(max-width: 900px\)[\s\S]*width:\s*calc\(100dvw - 1\.5rem\) !important/)
+  assert.match(css, /@media \(max-width: 639px\)[\s\S]*width:\s*calc\(100dvw - 1rem\) !important/)
+  assert.match(css, /overflow-x:\s*clip/)
+  assert.match(css, /overflow-y:\s*auto/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
@@ -36,6 +47,7 @@ test('advisor page exposes crawlable guidance below the interactive tool', () =>
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
+  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*max-width:\s*900px/)
 })
 
 test('search and AI guidance covers native, no-code, orchestration, durable jobs, and software', () => {
