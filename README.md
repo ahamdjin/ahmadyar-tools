@@ -2,7 +2,7 @@
 
 Practical automation architecture and operations tools for AhmadYar.co.
 
-Public product surface: `https://ahmadyar.co/tool`
+Public product surface: `https://www.ahmadyar.co/tool`
 
 This repository is the independently deployable tools application. It is intentionally separate from the portfolio so the decision engine, product UI, scenario tests, and future AI/cost layers can evolve without turning the portfolio into a product monolith.
 
