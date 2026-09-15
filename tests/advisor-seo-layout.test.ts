@@ -8,13 +8,13 @@ const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 
 test('advisor owns the first viewport without trapping the whole page', () => {
-  assert.match(css, /\.advisor-viewport[\s\S]*width:\s*100%/)
-  assert.match(css, /height:\s*100dvh/)
-  assert.match(css, /\.advisor-viewport > section[\s\S]*width:\s*100% !important/)
-  assert.match(css, /body:has\(\.advisor-viewport\) \.site-frame[\s\S]*max-width:\s*none !important/)
+  assert.match(css, /\.advisor-viewport\s*\{[^}]*width:\s*100%/)
+  assert.match(css, /\.advisor-viewport\s*\{[^}]*height:\s*100dvh/)
+  assert.match(css, /\.advisor-viewport > section\s*\{[^}]*width:\s*100% !important/)
+  assert.match(css, /body:has\(\.advisor-viewport\) \.site-frame\s*\{[^}]*max-width:\s*none !important/)
   assert.match(layout, /site-frame/)
-  assert.doesNotMatch(css, /body:has\(\.advisor-viewport\)[\s\S]*overflow:\s*hidden/)
-  assert.doesNotMatch(css, /\.advisor-viewport\s*\{[\s\S]*position:\s*fixed/)
+  assert.doesNotMatch(css, /body:has\(\.advisor-viewport\)\s*\{[^}]*overflow:\s*hidden/)
+  assert.doesNotMatch(css, /\.advisor-viewport\s*\{[^}]*position:\s*fixed/)
 })
 
 test('advisor page exposes crawlable guidance below the interactive tool', () => {
