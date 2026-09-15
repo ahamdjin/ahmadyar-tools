@@ -22,8 +22,28 @@
 
 .tool-reveal { animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* The portfolio is intentionally narrow. Tool routes fill that same frame
-   instead of escaping into viewport-width canvases. */
+/* Interactive tools are applications, not narrow portfolio articles. The
+   normal portfolio frame stays compact everywhere else, but dedicated tool
+   routes expand into the available viewport and center the working area. */
+.site-frame:has(.advisor-viewport, .crm-health-viewport, .onboarding-viewport, .routing-viewport, .roi-viewport) {
+  max-width: none;
+  padding-left: clamp(1rem, 3vw, 3rem);
+  padding-right: clamp(1rem, 3vw, 3rem);
+}
+
+.site-frame:has(.advisor-viewport, .crm-health-viewport, .onboarding-viewport, .routing-viewport, .roi-viewport) > header,
+.site-frame:has(.advisor-viewport, .crm-health-viewport, .onboarding-viewport, .routing-viewport, .roi-viewport) > footer {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-frame:has(.advisor-viewport, .crm-health-viewport, .onboarding-viewport, .routing-viewport, .roi-viewport) .site-main {
+  width: 100%;
+  min-width: 0;
+}
+
 .advisor-viewport,
 .crm-health-viewport,
 .onboarding-viewport,
@@ -34,12 +54,12 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   width: 100%;
-  max-width: 100%;
+  max-width: 1440px;
   min-width: 0;
-  height: calc(100dvh - 10rem);
-  min-height: 580px;
-  max-height: 820px;
-  margin: 0;
+  height: calc(100dvh - 11rem);
+  min-height: 680px;
+  margin-left: auto;
+  margin-right: auto;
   overflow: hidden;
   box-sizing: border-box;
   background: transparent;
@@ -51,12 +71,14 @@
 .routing-toolbar,
 .roi-toolbar {
   display: flex;
-  width: 100%;
+  width: min(100%, 1280px);
   min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 12px;
+  padding-bottom: 16px;
 }
 
 .advisor-workspace,
@@ -66,9 +88,11 @@
 .roi-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  width: 100%;
+  width: min(100%, 1280px);
   min-width: 0;
   min-height: 0;
+  margin-left: auto;
+  margin-right: auto;
   overflow: hidden;
 }
 
@@ -95,17 +119,17 @@
   min-width: 0;
 }
 
-.advisor-workspace > section > div:first-child { margin-bottom: 12px; }
+.advisor-workspace > section > div:first-child { margin-bottom: 14px; }
 .advisor-workspace > section > div:nth-child(2) {
   min-height: 0 !important;
   max-width: none;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-right: 6px;
+  padding: 10px clamp(0px, 0.5vw, 8px) 24px 0;
   scrollbar-width: thin;
 }
-.advisor-workspace > section > div:last-child { margin-top: 8px; padding-top: 8px; }
+.advisor-workspace > section > div:last-child { margin-top: 10px; padding-top: 10px; }
 
 .crm-health-workspace > .crm-health-check,
 .onboarding-workspace > .onboarding-planner,
@@ -149,15 +173,17 @@
   border-color: transparent !important;
 }
 
+/* Long-form SEO/research guidance should stay readable even when the app above
+   uses a wide canvas. */
 .advisor-guide,
 .crm-health-guide,
 .onboarding-guide,
 .routing-guide,
 .roi-guide {
   width: 100%;
-  max-width: 100%;
-  margin-left: 0;
-  margin-right: 0;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ahmadyar's current largest live display heading is sm:text-5xl (3rem).
@@ -173,13 +199,27 @@
 }
 
 @media (max-width: 639px) {
+  .site-frame:has(.advisor-viewport, .crm-health-viewport, .onboarding-viewport, .routing-viewport, .roi-viewport) {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 1.5rem;
+  }
+
   .advisor-viewport,
   .crm-health-viewport,
   .onboarding-viewport,
   .routing-viewport,
   .roi-viewport {
-    height: calc(100dvh - 8rem);
-    min-height: 540px;
+    height: calc(100dvh - 8.5rem);
+    min-height: 560px;
+  }
+
+  .advisor-toolbar,
+  .crm-health-toolbar,
+  .onboarding-toolbar,
+  .routing-toolbar,
+  .roi-toolbar {
+    padding-bottom: 12px;
   }
 }
 
