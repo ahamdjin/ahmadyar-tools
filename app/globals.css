@@ -27,7 +27,8 @@
 .advisor-viewport,
 .crm-health-viewport,
 .onboarding-viewport,
-.routing-viewport {
+.routing-viewport,
+.roi-viewport {
   position: relative;
   z-index: 1;
   display: grid;
@@ -46,7 +47,8 @@
 .advisor-toolbar,
 .crm-health-toolbar,
 .onboarding-toolbar,
-.routing-toolbar {
+.routing-toolbar,
+.roi-toolbar {
   display: flex;
   width: 100%;
   min-width: 0;
@@ -59,7 +61,8 @@
 .advisor-workspace,
 .crm-health-workspace,
 .onboarding-workspace,
-.routing-workspace {
+.routing-workspace,
+.roi-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   width: 100%;
@@ -105,7 +108,8 @@
 
 .crm-health-workspace > .crm-health-check,
 .onboarding-workspace > .onboarding-planner,
-.routing-workspace > .routing-check {
+.routing-workspace > .routing-check,
+.roi-workspace > .roi-calculator {
   width: 100%;
   max-width: 100%;
   height: 100%;
@@ -135,14 +139,20 @@
 .routing-viewport [class~='border-t'],
 .routing-viewport [class~='border-t-2'],
 .routing-viewport [class~='border-b'],
-.routing-viewport [class~='border-l'] {
+.routing-viewport [class~='border-l'],
+.roi-viewport [class~='border-y'],
+.roi-viewport [class~='border-t'],
+.roi-viewport [class~='border-t-2'],
+.roi-viewport [class~='border-b'],
+.roi-viewport [class~='border-l'] {
   border-color: transparent !important;
 }
 
 .advisor-guide,
 .crm-health-guide,
 .onboarding-guide,
-.routing-guide {
+.routing-guide,
+.roi-guide {
   width: 100%;
   max-width: 100%;
   margin-left: 0;
@@ -165,7 +175,8 @@
   .advisor-viewport,
   .crm-health-viewport,
   .onboarding-viewport,
-  .routing-viewport {
+  .routing-viewport,
+  .roi-viewport {
     height: calc(100dvh - 8rem);
     min-height: 540px;
   }
