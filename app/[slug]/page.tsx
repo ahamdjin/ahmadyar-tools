@@ -174,7 +174,9 @@ export default async function ToolPage({ params }: Props) {
               <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
             </div>
           </div>
-          <ArchitectureAdvisor />
+          <div className="advisor-workspace">
+            <ArchitectureAdvisor />
+          </div>
         </div>
         <AdvisorSeoContent />
       </>
