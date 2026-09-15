@@ -1,4 +1,4 @@
-import { analyzeArchitecture } from './analyze'
+import { analyzeArchitecture } from './recommend'
 import type { ArchitectureKind, AssessmentInput, PlatformId } from './types'
 
 export type StressScenario = {
