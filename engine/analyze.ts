@@ -1,4 +1,5 @@
 import { inferEnvironment, type DiscoveryProfile } from './discovery'
+import { appAffinityBonus, getPlatformKnowledge, PRIMARY_NATIVE_PLATFORM_BY_APP } from './platform-knowledge'
 import { PLATFORMS, type PlatformProfile } from './platforms'
 import type {
   ArchitectureAdvice,
@@ -15,7 +16,6 @@ const clamp = (value: number, min = 0, max = 100) => Math.max(min, Math.min(max,
 const average = (values: number[]) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 70
 
 const impactValue = { low: 20, medium: 46, high: 76, critical: 100 } as const
-const maintenanceValue = { low: 25, medium: 58, high: 92 } as const
 const stabilityValue = { changing: 34, 'mostly-stable': 72, stable: 100 } as const
 const branchingValue = { none: 0, simple: 34, advanced: 86 } as const
 const ownerCapability = { none: 14, 'power-user': 38, 'automation-specialist': 72, developer: 100 } as const
@@ -29,6 +29,7 @@ function workflowComplexity(input: AssessmentInput, discovery: DiscoveryProfile)
   score += Math.min(12, Math.max(0, input.appsPerWorkflow - 2) * 1.8)
   score += discovery.apiPressure * 0.12
   if (input.loopsOrBatching) score += 8
+  if (input.durableJobs) score += 7
   if (input.customApi) score += 10
   if (input.aiSteps) score += 6
   if (input.humanApprovals) score += 4
@@ -50,6 +51,7 @@ function reliabilityRisk(input: AssessmentInput, discovery: DiscoveryProfile) {
   let score = impactValue[input.failureImpact] * 0.56
   if (input.duplicateUnsafe) score += 14
   if (input.retriesRequired) score += 8
+  if (input.durableJobs) score += 4
   if (input.realtime) score += 6
   if (input.sensitiveData) score += 8
   if (discovery.apps.some((app) => app.category === 'finance' || app.category === 'erp')) score += 5
@@ -58,11 +60,12 @@ function reliabilityRisk(input: AssessmentInput, discovery: DiscoveryProfile) {
 
 function classifyArchitecture(input: AssessmentInput, discovery: DiscoveryProfile, complexity: number, scale: number): ArchitectureKind {
   const crmCentered = input.crmCentered || discovery.crmCenteredSignal
+  const explicitNative = discovery.primarySystem ? PRIMARY_NATIVE_PLATFORM_BY_APP[discovery.primarySystem.id] : undefined
   if (input.productLogic || input.portfolioShape === 'product-like' || (input.failureImpact === 'critical' && input.databaseWork && input.realtime && complexity >= 74)) return 'application'
   if (input.humanApprovals && (input.aiSteps || input.filesOrDocuments || input.failureImpact === 'high' || input.failureImpact === 'critical')) return 'human-in-the-loop'
   if (input.databaseWork && (input.loopsOrBatching || discovery.categoryCounts.has('data')) && input.monthlyRuns >= 25_000 && scale >= 68) return 'data-pipeline'
-  if (crmCentered && input.appsPerWorkflow <= 3 && complexity < 45 && discovery.unknownSystems <= 1) return 'native-automation'
-  if (complexity >= 62 || input.customApi || discovery.apiPressure >= 48 || input.branching === 'advanced') return 'orchestration'
+  if ((crmCentered || explicitNative) && input.appsPerWorkflow <= 3 && complexity < 45 && discovery.unknownSystems <= 1) return 'native-automation'
+  if (complexity >= 62 || input.customApi || discovery.apiPressure >= 48 || input.branching === 'advanced' || input.durableJobs) return 'orchestration'
   return 'integration-automation'
 }
 
@@ -103,7 +106,7 @@ function economicsFit(platform: PlatformProfile, input: AssessmentInput, discove
   const budgetGap = Math.max(0, platform.budgetFloor - capacity)
   const budgetFit = budgetGap === 0 ? 96 : Math.max(18, 92 - budgetGap * 28)
   let fit = platform.volumeEconomics[discovery.workloadBand] * 0.64 + budgetFit * 0.36
-  if ((platform.id === 'n8n-self-hosted' || platform.id === 'activepieces') && input.technicalOwner === 'none') fit -= 28
+  if ((platform.id === 'n8n-self-hosted' || platform.id === 'activepieces' || platform.id === 'trigger-dev') && input.selfHosting === 'required' && input.technicalOwner === 'none') fit -= 28
   if (platform.id === 'n8n-self-hosted' && input.maintenance === 'low') fit -= 18
   if (platform.id === 'custom-code' && input.technicalOwner !== 'developer') fit -= 28
   return Math.round(clamp(fit))
@@ -118,9 +121,11 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
   let eligible = true
   const reasons: string[] = []
   const cautions: string[] = []
+  const knowledge = getPlatformKnowledge(platform.id)
   const effectiveCrmCentered = input.crmCentered || discovery.crmCenteredSignal
   const effectiveMicrosoftFirst = input.microsoftFirst || discovery.microsoftFirstSignal
   const capacity = budgetCapacity[input.budget]
+  const primaryId = discovery.primarySystem?.id
 
   if (input.selfHosting === 'required' && platform.selfHostFit < 90) {
     eligible = false
@@ -188,6 +193,12 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
   }
   let score = numerator / denominator
 
+  const affinity = appAffinityBonus(platform.id, input.selectedApps)
+  if (affinity > 0) {
+    score += affinity
+    if (affinity >= 4) reasons.push('Several systems in your stack are a natural fit for this platform’s operating model.')
+  }
+
   const existingPlatformIds = new Set(discovery.automationApps.map((app) => app.id))
   const existingMatch =
     (platform.id === 'zapier' && existingPlatformIds.has('zapier')) ||
@@ -196,6 +207,7 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     (platform.id === 'power-automate' && existingPlatformIds.has('power-automate')) ||
     (platform.id === 'activepieces' && existingPlatformIds.has('activepieces')) ||
     (platform.id === 'pipedream' && existingPlatformIds.has('pipedream')) ||
+    (platform.id === 'trigger-dev' && existingPlatformIds.has('trigger-dev')) ||
     (platform.id === 'workato' && existingPlatformIds.has('workato')) ||
     (platform.id === 'tray' && existingPlatformIds.has('tray'))
 
@@ -206,6 +218,46 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
   if (platform.id === 'crm-native' && effectiveCrmCentered && complexity < 48 && input.appsPerWorkflow <= 3) {
     score += 18
     reasons.push('Most of the work can stay in the system of record, removing an unnecessary automation layer.')
+  }
+  if (platform.id === 'hubspot-native') {
+    if (primaryId === 'hubspot' && complexity < 60 && input.appsPerWorkflow <= 4 && !input.productLogic) {
+      score += 26
+      reasons.push('HubSpot is the system of record and can own the CRM-centered workflow without an extra orchestration layer.')
+    }
+    if (input.customApi || discovery.unknownSystems >= 2 || complexity >= 68) {
+      score -= 14
+      cautions.push('The workflow is moving beyond a HubSpot-centered boundary and may need an external orchestration layer.')
+    }
+  }
+  if (platform.id === 'gohighlevel-native') {
+    if (primaryId === 'gohighlevel' && complexity < 62 && input.appsPerWorkflow <= 4 && !input.productLogic) {
+      score += 28
+      reasons.push('GoHighLevel already owns the lead, messaging, appointment, opportunity, and follow-up context, so keeping this native removes avoidable infrastructure.')
+    }
+    if (input.customApi || discovery.unknownSystems >= 3 || complexity >= 70 || input.databaseWork) {
+      score -= 13
+      cautions.push('The workload is becoming a cross-system/data orchestration problem rather than mainly a HighLevel workflow problem.')
+    }
+  }
+  if (platform.id === 'salesforce-flow') {
+    if (primaryId === 'salesforce' && (input.governance || input.departments >= 2) && !input.productLogic) {
+      score += 24
+      reasons.push('Salesforce owns the business state and the governance needs favor keeping core CRM process logic in Flow.')
+    }
+    if (discovery.unknownSystems >= 4 || input.customApi) {
+      score -= 8
+      cautions.push('A broader integration/API layer may still be needed around Salesforce for cross-system orchestration.')
+    }
+  }
+  if (platform.id === 'shopify-flow') {
+    if (input.selectedApps.includes('shopify') && complexity < 52 && input.appsPerWorkflow <= 4 && !input.customApi && !input.productLogic) {
+      score += 22
+      reasons.push('The workflow is store-centered and simple enough that Shopify should own the event logic before another platform is introduced.')
+    }
+    if (input.databaseWork || input.customApi || complexity >= 64) {
+      score -= 14
+      cautions.push('The workflow has crossed beyond straightforward store-event automation.')
+    }
   }
   if (platform.id === 'zapier' && (input.technicalOwner === 'none' || input.technicalOwner === 'power-user') && complexity < 58 && discovery.apiPressure < 48) {
     score += 12
@@ -248,19 +300,46 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     reasons.push('Microsoft is an environment constraint, not just another connector, so identity, governance, and native services matter.')
   }
   if (platform.id === 'activepieces' && input.selfHosting !== 'none' && (input.technicalOwner === 'automation-specialist' || input.technicalOwner === 'developer')) {
-    score += 9
-    reasons.push('Open-source/self-hosting flexibility matches the ownership model, provided the required connectors are deep enough.')
+    score += input.customApi || complexity >= 70 ? 7 : 14
+    reasons.push('Open-source/self-hosting flexibility matches the ownership model without requiring the deepest developer-first runtime.')
   }
   if (platform.id === 'pipedream' && input.technicalOwner === 'developer' && discovery.apiPressure >= 42) {
     score += 14
     reasons.push('A developer owns the system and API/code-heavy event workflows are central, which fits a code-friendly execution model.')
   }
+  if (platform.id === 'pipedream' && input.durableJobs) {
+    score -= 7
+    cautions.push('Durable long-running job orchestration is important enough that a purpose-built background-job platform deserves stronger consideration.')
+  }
+  if (platform.id === 'trigger-dev') {
+    if (input.durableJobs && input.technicalOwner === 'developer') {
+      score += 30
+      reasons.push('Durable background jobs, queues, retries, or long-running tasks are core requirements and a developer owns the system.')
+    }
+    if (input.durableJobs && (input.aiSteps || input.realtime || input.retriesRequired)) score += 8
+    if (!input.durableJobs) {
+      score -= 18
+      cautions.push('The workload does not currently need a dedicated durable background-job runtime.')
+    }
+    if (input.technicalOwner !== 'developer') {
+      score -= 30
+      cautions.push('Trigger.dev is developer-first and should not become a business team’s primary no-code automation platform.')
+    }
+  }
   if ((platform.id === 'workato' || platform.id === 'tray') && input.futureWorkflows >= 45 && input.departments >= 3 && (input.governance || input.sensitiveData)) {
     score += 14
     reasons.push('The workflow portfolio is becoming a cross-team integration program where governance and reusable platform capabilities justify enterprise tooling.')
   }
+  if (platform.id === 'workato' && input.team === 'mixed' && discovery.enterpriseApps.length >= 2 && input.governance) {
+    score += 12
+    reasons.push('The environment spans governed business systems and a mixed team, which favors an enterprise integration operating model.')
+  }
+  if (platform.id === 'tray' && input.technicalOwner === 'developer' && input.customApi && input.futureWorkflows >= 50 && input.departments >= 3) {
+    score += 16
+    reasons.push('A technical integration team needs reusable API-led capabilities across a large workflow portfolio.')
+  }
   if (platform.id === 'mulesoft' && input.futureWorkflows >= 80 && discovery.enterpriseApps.length >= 3 && input.technicalOwner === 'developer' && input.governance) {
-    score += 18
+    score += 24
     reasons.push('This resembles an enterprise API and integration architecture problem rather than a collection of business automations.')
   }
   if (platform.id === 'custom-code' && (input.productLogic || input.portfolioShape === 'product-like')) {
@@ -286,6 +365,9 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     dimensions,
     reasons: reasons.slice(0, 4),
     cautions: cautions.slice(0, 4),
+    strengths: knowledge.strengths,
+    tradeoffs: knowledge.tradeoffs,
+    winsWhen: knowledge.winsWhen,
     costPressure: Math.round(clamp(100 - economics)),
     supportFit,
   }
@@ -295,6 +377,7 @@ function buildSafeguards(input: AssessmentInput) {
   const items: string[] = []
   if (input.duplicateUnsafe) items.push('Use idempotency or a deduplication key before any action that must never happen twice.')
   if (input.retriesRequired) items.push('Separate retryable failures from permanent failures and send exhausted retries to a visible fallback queue.')
+  if (input.durableJobs) items.push('Define queue/concurrency limits, retry policy, timeout expectations, and a replay strategy for durable background work.')
   if (input.failureImpact === 'high' || input.failureImpact === 'critical') items.push('Add failure alerts, a named owner, and a recovery path instead of silently retrying forever.')
   if (input.aiSteps) items.push('Put confidence thresholds and deterministic validation around AI output before it can trigger high-impact actions.')
   if (input.sensitiveData) items.push('Minimize sensitive fields crossing systems and review retention, permissions, logs, and data residency before launch.')
@@ -308,7 +391,7 @@ function architectureSummary(kind: ArchitectureKind, primary: PlatformResult, di
   if (kind === 'application') return `Treat the core as software architecture, not one giant workflow. ${primary.name} should own stateful or transactional logic; automation platforms can still handle replaceable integrations around the edges.`
   if (kind === 'human-in-the-loop') return `Automate preparation, routing, and repetitive work, but preserve explicit human approval around decisions where mistakes, money, sensitive data, or uncertain AI output matter.`
   if (kind === 'data-pipeline') return `Design this as a repeatable data-processing system with batching, checkpoints, replay, and monitoring. ${primary.name} is the strongest current fit for the orchestration layer.`
-  if (kind === 'orchestration') return `${primary.name} is the strongest orchestration fit for the systems and workflow shape you described. Keep systems of record native and use the orchestration layer for cross-system logic, APIs, transformations, and recovery.`
+  if (kind === 'orchestration') return `${primary.name} is the strongest orchestration fit for the systems and workflow shape you described. Keep systems of record native and use the orchestration layer for cross-system logic, APIs, transformations, durable work, and recovery.`
   return `${primary.name} is the strongest starting point for this integration workload. Keep the architecture simple until branching, scale, APIs, or governance genuinely require another layer.`
 }
 
@@ -318,12 +401,12 @@ function bestEligible(ranking: PlatformResult[], ids: PlatformId[]) {
 
 function buildPortfolioPlan(input: AssessmentInput, discovery: DiscoveryProfile, ranking: PlatformResult[], kind: ArchitectureKind, complexity: number): PortfolioLane[] {
   const lanes: PortfolioLane[] = []
-  const native = bestEligible(ranking, ['crm-native', 'power-automate'])
+  const native = bestEligible(ranking, ['hubspot-native', 'gohighlevel-native', 'salesforce-flow', 'shopify-flow', 'crm-native', 'power-automate'])
   const integration = bestEligible(ranking, ['zapier', 'make', 'power-automate', 'activepieces'])
-  const orchestration = bestEligible(ranking, ['make', 'n8n-cloud', 'n8n-self-hosted', 'pipedream', 'workato', 'tray', 'mulesoft', 'activepieces'])
-  const application = bestEligible(ranking, ['custom-code', 'pipedream', 'n8n-self-hosted'])
+  const orchestration = bestEligible(ranking, ['make', 'n8n-cloud', 'n8n-self-hosted', 'pipedream', 'trigger-dev', 'workato', 'tray', 'mulesoft', 'activepieces'])
+  const application = bestEligible(ranking, ['custom-code', 'trigger-dev', 'pipedream', 'n8n-self-hosted'])
 
-  if ((input.crmCentered || discovery.crmCenteredSignal || input.portfolioShape === 'mostly-simple') && native) {
+  if ((input.crmCentered || discovery.crmCenteredSignal || input.portfolioShape === 'mostly-simple' || Boolean(discovery.primarySystem && PRIMARY_NATIVE_PLATFORM_BY_APP[discovery.primarySystem.id])) && native) {
     lanes.push({
       id: 'native',
       label: 'Simple / native workflows',
@@ -343,14 +426,14 @@ function buildPortfolioPlan(input: AssessmentInput, discovery: DiscoveryProfile,
       useWhen: 'The flow is predictable, connector-led, and easy for the owning team to support.',
     })
   }
-  if ((kind === 'orchestration' || kind === 'data-pipeline' || kind === 'human-in-the-loop' || complexity >= 54 || discovery.apiPressure >= 38) && orchestration) {
+  if ((kind === 'orchestration' || kind === 'data-pipeline' || kind === 'human-in-the-loop' || complexity >= 54 || discovery.apiPressure >= 38 || input.durableJobs) && orchestration) {
     lanes.push({
       id: 'orchestration',
-      label: 'Complex orchestration',
+      label: input.durableJobs ? 'Complex / durable orchestration' : 'Complex orchestration',
       platform: orchestration.id,
       platformName: orchestration.name,
-      purpose: 'Own cross-system branching, APIs, transformations, reusable logic, AI controls, retries, and more complex recovery paths.',
-      useWhen: 'A workflow has enough complexity that keeping it in a simple connector tool becomes fragile or expensive.',
+      purpose: 'Own cross-system branching, APIs, transformations, reusable logic, AI controls, queues, retries, and more complex recovery paths.',
+      useWhen: 'A workflow has enough complexity or durability requirements that keeping it in a simple connector tool becomes fragile or expensive.',
     })
   }
   if ((kind === 'application' || input.productLogic || input.portfolioShape === 'product-like') && application) {
@@ -372,8 +455,15 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
   const scale = scaleScore(input, discovery)
   const risk = reliabilityRisk(input, discovery)
   const kind = classifyArchitecture(input, discovery, complexity, scale)
+  const explicitNative = discovery.primarySystem ? PRIMARY_NATIVE_PLATFORM_BY_APP[discovery.primarySystem.id] : undefined
 
-  const ranking = PLATFORMS
+  const candidateProfiles = PLATFORMS.filter((platform) => {
+    if (platform.requiresSelectedApp && !input.selectedApps.includes(platform.requiresSelectedApp)) return false
+    if (platform.id === 'crm-native' && explicitNative) return false
+    return true
+  })
+
+  const ranking = candidateProfiles
     .map((platform) => scorePlatform(platform, input, discovery, complexity, scale, risk))
     .sort((a, b) => (Number(b.eligible) - Number(a.eligible)) || b.score - a.score)
 
@@ -382,7 +472,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
   const portfolioPlan = buildPortfolioPlan(input, discovery, ranking, kind, complexity)
   const platformMix = [...new Set([primary.id, ...portfolioPlan.map((lane) => lane.platform)])]
 
-  const primaryProfile = PLATFORMS.find((item) => item.id === primary.id)!
+  const primaryProfile = candidateProfiles.find((item) => item.id === primary.id) ?? PLATFORMS.find((item) => item.id === primary.id)!
   const ownerGap = Math.max(0, primaryProfile.technicalRequirement - ownerCapability[input.technicalOwner])
   const maintenanceBurden = Math.round(clamp(ownerGap * 0.54 + input.futureWorkflows * 0.45 + complexity * 0.2 + (input.changeFrequency === 'daily' ? 12 : input.changeFrequency === 'weekly' ? 7 : 0)))
   const automationPotential = Math.round(clamp(stabilityValue[input.processStability] * 0.38 + Math.min(100, input.monthlyRuns / 150) * 0.24 + Math.min(100, input.currentWorkflows * 7) * 0.16 + (100 - Math.min(100, risk * 0.38)) * 0.22))
@@ -396,6 +486,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
   if (input.selectedApps.length === 0) confidence -= 22
   if (input.processStability === 'changing') confidence -= 10
   if (primary.score < 68) confidence -= 6
+  if (margin <= 3) confidence -= 9
   if (input.productLogic && input.failureImpact === 'critical') confidence -= 4
   confidence = Math.round(clamp(confidence, 38, 96))
 
@@ -410,6 +501,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
   if (input.branching !== 'none') orchestrationResponsibilities.push('Cross-system branching, routing rules, and reusable decision logic.')
   if (input.aiSteps) orchestrationResponsibilities.push('AI enrichment or classification with validation, confidence thresholds, and a fallback path.')
   if (input.loopsOrBatching || input.databaseWork) orchestrationResponsibilities.push('Batching, iteration, data shaping, synchronization, and replay between systems.')
+  if (input.durableJobs) orchestrationResponsibilities.push('Durable jobs, queues, concurrency control, schedules, retries, long-running work, and replayable background execution.')
   if (!orchestrationResponsibilities.length) orchestrationResponsibilities.push('Only the handoffs that genuinely cross system boundaries.')
 
   const humanCheckpoints: string[] = []
@@ -423,6 +515,7 @@ export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice 
   if (input.futureWorkflows >= 25 && !input.governance) nextQuestions.push('Will multiple people or departments publish workflows, and who reviews high-impact changes?')
   if (input.monthlyRuns >= 20_000) nextQuestions.push('What does peak-hour traffic look like, not just the monthly average?')
   if (input.customApi) nextQuestions.push('Do the important APIs support rate limits, webhooks, idempotency, and reliable authentication?')
+  if (input.durableJobs) nextQuestions.push('How long can the longest jobs run, what concurrency/backpressure is required, and which jobs must survive deploys or dependency outages?')
   if (input.sensitiveData) nextQuestions.push('Which fields are sensitive, where may they be stored, and how long may logs retain them?')
   if (input.processStability === 'changing') nextQuestions.push('Which parts of the process are still changing? Standardizing them may create more value than automating them immediately.')
 
