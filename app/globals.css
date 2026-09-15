@@ -35,23 +35,27 @@
   animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-body:has(.advisor-viewport) .site-frame {
+body:has(.advisor-viewport) .site-frame,
+body:has(.crm-health-viewport) .site-frame {
   min-height: 0 !important;
   max-width: none !important;
   padding: 0 !important;
 }
 
-body:has(.advisor-viewport) .site-header {
+body:has(.advisor-viewport) .site-header,
+body:has(.crm-health-viewport) .site-header {
   display: none;
 }
 
-body:has(.advisor-viewport) .site-main {
+body:has(.advisor-viewport) .site-main,
+body:has(.crm-health-viewport) .site-main {
   width: 100%;
   max-width: none !important;
   flex: none;
 }
 
-body:has(.advisor-viewport) .site-footer {
+body:has(.advisor-viewport) .site-footer,
+body:has(.crm-health-viewport) .site-footer {
   width: min(92vw, 1080px);
   margin-left: auto !important;
   margin-right: auto !important;
@@ -178,8 +182,63 @@ body:has(.advisor-viewport) .site-footer {
   margin-right: auto;
 }
 
+/* CRM diagnostic uses the same proven canvas/workspace model, but has its own
+   classes so changes to one product cannot accidentally move the other. */
+.crm-health-viewport {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100svh;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: white;
+  padding: max(14px, env(safe-area-inset-top)) 16px max(12px, env(safe-area-inset-bottom));
+}
+
+.dark .crm-health-viewport {
+  background: var(--color-zinc-950);
+}
+
+.crm-health-toolbar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.crm-health-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: stretch center;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.crm-health-workspace > .crm-health-check {
+  width: min(100%, 1120px);
+  max-width: 1120px;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 @media (min-width: 640px) {
-  .advisor-viewport {
+  .advisor-viewport,
+  .crm-health-viewport {
     padding: max(18px, env(safe-area-inset-top)) 24px max(16px, env(safe-area-inset-bottom));
   }
 }
