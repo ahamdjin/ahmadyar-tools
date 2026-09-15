@@ -1,35 +1,111 @@
 # Decision model
 
-The advisor evaluates the environment in stages rather than adding arbitrary points to platform names.
+The Architecture Advisor is a deterministic decision system, not a brand quiz. It evaluates the process, operating environment, architecture boundary, ownership model, reliability requirements, and platform trade-offs in stages so one strong vendor score cannot erase a more important constraint.
 
-## 1. Process and portfolio shape
+## 1. Process readiness comes first
 
-Current workflow count, expected future workflow count, volume, apps per workflow, steps per workflow, and process stability determine whether the user is choosing a tool for one automation or an automation operating model.
+Before platform selection, the engine asks whether the process is mature enough to automate. Process stability, change frequency, workflow shape, volume, human judgment, failure impact, AI involvement, and product/application boundaries can produce five dispositions:
 
-## 2. Ownership
+- **Ready to automate** — automate the stable process with the smallest maintainable architecture.
+- **Pilot first** — automate one bounded path while the wider process is still settling.
+- **Standardize first** — stabilize trigger, ownership, handoffs, exceptions, and source of truth before scaling automation.
+- **Automate with a human checkpoint** — automate preparation and repetition but preserve judgment around high-impact or uncertain decisions.
+- **Software first** — persistent state, transactions, customer-visible behavior, or domain logic belong in application architecture; workflow automation stays around the edges.
 
-Builder profile and maintenance capacity matter independently from workflow capability. A platform that can technically execute a workflow can still be the wrong recommendation when the team cannot safely own it.
+A powerful platform does not turn an unstable process into a good automation candidate.
 
-## 3. Workflow architecture
+## 2. Discover the real environment
 
-Branching, loops, APIs, AI, approvals, documents, databases, real-time requirements, and product logic are combined into architecture complexity. They are optional inputs; the engine does not assume advanced logic exists.
+The engine starts with the systems the business actually uses, including internal or unknown systems. The selected stack is used to infer source-of-truth pressure, native-platform fit, Microsoft concentration, API pressure, integration difficulty, estimated action volume, and existing automation layers.
 
-## 4. Reliability
+Unknown systems increase uncertainty instead of being silently treated as normal connectors.
 
-Failure impact, duplicate safety, retry requirements, and sensitive data influence architecture and safeguards. Critical or irreversible actions receive stronger architecture requirements.
+## 3. Model current and future scale
 
-## 5. Hard constraints
+Current workflow count, expected workflow count in 12–24 months, execution volume, apps per workflow, workflow size, team count, and change frequency determine whether the user is solving one automation or designing an automation operating model.
 
-Requirements such as mandatory self-hosting eliminate incompatible managed-only options before weighted scoring.
+Growth matters because the correct architecture for four simple workflows can become expensive or ungovernable at eighty workflows, while a small number of stateful or transaction-critical workflows can justify software much earlier.
 
-## 6. Context
+## 4. Ownership is an architecture constraint
 
-CRM-centered workflows receive a native-system bias when the process is simple enough. Microsoft-first environments receive a Power Automate ecosystem bias. These are context adjustments, not universal preferences.
+Builder profile, strongest day-to-day owner, maintenance capacity, governance needs, and hosting preference matter independently from raw platform capability. A platform that can technically execute the workflow is still a bad recommendation if the team cannot safely debug, update, secure, and recover it.
 
-## 7. Platform fit
+Self-hosting is treated as an operating responsibility, not a free deployment checkbox.
 
-The remaining platforms are compared across ownership, simplicity, integration coverage, complexity, scale, reliability, control, and ecosystem fit. User priorities may change weights but cannot override hard constraints.
+## 5. Classify workflow architecture
 
-## 8. Output
+Branching, loops, batching, APIs, AI, approvals, documents, databases, real-time requirements, durable jobs, and product logic are combined into architecture complexity. The engine classifies the workload before choosing a vendor:
 
-The product returns an architecture type, recommended platform or platform mix, confidence, architecture metrics, responsibilities, safeguards, human checkpoints, alternatives, and questions that still need discovery.
+- native automation
+- integration automation
+- orchestration
+- human-in-the-loop
+- data pipeline
+- application/software
+
+Platform scoring happens inside this architectural context rather than defining the architecture by itself.
+
+## 6. Reliability changes the design
+
+Failure impact, duplicate safety, retry requirements, durable execution, real-time behavior, sensitive data, and irreversible side effects influence both architecture and safeguards.
+
+A duplicated Slack notification and a duplicated charge are not equivalent failures. When retries are required, the engine can recommend idempotency/deduplication, bounded retry policy, visible recovery queues, alert ownership, replay strategy, and deterministic validation around AI output.
+
+## 7. Apply hard constraints before weighted trade-offs
+
+Mandatory self-hosting, product/application logic, ownership capability, ecosystem constraints, and enterprise governance can eliminate or strongly constrain options before normal scoring.
+
+Examples:
+
+- a simple CRM-contained workflow can remain native;
+- a Microsoft-first governed environment can favor Power Automate;
+- product-like transactional state can force the core into custom software;
+- a business-only owner can make developer-first infrastructure operationally inappropriate;
+- required self-hosting removes managed-only choices.
+
+## 8. Compare platforms by fit, not popularity
+
+Eligible platforms are compared across ownership, simplicity, integration support, workflow complexity, scale, reliability, control, ecosystem fit, and economics. Exact vendor prices are intentionally not hard-coded as permanent truth; the engine models billing behavior and cost pressure instead.
+
+App affinity can help a platform, but merely selecting an app must never force that platform to win.
+
+## 9. Measure decision stability and confidence
+
+Confidence is not a decorative percentage. The engine looks at the score margin between viable candidates and unresolved architecture boundaries, then identifies the few unanswered questions most likely to change the recommendation.
+
+High-value uncertainty includes:
+
+- unknown/internal system connectivity;
+- native versus external automation boundary;
+- Zapier-versus-Make workflow shape;
+- technical ownership;
+- self-hosting responsibility;
+- durable background-job requirements;
+- software/application boundary;
+- governance requirements;
+- growth economics;
+- retry/idempotency failure semantics.
+
+Close candidates reduce confidence instead of manufacturing certainty. The product exposes at most a small set of high-value follow-up questions.
+
+## 10. Design the portfolio, not one universal tool
+
+The output may assign different workflow classes to different layers:
+
+- native system for simple lifecycle/state work;
+- lightweight integration for predictable SaaS handoffs;
+- orchestration for APIs, branching, transformations, data, AI, retries, or complex recovery;
+- durable developer jobs for application-side asynchronous work;
+- custom software for persistent transactional or product-critical logic.
+
+The goal is a maintainable architecture, not a single platform winner.
+
+## 11. Stress-test the recommendation
+
+The Advisor recomputes the architecture under changed conditions such as higher volume, loss of technical ownership, self-hosting requirements, more integrations, or increased criticality. A useful recommendation should explain when it stops being the right recommendation.
+
+## 12. Testing policy
+
+Every meaningful platform/architecture change should have deterministic regression coverage. Benchmark scenarios ensure each modeled platform can win in the environment it is designed for, while matrix/invariant tests check bounded scores, safety ordering, hard constraints, stable outputs, and cross-tool assumptions.
+
+The authoritative decision path must work without an AI API. AI may later help parse narrative input or explain results, but it should not own hard constraints, arithmetic, vendor facts, or the final recommendation authority.
