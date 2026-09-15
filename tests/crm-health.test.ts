@@ -71,10 +71,7 @@ test('high-volume manual sales operation exposes routing and response risk', () 
 })
 
 test('automation sprawl is called out instead of rewarding more tools', () => {
-  const result = analyzeCrmHealth({
-    ...strong,
-    connectedApps: ['zapier', 'make', 'n8n', 'slack', 'typeform', 'stripe'],
-  })
+  const result = analyzeCrmHealth({ ...strong, connectedApps: ['zapier', 'make', 'n8n', 'slack', 'typeform', 'stripe'] })
   assert.ok(result.issues.some((issue) => issue.id === 'automation-sprawl'))
   assert.match(result.architecture, /consolidate the automation layer/i)
   assert.match(result.warning ?? '', /several automation layers/i)
@@ -92,14 +89,16 @@ test('shadow systems reduce reporting and adoption health', () => {
   assert.ok(shadowed.issues.some((issue) => issue.id === 'adoption'))
 })
 
-test('CRM health route uses the dedicated full-screen diagnostic, not the legacy quiz', () => {
+test('CRM health route uses the dedicated diagnostic inside the portfolio frame', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const component = readFileSync('components/crm-health-check.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
+  const frame = readFileSync('components/route-frame.tsx', 'utf8')
   assert.match(page, /crm-health-viewport/)
   assert.match(page, /<CrmHealthCheck \/>/)
   assert.match(component, /Search 140\+ systems/)
   assert.match(component, /Fix the leaks in this order/)
   assert.match(css, /\.crm-health-workspace/)
-  assert.match(css, /place-items:\s*stretch center/)
+  assert.match(frame, /max-w-screen-sm/)
+  assert.doesNotMatch(frame, /IMMERSIVE_TOOL_PATHS/)
 })
