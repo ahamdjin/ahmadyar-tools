@@ -9,7 +9,7 @@ These are free, interactive business-automation decision tools. The visible guid
 
 ## Automation Architecture Advisor
 URL: ${SITE.origin}/tools/automation-architecture-advisor
-Purpose: Decide whether a process should stay native, use a no-code integration layer, require deeper orchestration, durable developer jobs, enterprise integration infrastructure, or custom software. It evaluates the actual app stack, workflow portfolio, ownership, volume, reliability, governance, hosting, economics, and future growth. It can recommend multiple platforms for different workflow lanes instead of forcing one tool across the business.
+Purpose: First decide whether the process is ready to automate now, should be piloted, should be standardized first, needs a human checkpoint, or has crossed into software/application architecture. Then decide whether work should stay native, use a no-code integration layer, require deeper orchestration, durable developer jobs, enterprise integration infrastructure, or custom software. It evaluates the actual app stack, workflow portfolio, ownership, volume, process stability, change frequency, reliability, governance, hosting, economics, and future growth. It can recommend multiple platforms for different workflow lanes instead of forcing one tool across the business.
 Platforms modeled include HubSpot native automation, GoHighLevel native automation, Salesforce Flow, Shopify Flow, CRM-native automation, Zapier, Make, n8n Cloud, n8n self-hosted, Power Automate, Activepieces, Pipedream, Trigger.dev, Workato, Tray.ai, MuleSoft, and custom software.
 
 ## CRM Automation Health Check
@@ -18,14 +18,14 @@ Purpose: Diagnose lead capture, CRM data quality, source attribution, duplicate 
 
 ## Client Onboarding Automation Planner
 URL: ${SITE.origin}/tools/client-onboarding-automation-planner
-Purpose: Design a reliable sales-to-delivery onboarding flow across CRM, contracts, payments, intake, project management, files, communication, access, kickoff, and exceptions. It models start/readiness gates, structured handoff, missing information, duplicate safety, ownership, templates, monitoring, and time-to-first-value.
+Purpose: Design a reliable sales-to-delivery onboarding flow across CRM, contracts, payments, intake, project management, files, communication, access, kickoff, and exceptions. It models authoritative start/readiness gates, structured handoff, missing information, duplicate safety, ownership, templates, monitoring, exception recovery, and time-to-first-value.
 
 ## Lead Routing Rules Builder
 URL: ${SITE.origin}/tools/lead-routing-rules-builder
-Purpose: Design and test lead assignment logic. The recommended sequence is normalize and deduplicate, protect existing relationships, apply priority and eligibility, distribute inside the qualified pool, then enforce fallback and response SLA. It models territory, product/service, segment, named accounts, round robin, capacity, availability, after-hours coverage, reassignment, auditability, and monitoring.
+Purpose: Design and test lead assignment logic. The recommended sequence is normalize and deduplicate, protect existing relationships, apply protected priority rules, build the eligible pool, remove unavailable owners, then enforce fallback and response SLA. It models territory, product/service, segment, named accounts, round robin, capacity, availability, after-hours coverage, reassignment, auditability, monitoring, and concrete pre-launch test cases.
 
 ## Methodology
-The tools use deterministic, testable decision engines. Vendor popularity does not decide the answer. Hard constraints and architecture boundaries are evaluated before weighted trade-offs. Close platform scores lower confidence instead of manufacturing certainty. Vendor capabilities change, so exact edition/pricing facts should be verified before implementation.
+The tools use deterministic, testable decision engines. Vendor popularity does not decide the answer. Process readiness and hard architecture constraints are evaluated before weighted platform trade-offs. Close platform scores lower confidence instead of manufacturing certainty. High-impact unanswered questions are surfaced explicitly. Vendor capabilities change, so exact edition/pricing facts should be verified before implementation.
 
 Author: Ahmad Yar
 Primary topics: CRM automation, revenue operations, workflow automation, automation architecture, lead routing, client onboarding, business process automation.
