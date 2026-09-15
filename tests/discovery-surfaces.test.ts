@@ -25,8 +25,9 @@ test('machine-readable index describes every public tool without replacing visib
 
 test('tool sitemap uses canonical ahmadyar URLs from the shared registry', () => {
   assert.match(sitemap, /SITE\.origin/)
+  assert.match(sitemap, /SITE\.toolsPath/)
   assert.match(sitemap, /TOOLS\.map/)
-  assert.match(sitemap, /\/tools\/\$\{tool\.slug\}/)
+  assert.match(sitemap, /SITE\.toolsPath\}\/\$\{tool\.slug\}/)
 })
 
 test('all six advanced tools have dedicated metadata and crawlable guidance', () => {
