@@ -32,9 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geist.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}>
         <ThemeProvider>
           <div className="min-h-screen w-full font-[family-name:var(--font-geist)]">
-            <div className="mx-auto flex min-h-screen w-full max-w-screen-sm flex-col px-4 pt-8 sm:px-5 sm:pt-14 md:pt-20">
+            <div className="site-frame mx-auto flex min-h-screen w-full max-w-screen-sm flex-col px-4 pt-8 sm:px-5 sm:pt-14 md:pt-20">
               <SiteHeader />
-              <main className="flex-1">{children}</main>
+              <main className="site-main flex-1">{children}</main>
               <SiteFooter />
             </div>
           </div>
