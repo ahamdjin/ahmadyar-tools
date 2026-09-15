@@ -1,0 +1,26 @@
+# Ahmad Yar Automation Tools
+
+Canonical site: https://ahmadyar.co/tools
+
+## Automation Architecture Advisor
+
+Canonical URL: https://ahmadyar.co/tools/automation-architecture-advisor
+
+A free interactive advisor for choosing an automation architecture and platform mix based on the systems a business already uses, current and future workflow count, execution volume, workflow complexity, APIs, branching, AI, databases, durable jobs, reliability consequences, ownership, governance, hosting requirements, budget, and growth.
+
+The advisor can recommend native automation in HubSpot, GoHighLevel, Salesforce, Shopify, or Microsoft environments; integration platforms such as Zapier or Make; orchestration platforms such as n8n, Pipedream, Activepieces, Workato, Tray.ai, or MuleSoft; Trigger.dev for developer-owned durable background jobs; and custom software for product-like or transactional logic.
+
+The recommendation engine is deterministic and does not require an AI API. It can recommend different tools for different workflow classes rather than forcing an entire company onto one platform.
+
+The page also includes a decision framework, platform trade-offs, architecture examples, methodology, and frequently asked questions intended to help people compare automation approaches even without completing the interactive assessment.
+
+## Other tools
+
+- CRM Automation Health Check: https://ahmadyar.co/tools/crm-automation-health-check
+- Client Onboarding Automation Planner: https://ahmadyar.co/tools/client-onboarding-automation-planner
+- Lead Routing Rules Builder: https://ahmadyar.co/tools/lead-routing-rules-builder
+
+## Publisher
+
+Ahmad Yar — AI Automation Consultant
+https://ahmadyar.co
