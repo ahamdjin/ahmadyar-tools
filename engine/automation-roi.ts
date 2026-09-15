@@ -167,7 +167,13 @@ function confidenceFor(input: AutomationRoiInput) {
   const exceptionConfidence = clamp(100 - input.exceptionPct * 0.75, 35, 100)
   const reviewConfidence = clamp(100 - input.humanReviewPct * 0.35, 55, 100)
   let confidence = source * 0.34 + stability * 0.25 + change * 0.17 + exceptionConfidence * 0.14 + reviewConfidence * 0.1
-  if ((input.failureImpact === 'high' || input.failureImpact === 'critical') && input.baselineSource === 'guess') confidence -= 8
+
+  // A tidy process cannot make an unmeasured business case precise. Baseline
+  // quality is therefore a ceiling, not just one weighted input.
+  if (input.baselineSource === 'guess') confidence = Math.min(confidence, 54)
+  if (input.baselineSource === 'estimated') confidence = Math.min(confidence, 82)
+  if (input.failureImpact === 'high' || input.failureImpact === 'critical') confidence -= input.baselineSource === 'guess' ? 8 : 4
+
   return Math.round(clamp(confidence, 25, 95))
 }
 
