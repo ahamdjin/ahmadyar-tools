@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.origin),
   title: { default: 'Automation Tools | Ahmad Yar', template: '%s | Ahmad Yar' },
   description: 'Practical automation architecture, CRM, onboarding, and lead-routing tools by Ahmad Yar.',
-  alternates: { canonical: '/tools' },
+  alternates: { canonical: SITE.toolsPath },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
