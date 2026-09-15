@@ -8,20 +8,18 @@ const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 
-test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
+test('tool applications break out of the narrow portfolio article frame', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
-  assert.match(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*width:\s*100%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*max-width:\s*100%/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*100% !important/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(css, /100vw/)
-  assert.doesNotMatch(css, /margin-left:\s*calc\(50% - 50vw\)/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*left:\s*50%/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*translate:\s*-50% 0/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*100dvw/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 9rem\)/)
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.routing-workspace\s*\{[^}]*width:\s*min\(100%, 1400px\)/)
+  assert.match(css, /\.crm-health-workspace > \.crm-health-check,[\s\S]*width:\s*min\(100%, 1240px\)/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
@@ -36,6 +34,7 @@ test('advisor page exposes crawlable guidance below the interactive tool', () =>
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
+  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*max-width:\s*900px/)
 })
 
 test('search and AI guidance covers native, no-code, orchestration, durable jobs, and software', () => {
