@@ -46,6 +46,7 @@ const PRIORITIES: Array<{ id: Priority; label: string; detail: string }> = [
 ]
 
 const number = new Intl.NumberFormat('en-US')
+const POPULAR_ORDER = new Map<string, number>(POPULAR_APP_IDS.map((id, index) => [id, index]))
 
 function Field({
   label,
@@ -152,7 +153,6 @@ function SystemsForm({ input, setInput }: { input: AssessmentInput; setInput: Re
   const plan = useMemo(() => getQuestionPlan(input), [input])
 
   const selected = input.selectedApps.map((id) => APP_BY_ID.get(id)).filter((app): app is AppDefinition => Boolean(app))
-  const popularOrder = new Map(POPULAR_APP_IDS.map((id, index) => [id, index]))
   const results = useMemo(() => {
     const term = query.trim().toLowerCase()
     return APP_CATALOG
@@ -160,10 +160,10 @@ function SystemsForm({ input, setInput }: { input: AssessmentInput; setInput: Re
       .filter((app) => !term || `${app.name} ${app.category} ${app.vendor}`.toLowerCase().includes(term))
       .sort((a, b) => {
         if (term) return a.name.localeCompare(b.name)
-        return (popularOrder.get(a.id) ?? 999) - (popularOrder.get(b.id) ?? 999) || a.name.localeCompare(b.name)
+        return (POPULAR_ORDER.get(a.id) ?? 999) - (POPULAR_ORDER.get(b.id) ?? 999) || a.name.localeCompare(b.name)
       })
       .slice(0, term || category !== 'all' ? 36 : 24)
-  }, [category, query, popularOrder])
+  }, [category, query])
 
   const toggleApp = (id: string) => {
     setInput((current) => {
