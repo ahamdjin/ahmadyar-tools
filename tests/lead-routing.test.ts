@@ -90,14 +90,15 @@ test('high-volume weak observability is treated as an operating risk', () => {
   }
 })
 
-test('lead routing route is a dedicated immersive product, not the legacy quiz', () => {
+test('lead routing route is a dedicated product inside the portfolio frame', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const frame = readFileSync('components/route-frame.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
   assert.match(page, /<LeadRoutingBuilder \/>/)
   assert.match(page, /<LeadRoutingSeoContent \/>/)
   assert.match(page, /LEAD_ROUTING_FAQS/)
-  assert.match(frame, /lead-routing-rules-builder/)
+  assert.match(frame, /max-w-screen-sm/)
+  assert.doesNotMatch(frame, /IMMERSIVE_TOOL_PATHS/)
   assert.match(css, /\.routing-viewport/)
   assert.match(css, /\.routing-workspace/)
 })
