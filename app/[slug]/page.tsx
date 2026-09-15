@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArchitectureAdvisor } from '@/components/architecture-advisor'
 import { ADVISOR_FAQS, AdvisorSeoContent } from '@/components/advisor-seo-content'
 import { CrmHealthCheck } from '@/components/crm-health-check'
+import { CRM_HEALTH_FAQS, CrmHealthSeoContent } from '@/components/crm-health-seo-content'
 import { LegacyTool } from '@/components/legacy-tool'
 import { BackLink } from '@/components/site-shell'
 import { SITE } from '@/lib/site'
@@ -154,6 +155,11 @@ export default async function ToolPage({ params }: Props) {
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM', 'Close', 'Attio'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: CRM_HEALTH_FAQS.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
+    }
     const breadcrumbJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
@@ -164,19 +170,23 @@ export default async function ToolPage({ params }: Props) {
     }
 
     return (
-      <div className="crm-health-viewport tool-reveal">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd) }} />
-        <div className="crm-health-toolbar">
-          <BackLink />
-          <div className="min-w-0 text-right">
-            <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM diagnostic</p>
-            <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
+      <>
+        <div className="crm-health-viewport tool-reveal">
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd) }} />
+          <div className="crm-health-toolbar">
+            <BackLink />
+            <div className="min-w-0 text-right">
+              <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM diagnostic</p>
+              <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
+            </div>
           </div>
+          <div className="crm-health-workspace"><CrmHealthCheck /></div>
         </div>
-        <div className="crm-health-workspace"><CrmHealthCheck /></div>
-      </div>
+        <CrmHealthSeoContent />
+      </>
     )
   }
 
