@@ -162,7 +162,7 @@ export default async function ToolPage({ params }: Props) {
 
     return (
       <>
-        <div className="advisor-viewport tool-reveal">
+        <div className="tool-app-viewport advisor-viewport tool-reveal">
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
