@@ -1,12 +1,24 @@
 import { analyzeArchitecture as analyzeScoredArchitecture } from './analyze'
 import { assessDecisionStability } from './decision-stability'
+import { assessProcessReadiness } from './process-readiness'
 import type { ArchitectureAdvice, AssessmentInput } from './types'
 
+function unique(items: string[]) {
+  return [...new Set(items)]
+}
+
 function finalizeRecommendation(input: AssessmentInput, result: ArchitectureAdvice): ArchitectureAdvice {
+  const readiness = assessProcessReadiness(input, result.kind)
   const stability = assessDecisionStability(input, result)
+  const architectureSummary = result.summary
+  const summary = readiness.disposition === 'software-first'
+    ? `${readiness.label}. ${readiness.summary}`
+    : `${readiness.label}. ${readiness.summary} ${architectureSummary}`
 
   return {
     ...result,
+    summary,
+    safeguards: unique([...readiness.controls, ...result.safeguards]),
     metrics: {
       ...result.metrics,
       confidence: stability.confidence,
@@ -16,10 +28,10 @@ function finalizeRecommendation(input: AssessmentInput, result: ArchitectureAdvi
 }
 
 /**
- * Apply architecture-boundary policy after the scoring model runs, then turn
- * score separation and unresolved architecture questions into user-facing
- * confidence. Platform scoring can compare tools, but it must not manufacture
- * certainty when a high-impact answer is still missing.
+ * Apply architecture-boundary policy after the scoring model runs, then decide
+ * whether the process itself is mature enough to automate and how confident we
+ * should be in the platform recommendation. Platform capability must never
+ * turn an unstable process into a good automation candidate.
  */
 export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice {
   let result = analyzeScoredArchitecture(input)
