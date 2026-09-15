@@ -8,20 +8,20 @@ const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 
-test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
+test('interactive tool routes expand beyond the narrow portfolio article frame', () => {
+  assert.match(page, /tool-app-viewport advisor-viewport/)
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
   assert.match(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*width:\s*100%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*max-width:\s*100%/)
+  assert.match(css, /\.site-frame:has\(\.tool-app-viewport\)\s*\{[^}]*max-width:\s*none/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*max-width:\s*1440px/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 11rem\)/)
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.routing-workspace\s*\{[^}]*width:\s*min\(100%, 1280px\)/)
+  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*transform:\s*none !important/)
   assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*100% !important/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(css, /100vw/)
-  assert.doesNotMatch(css, /margin-left:\s*calc\(50% - 50vw\)/)
+  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*max-width:\s*900px/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
