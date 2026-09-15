@@ -8,25 +8,30 @@ const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 
-test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
+test('all advanced tool applications break out of the narrow portfolio article frame', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
-  assert.match(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*width:\s*100%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*max-width:\s*100%/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*100% !important/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.followup-guide\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(css, /100vw/)
-  assert.doesNotMatch(css, /margin-left:\s*calc\(50% - 50vw\)/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*left:\s*50%/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*translate:\s*-50% 0/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*100dvw/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 9rem\)/)
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.followup-workspace\s*\{[^}]*width:\s*min\(100%, 1400px\)/)
+  assert.match(css, /\.followup-workspace > \.followup-check\s*\{[^}]*width:\s*min\(100%, 1240px\)/)
+  assert.match(css, /\.roi-workspace > \.roi-calculator,[\s\S]*max-width:\s*1240px/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+  assert.doesNotMatch(css, /\.site-frame:has\(/)
+})
+
+test('tool workspaces reflow down to phone width without two-dimensional scrolling', () => {
+  assert.match(css, /@media \(max-width: 900px\)[\s\S]*width:\s*calc\(100dvw - 1\.5rem\) !important/)
+  assert.match(css, /@media \(max-width: 639px\)[\s\S]*width:\s*calc\(100dvw - 1rem\) !important/)
+  assert.match(css, /overflow-x:\s*clip/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
-  assert.match(css, /ahmadyar's current largest live display heading is sm:text-5xl/)
-  assert.match(css, /\[class\*='text-6xl'\][\s\S]*font-size:\s*3rem !important/)
+  assert.match(css, /font-size:\s*3rem !important/)
 })
 
 test('advisor page exposes crawlable guidance below the interactive tool', () => {
@@ -36,6 +41,7 @@ test('advisor page exposes crawlable guidance below the interactive tool', () =>
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
+  assert.match(css, /\.advisor-guide,[\s\S]*\.followup-guide\s*\{[^}]*max-width:\s*900px/)
 })
 
 test('search and AI guidance covers native, no-code, orchestration, durable jobs, and software', () => {
