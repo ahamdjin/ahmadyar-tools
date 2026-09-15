@@ -49,6 +49,7 @@ test('unknown internal systems trigger a connectivity question before certainty'
   const advice = analyzeArchitecture(input)
   const stability = assessDecisionStability(input, advice)
   assert.ok(stability.highValueQuestions.some((item) => item.id === 'unknown-connectivity'))
+  assert.ok(advice.nextQuestions.some((question) => /unlisted\/internal systems/i.test(question)))
   assert.notEqual(stability.level, 'stable')
 })
 
@@ -85,6 +86,16 @@ test('product-like architecture asks the software-boundary question', () => {
   assert.equal(advice.primary.id, 'custom-code')
   assert.ok(stability.highValueQuestions.some((item) => item.id === 'software-boundary'))
   assert.ok(stability.highValueQuestions.some((item) => item.id === 'failure-semantics'))
+  assert.ok(advice.nextQuestions.some((question) => /persistent state|money\/transactions/i.test(question)))
+  assert.ok(advice.nextQuestions.some((question) => /retries or runs twice/i.test(question)))
+})
+
+test('public recommendation confidence stays bounded and only exposes high-value follow-ups', () => {
+  for (const benchmark of BENCHMARK_SCENARIOS) {
+    const advice = analyzeArchitecture(benchmark.input)
+    assert.ok(advice.metrics.confidence >= 25 && advice.metrics.confidence <= 98, benchmark.name)
+    assert.ok(advice.nextQuestions.length <= 4, benchmark.name)
+  }
 })
 
 test('stability confidence is bounded and derived from uncertainty, not fake precision', () => {
