@@ -83,7 +83,7 @@ test('external payment or contract events require duplicate-safe creation', () =
   assert.ok(result.safeguards.some((item) => /duplicate|retry/i.test(item)))
 })
 
-test('onboarding route uses the dedicated planner and crawlable guide', () => {
+test('onboarding route uses the dedicated planner and crawlable guide inside the portfolio frame', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
@@ -93,7 +93,8 @@ test('onboarding route uses the dedicated planner and crawlable guide', () => {
   assert.match(page, /<OnboardingPlanner \/>/)
   assert.match(page, /<OnboardingSeoContent \/>/)
   assert.match(page, /ONBOARDING_FAQS/)
-  assert.match(routeFrame, /client-onboarding-automation-planner/)
+  assert.match(routeFrame, /max-w-screen-sm/)
+  assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
   assert.match(css, /\.onboarding-viewport/)
   assert.match(css, /\.onboarding-workspace > \.onboarding-planner/)
   assert.match(guide, /ready-for-delivery/i)
