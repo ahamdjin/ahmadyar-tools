@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 
 import './globals.css'
-import { SiteFooter, SiteHeader } from '@/components/site-shell'
+import { RouteFrame } from '@/components/route-frame'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SITE } from '@/lib/site'
 
@@ -31,13 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}>
         <ThemeProvider>
-          <div className="min-h-screen w-full font-[family-name:var(--font-geist)]">
-            <div className="site-frame mx-auto flex min-h-screen w-full max-w-screen-sm flex-col px-4 pt-8 sm:px-5 sm:pt-14 md:pt-20">
-              <SiteHeader />
-              <main className="site-main flex-1">{children}</main>
-              <SiteFooter />
-            </div>
-          </div>
+          <RouteFrame>{children}</RouteFrame>
         </ThemeProvider>
         <Analytics />
       </body>
