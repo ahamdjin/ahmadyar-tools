@@ -11,7 +11,7 @@
   }
 
   html { scroll-behavior: smooth; }
-  body { margin: 0; }
+  body { margin: 0; overflow-x: clip; }
   button, input, select, textarea { font: inherit; }
 }
 
@@ -22,25 +22,16 @@
 
 .tool-reveal { animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* Interactive tools are applications, not narrow portfolio articles. The
-   normal portfolio frame stays compact everywhere else, but tool routes can
-   use the available viewport while keeping their working area centered. */
-.site-frame:has(.tool-app-viewport) {
-  max-width: none;
-  padding-left: clamp(1rem, 3vw, 3rem);
-  padding-right: clamp(1rem, 3vw, 3rem);
-}
-
-.site-frame:has(.tool-app-viewport) > header,
-.site-frame:has(.tool-app-viewport) > footer {
-  width: 100%;
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.site-frame:has(.tool-app-viewport) .site-main {
-  width: 100%;
+/* Tool pages are applications. They intentionally break out of the narrow
+   portfolio text column and center themselves against the browser viewport.
+   `translate` is used instead of `transform` so the reveal animation cannot
+   accidentally cancel the horizontal centering. */
+.tool-app-viewport {
+  position: relative;
+  left: 50%;
+  translate: -50% 0;
+  width: min(calc(100dvw - 2rem), 1600px) !important;
+  max-width: 1600px !important;
   min-width: 0;
 }
 
@@ -48,17 +39,13 @@
 .crm-health-viewport,
 .onboarding-viewport,
 .routing-viewport {
-  position: relative;
   z-index: 1;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  width: 100%;
-  max-width: 1440px;
-  height: calc(100dvh - 11rem);
-  min-height: 680px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: hidden;
+  height: calc(100dvh - 9rem);
+  min-height: 640px;
+  margin: 0;
+  overflow: visible;
   box-sizing: border-box;
   background: transparent;
 }
@@ -68,14 +55,14 @@
 .onboarding-toolbar,
 .routing-toolbar {
   display: flex;
-  width: min(100%, 1280px);
+  width: min(100%, 1400px);
   min-width: 0;
   margin-left: auto;
   margin-right: auto;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 16px;
+  padding: 0 clamp(0rem, 1vw, 1rem) 16px;
 }
 
 .advisor-workspace,
@@ -84,18 +71,19 @@
 .routing-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  width: min(100%, 1280px);
+  width: min(100%, 1400px);
   min-width: 0;
   min-height: 0;
   margin-left: auto;
   margin-right: auto;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .advisor-workspace > section {
   position: static !important;
   left: auto !important;
   transform: none !important;
+  translate: none !important;
   display: grid !important;
   grid-template-rows: auto minmax(0, 1fr) auto;
   width: 100% !important;
@@ -104,26 +92,31 @@
   min-width: 0 !important;
   min-height: 0 !important;
   margin: 0 !important;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
 }
 
+/* Progress, scrollable content, and navigation all share one visual center.
+   The app gets much more room than the portfolio, while line lengths stay
+   controlled enough to scan comfortably. */
 .advisor-workspace > section > div:first-child,
 .advisor-workspace > section > div:nth-child(2),
 .advisor-workspace > section > div:last-child {
-  width: 100%;
+  width: min(100%, 1240px);
   min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .advisor-workspace > section > div:first-child { margin-bottom: 14px; }
 
 .advisor-workspace > section > div:nth-child(2) {
   min-height: 0 !important;
-  max-width: none;
-  overflow-x: hidden;
+  max-width: 1240px;
+  overflow-x: clip;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 10px clamp(0px, 0.5vw, 8px) 24px 0;
+  padding: 12px clamp(0px, 0.75vw, 10px) 28px;
   scrollbar-width: thin;
 }
 
@@ -145,8 +138,8 @@
   box-sizing: border-box;
 }
 
-/* Keep the application surfaces visually quiet. Form-control borders remain
-   visible, while divider-line decoration is suppressed. */
+/* Keep application surfaces visually quiet. Form-control borders remain
+   visible, while decorative divider lines are suppressed. */
 .advisor-viewport [class~='border-y'],
 .advisor-viewport [class~='border-t'],
 .advisor-viewport [class~='border-t-2'],
@@ -170,8 +163,7 @@
   border-color: transparent !important;
 }
 
-/* The long-form guide stays readable even though the application above it is
-   allowed to use a much wider canvas. */
+/* Long-form research/SEO content remains a readable article below the app. */
 .advisor-guide,
 .crm-health-guide,
 .onboarding-guide,
@@ -194,26 +186,50 @@
   line-height: 1 !important;
 }
 
-@media (max-width: 639px) {
-  .site-frame:has(.tool-app-viewport) {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    padding-top: 1.5rem;
-  }
-
-  .advisor-viewport,
-  .crm-health-viewport,
-  .onboarding-viewport,
-  .routing-viewport {
-    height: calc(100dvh - 8.5rem);
-    min-height: 560px;
+@media (max-width: 900px) {
+  .tool-app-viewport {
+    width: calc(100dvw - 1.5rem) !important;
   }
 
   .advisor-toolbar,
   .crm-health-toolbar,
   .onboarding-toolbar,
   .routing-toolbar {
-    padding-bottom: 12px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .advisor-workspace > section > div:first-child,
+  .advisor-workspace > section > div:nth-child(2),
+  .advisor-workspace > section > div:last-child {
+    width: 100%;
+  }
+}
+
+@media (max-width: 639px) {
+  .tool-app-viewport {
+    width: calc(100dvw - 1rem) !important;
+  }
+
+  .advisor-viewport,
+  .crm-health-viewport,
+  .onboarding-viewport,
+  .routing-viewport {
+    height: calc(100dvh - 7.5rem);
+    min-height: 520px;
+  }
+
+  .advisor-toolbar,
+  .crm-health-toolbar,
+  .onboarding-toolbar,
+  .routing-toolbar {
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+
+  .advisor-workspace > section > div:nth-child(2) {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
   }
 }
 
