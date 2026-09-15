@@ -9,21 +9,19 @@ const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 const roiCalculator = readFileSync('components/automation-roi-calculator.tsx', 'utf8')
 
-test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
+test('advanced tool routes expand into a full-height application workspace', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
   assert.match(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*width:\s*100%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*max-width:\s*100%/)
+  assert.match(css, /\.site-frame:has\(\.advisor-viewport,[\s\S]*\.roi-viewport\)\s*\{[^}]*max-width:\s*none/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*max-width:\s*1440px/)
   assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*min-width:\s*0/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*100% !important/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.roi-guide\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(css, /100vw/)
-  assert.doesNotMatch(css, /margin-left:\s*calc\(50% - 50vw\)/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 11rem\)/)
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.roi-workspace\s*\{[^}]*width:\s*min\(100%, 1280px\)/)
+  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*transform:\s*none !important/)
+  assert.match(css, /\.advisor-guide,[\s\S]*\.roi-guide\s*\{[^}]*max-width:\s*900px/)
 })
 
 test('ROI calculator cannot force horizontal overflow on narrow screens', () => {
