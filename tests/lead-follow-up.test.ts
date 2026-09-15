@@ -61,7 +61,7 @@ test('high volume follow-up requires observable operations', () => {
   }
 })
 
-test('lead follow-up route is a dedicated portfolio-framed planner with crawlable guidance', () => {
+test('lead follow-up route is a dedicated viewport-sized planner with crawlable guidance', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const component = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
@@ -74,8 +74,19 @@ test('lead follow-up route is a dedicated portfolio-framed planner with crawlabl
   assert.match(component, /replyDetection/)
   assert.match(component, /bookingDetection/)
   assert.match(component, /consentControl/)
-  assert.match(css, /\.followup-viewport/)
-  assert.match(css, /\.followup-workspace > \.followup-check/)
+  assert.match(css, /\.followup-viewport[\s\S]*100dvw/)
+  assert.match(css, /\.followup-workspace > \.followup-check\s*\{[^}]*max-width:\s*1240px/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
   assert.match(guide, /Think in states/i)
   assert.match(guide, /Stop conditions matter more than clever copy/i)
+})
+
+test('lead follow-up has current research for response stops, engagement transitions and re-entry', () => {
+  const research = readFileSync('docs/research/lead-follow-up-2026-09.md', 'utf8')
+  assert.match(research, /Stop on Response/i)
+  assert.match(research, /Cadence Builder 2\.0/)
+  assert.match(research, /suppression lists and unenrollment triggers/i)
+  assert.match(research, /stop and re-entry are different decisions/i)
+  assert.match(research, /Human handoff should have an owner/i)
+  assert.match(research, /not legal advice/i)
 })
