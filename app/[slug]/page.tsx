@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const tool = getTool(slug)
   if (!tool) return {}
-  const canonical = `${SITE.origin}/tools/${tool.slug}`
+  const canonical = `${SITE.origin}${SITE.toolsPath}/${tool.slug}`
 
   if (tool.slug === 'automation-architecture-advisor') {
     return {
@@ -72,7 +72,7 @@ export default async function ToolPage({ params }: Props) {
   const tool = getTool(slug)
   if (!tool) notFound()
 
-  const canonical = `${SITE.origin}/tools/${tool.slug}`
+  const canonical = `${SITE.origin}${SITE.toolsPath}/${tool.slug}`
   const softwareJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -149,7 +149,7 @@ export default async function ToolPage({ params }: Props) {
           '@type': 'ListItem',
           position: 1,
           name: 'Tools',
-          item: `${SITE.origin}/tools`,
+          item: `${SITE.origin}${SITE.toolsPath}`,
         },
         {
           '@type': 'ListItem',
