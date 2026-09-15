@@ -7,12 +7,11 @@ import { CrmHealthCheck } from '@/components/crm-health-check'
 import { CRM_HEALTH_FAQS, CrmHealthSeoContent } from '@/components/crm-health-seo-content'
 import { LeadRoutingBuilder } from '@/components/lead-routing-builder'
 import { LEAD_ROUTING_FAQS, LeadRoutingSeoContent } from '@/components/lead-routing-seo-content'
-import { LegacyTool } from '@/components/legacy-tool'
 import { OnboardingPlanner } from '@/components/onboarding-planner'
 import { ONBOARDING_FAQS, OnboardingSeoContent } from '@/components/onboarding-seo-content'
 import { BackLink } from '@/components/site-shell'
 import { SITE } from '@/lib/site'
-import { TOOLS, getTool, type ToolSlug } from '@/lib/tools'
+import { TOOLS, getTool } from '@/lib/tools'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -70,12 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  return {
-    title: tool.title,
-    description: tool.description,
-    alternates: { canonical },
-    openGraph: { title: `${tool.title} | Ahmad Yar`, description: tool.description, url: canonical, type: 'website' },
-  }
+  return {}
 }
 
 function breadcrumbs(title: string, canonical: string) {
@@ -183,12 +177,5 @@ export default async function ToolPage({ params }: Props) {
     return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Lead routing builder</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /></>
   }
 
-  return (
-    <div className="space-y-12 pb-8 tool-reveal">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
-      <BackLink />
-      <section className="max-w-2xl space-y-3"><p className="text-xs text-zinc-500 dark:text-zinc-500">Free automation tool</p><h1 className="text-3xl font-medium tracking-[-0.05em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{tool.title}</h1><p className="max-w-xl text-sm leading-7 text-zinc-500 dark:text-zinc-400">{tool.description}</p></section>
-      <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor' | 'crm-automation-health-check' | 'client-onboarding-automation-planner' | 'lead-routing-rules-builder'>} />
-    </div>
-  )
+  notFound()
 }
