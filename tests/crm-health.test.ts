@@ -92,14 +92,16 @@ test('shadow systems reduce reporting and adoption health', () => {
   assert.ok(shadowed.issues.some((issue) => issue.id === 'adoption'))
 })
 
-test('CRM health route uses the dedicated full-screen diagnostic, not the legacy quiz', () => {
+test('CRM health route uses the dedicated diagnostic inside the portfolio frame', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const component = readFileSync('components/crm-health-check.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
+  const frame = readFileSync('components/route-frame.tsx', 'utf8')
   assert.match(page, /crm-health-viewport/)
   assert.match(page, /<CrmHealthCheck \/>/)
   assert.match(component, /Search 140\+ systems/)
   assert.match(component, /Fix the leaks in this order/)
   assert.match(css, /\.crm-health-workspace/)
-  assert.match(css, /place-items:\s*stretch center/)
+  assert.match(frame, /max-w-screen-sm/)
+  assert.doesNotMatch(frame, /IMMERSIVE_TOOL_PATHS/)
 })
