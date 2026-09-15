@@ -1,0 +1,76 @@
+import { analyzeArchitecture as analyzeScoredArchitecture } from './analyze'
+import { assessDecisionStability } from './decision-stability'
+import { assessProcessReadiness } from './process-readiness'
+import type { ArchitectureAdvice, AssessmentInput } from './types'
+
+function unique(items: string[]) {
+  return [...new Set(items)]
+}
+
+function finalizeRecommendation(input: AssessmentInput, result: ArchitectureAdvice): ArchitectureAdvice {
+  const readiness = assessProcessReadiness(input, result.kind)
+  const stability = assessDecisionStability(input, result)
+  const architectureSummary = result.summary
+  const summary = readiness.disposition === 'software-first'
+    ? `${readiness.label}. ${readiness.summary}`
+    : `${readiness.label}. ${readiness.summary} ${architectureSummary}`
+
+  return {
+    ...result,
+    summary,
+    safeguards: unique([...readiness.controls, ...result.safeguards]),
+    metrics: {
+      ...result.metrics,
+      confidence: stability.confidence,
+    },
+    nextQuestions: stability.highValueQuestions.map((item) => item.question),
+  }
+}
+
+/**
+ * Apply architecture-boundary policy after the scoring model runs, then decide
+ * whether the process itself is mature enough to automate and how confident we
+ * should be in the platform recommendation. Platform capability must never
+ * turn an unstable process into a good automation candidate.
+ */
+export function analyzeArchitecture(input: AssessmentInput): ArchitectureAdvice {
+  let result = analyzeScoredArchitecture(input)
+
+  if (result.kind === 'application') {
+    const custom = result.ranking.find((platform) => platform.id === 'custom-code' && platform.eligible)
+
+    if (custom) {
+      const ranking = [custom, ...result.ranking.filter((platform) => platform.id !== 'custom-code')]
+      const alternatives = ranking.filter((platform) => platform.eligible && platform.id !== custom.id).slice(0, 3)
+      const portfolioPlan = result.portfolioPlan.map((lane) =>
+        lane.id === 'application'
+          ? {
+              ...lane,
+              platform: custom.id,
+              platformName: custom.name,
+              purpose:
+                'Keep persistent state, transactions, customer-facing behavior, and domain rules in software built, tested, observed, and deployed like an application.',
+            }
+          : lane,
+      )
+      const platformMix = [...new Set([custom.id, ...portfolioPlan.map((lane) => lane.platform)])]
+
+      result = {
+        ...result,
+        primary: custom,
+        alternatives,
+        ranking,
+        portfolioPlan,
+        platformMix,
+        metrics: {
+          ...result.metrics,
+          costPressure: custom.costPressure,
+        },
+        summary:
+          'Treat the core as software architecture, not one giant workflow. Custom application code should own stateful or transactional logic; automation platforms can still handle replaceable integrations, notifications, and peripheral orchestration around the edges.',
+      }
+    }
+  }
+
+  return finalizeRecommendation(input, result)
+}
