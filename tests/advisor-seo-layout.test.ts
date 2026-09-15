@@ -7,21 +7,34 @@ const css = readFileSync('app/globals.css', 'utf8')
 const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
+const roiCalculator = readFileSync('components/automation-roi-calculator.tsx', 'utf8')
 
-test('tool routes stay inside the same portfolio frame as ahmadyar', () => {
+test('advanced tool routes break out to the browser viewport instead of the portfolio article width', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
   assert.match(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*width:\s*100%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*max-width:\s*100%/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*width:\s*100% !important/)
-  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*100% !important/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.routing-guide\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(css, /100vw/)
-  assert.doesNotMatch(css, /margin-left:\s*calc\(50% - 50vw\)/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*left:\s*50%/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*translate:\s*-50% 0/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*100dvw/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.roi-viewport\s*\{[^}]*max-width:\s*1600px !important/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 9rem\)/)
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.roi-workspace\s*\{[^}]*width:\s*min\(100%, 1400px\)/)
+  assert.match(css, /\.roi-workspace > \.roi-calculator\s*\{[^}]*width:\s*min\(100%, 1240px\)/)
+  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*transform:\s*none !important/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+  assert.doesNotMatch(css, /\.site-frame:has\(/)
+})
+
+test('ROI calculator cannot force horizontal overflow on narrow screens', () => {
+  assert.match(roiCalculator, /roi-calculator grid h-full min-h-0 min-w-0/)
+  assert.match(roiCalculator, /overflow-x-hidden overflow-y-auto/)
+  assert.match(roiCalculator, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
+  assert.match(roiCalculator, /mt-4 grid min-w-0 gap-3 sm:grid-cols-2/)
+  assert.match(roiCalculator, /break-words[^"\n]*\[overflow-wrap:anywhere\]/)
+  assert.doesNotMatch(roiCalculator, /mt-4 grid grid-cols-2 gap-3/)
+  assert.match(css, /@media \(max-width: 639px\)[\s\S]*width:\s*calc\(100dvw - 1rem\) !important/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
@@ -36,6 +49,7 @@ test('advisor page exposes crawlable guidance below the interactive tool', () =>
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
+  assert.match(css, /\.advisor-guide,[\s\S]*\.roi-guide\s*\{[^}]*max-width:\s*900px/)
 })
 
 test('search and AI guidance covers native, no-code, orchestration, durable jobs, and software', () => {

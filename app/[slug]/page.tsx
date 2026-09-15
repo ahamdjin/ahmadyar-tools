@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 
 import { ArchitectureAdvisor } from '@/components/architecture-advisor'
 import { ADVISOR_FAQS, AdvisorSeoContent } from '@/components/advisor-seo-content'
+import { AutomationRoiCalculator } from '@/components/automation-roi-calculator'
+import { AUTOMATION_ROI_FAQS, AutomationRoiSeoContent } from '@/components/automation-roi-seo-content'
 import { CrmHealthCheck } from '@/components/crm-health-check'
 import { CRM_HEALTH_FAQS, CrmHealthSeoContent } from '@/components/crm-health-seo-content'
 import { LeadRoutingBuilder } from '@/components/lead-routing-builder'
@@ -23,6 +25,8 @@ const ONBOARDING_TITLE = 'Client Onboarding Automation Planner | Build the Right
 const ONBOARDING_DESCRIPTION = 'Design a reliable sales-to-delivery onboarding flow across your CRM, contracts, payments, intake, files, project management, communication, access, and kickoff systems.'
 const LEAD_ROUTING_TITLE = 'Lead Routing Rules Builder | Design Reliable Assignment Logic'
 const LEAD_ROUTING_DESCRIPTION = 'Build and test lead-routing logic for existing accounts, duplicates, territories, products, round robin, capacity, availability, fallbacks, response SLAs, reassignment, and auditability.'
+const AUTOMATION_ROI_TITLE = 'Automation ROI Calculator | Payback, Savings & Build Decision'
+const AUTOMATION_ROI_DESCRIPTION = 'Calculate automation ROI using real volume, handling time, human review, exceptions, value capture, error cost, build cost, software, maintenance, payback, break-even volume and a conservative stress case.'
 
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c')
@@ -37,6 +41,7 @@ function dedicatedMetadata(slug: string) {
   if (slug === 'crm-automation-health-check') return { title: CRM_HEALTH_TITLE, description: CRM_HEALTH_DESCRIPTION }
   if (slug === 'client-onboarding-automation-planner') return { title: ONBOARDING_TITLE, description: ONBOARDING_DESCRIPTION }
   if (slug === 'lead-routing-rules-builder') return { title: LEAD_ROUTING_TITLE, description: LEAD_ROUTING_DESCRIPTION }
+  if (slug === 'automation-roi-calculator') return { title: AUTOMATION_ROI_TITLE, description: AUTOMATION_ROI_DESCRIPTION }
   return null
 }
 
@@ -175,6 +180,15 @@ export default async function ToolPage({ params }: Props) {
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
     return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Lead routing builder</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /></>
+  }
+
+  if (tool.slug === 'automation-roi-calculator') {
+    const webpageJsonLd = {
+      '@context': 'https://schema.org', '@type': 'WebPage', name: AUTOMATION_ROI_TITLE, url: canonical, description: AUTOMATION_ROI_DESCRIPTION, dateModified: '2026-09-15',
+      about: [{ '@type': 'Thing', name: 'Automation ROI' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Automation payback period' }, { '@type': 'Thing', name: 'Automation business case' }],
+      isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
+    }
+    return <><div className="roi-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(AUTOMATION_ROI_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="roi-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">ROI calculator</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="roi-workspace"><AutomationRoiCalculator /></div></div><AutomationRoiSeoContent /></>
   }
 
   notFound()
