@@ -191,6 +191,7 @@ const RAW_APPS: readonly AppRow[] = [
   ['power-automate', 'Power Automate', 'automation', 'powerautomate', 'microsoft', 'microsoft'],
   ['activepieces', 'Activepieces', 'automation', '', 'activepieces', 'api-first'],
   ['pipedream', 'Pipedream', 'automation', 'pipedream', 'pipedream', 'api-first'],
+  ['trigger-dev', 'Trigger.dev', 'automation', 'triggerdotdev', 'trigger.dev', 'api-first'],
   ['workato', 'Workato', 'automation', 'workato', 'workato', 'enterprise'],
   ['tray', 'Tray.ai', 'automation', '', 'tray', 'enterprise'],
 
@@ -216,6 +217,7 @@ const NATIVE_AUTOMATION: Record<string, number> = {
   'power-automate': 100,
   activepieces: 100,
   pipedream: 100,
+  'trigger-dev': 100,
   workato: 100,
   tray: 100,
 }
@@ -254,6 +256,7 @@ export const POPULAR_APP_IDS = [
   'make',
   'n8n',
   'power-automate',
+  'trigger-dev',
 ] as const
 
 export const APP_CATEGORY_LABELS: Record<AppCategory, string> = {
