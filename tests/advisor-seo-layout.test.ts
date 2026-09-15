@@ -7,14 +7,21 @@ const css = readFileSync('app/globals.css', 'utf8')
 const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 
-test('advisor owns the first viewport without trapping the whole page', () => {
-  assert.match(css, /\.advisor-viewport\s*\{[^}]*width:\s*100%/)
+test('advisor owns the first viewport without trapping or collapsing the canvas', () => {
+  assert.match(css, /\.advisor-viewport\s*\{[^}]*width:\s*100vw !important/)
   assert.match(css, /\.advisor-viewport\s*\{[^}]*height:\s*100dvh/)
-  assert.match(css, /\.advisor-viewport > section\s*\{[^}]*width:\s*100% !important/)
+  assert.match(css, /section\[class\*='w-\[min\(94vw,960px\)\]'\]/)
+  assert.match(css, /width:\s*100vw !important/)
   assert.match(css, /body:has\(\.advisor-viewport\) \.site-frame\s*\{[^}]*max-width:\s*none !important/)
   assert.match(layout, /site-frame/)
   assert.doesNotMatch(css, /body:has\(\.advisor-viewport\)\s*\{[^}]*overflow:\s*hidden/)
   assert.doesNotMatch(css, /\.advisor-viewport\s*\{[^}]*position:\s*fixed/)
+})
+
+test('desktop system discovery uses the available canvas instead of a half-width list', () => {
+  assert.match(css, /input\[placeholder\^='Search HubSpot'\]/)
+  assert.match(css, /grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\)/)
+  assert.match(css, /grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/)
 })
 
 test('advisor page exposes crawlable guidance below the interactive tool', () => {
