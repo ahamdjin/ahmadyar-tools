@@ -8,18 +8,30 @@ const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 
-test('tool applications break out of the narrow portfolio article frame', () => {
+test('tool applications use a wide normal-flow frame instead of viewport translations', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
+  assert.match(routeFrame, /max-w-none/)
+  assert.doesNotMatch(routeFrame, /max-w-screen-sm/)
+  assert.match(routeFrame, /site-main min-w-0 w-full flex-1/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*left:\s*50%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*translate:\s*-50% 0/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*100dvw/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*width:\s*100%/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*max-width:\s*1600px/)
+  assert.doesNotMatch(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*left:\s*50%/)
+  assert.doesNotMatch(css, /\.advisor-viewport,[\s\S]*\.routing-viewport\s*\{[^}]*translate:\s*-50% 0/)
   assert.match(css, /\.advisor-viewport,[\s\S]*height:\s*calc\(100dvh - 9rem\)/)
   assert.match(css, /\.advisor-workspace,[\s\S]*\.routing-workspace\s*\{[^}]*width:\s*min\(100%, 1400px\)/)
-  assert.match(css, /\.crm-health-workspace > \.crm-health-check,[\s\S]*width:\s*min\(100%, 1240px\)/)
+  assert.match(css, /\.crm-health-workspace > \.crm-health-check,[\s\S]*width:\s*100%/)
+  assert.match(css, /\.crm-health-workspace > \.crm-health-check,[\s\S]*max-width:\s*100%/)
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+})
+
+test('tool workspaces contain horizontal overflow and keep vertical content scrollable', () => {
+  assert.match(css, /\.advisor-workspace,[\s\S]*\.routing-workspace\s*\{[^}]*overflow:\s*hidden/)
+  assert.match(css, /\.advisor-workspace > section\s*\{[^}]*overflow:\s*hidden/)
+  assert.match(css, /overflow-x:\s*hidden/)
+  assert.match(css, /overflow-y:\s*auto/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
