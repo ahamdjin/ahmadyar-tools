@@ -1,5 +1,8 @@
+import { POPULAR_APP_IDS as POPULAR_APP_IDS_SOURCE } from './apps'
+
 export { analyzeArchitecture } from './analyze'
-export { APP_CATALOG, APP_BY_ID, APP_CATEGORY_LABELS, POPULAR_APP_IDS, getApps } from './apps'
+export { APP_CATALOG, APP_BY_ID, APP_CATEGORY_LABELS, getApps } from './apps'
+export const POPULAR_APP_IDS: readonly string[] = POPULAR_APP_IDS_SOURCE
 export { inferEnvironment, getQuestionPlan } from './discovery'
 export { recommendOperatingModel } from './operating-model'
 export { PLATFORMS } from './platforms'
