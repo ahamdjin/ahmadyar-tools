@@ -90,15 +90,24 @@ test('high-volume weak observability is treated as an operating risk', () => {
   }
 })
 
-test('lead routing route is a dedicated product inside the portfolio frame', () => {
+test('lead routing route is a dedicated viewport-sized product', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
-  const frame = readFileSync('components/route-frame.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
   assert.match(page, /<LeadRoutingBuilder \/>/)
   assert.match(page, /<LeadRoutingSeoContent \/>/)
   assert.match(page, /LEAD_ROUTING_FAQS/)
-  assert.match(frame, /max-w-screen-sm/)
-  assert.doesNotMatch(frame, /IMMERSIVE_TOOL_PATHS/)
-  assert.match(css, /\.routing-viewport/)
-  assert.match(css, /\.routing-workspace/)
+  assert.match(css, /\.routing-viewport[\s\S]*100dvw/)
+  assert.match(css, /\.routing-workspace > \.routing-check\s*\{[^}]*max-width:\s*1240px/)
+  assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+})
+
+test('lead routing has a dated research basis for precedence, duplicates, fallback and SLA', () => {
+  const research = readFileSync('docs/research/lead-routing-2026-09.md', 'utf8')
+  assert.match(research, /HubSpot/)
+  assert.match(research, /Salesforce/)
+  assert.match(research, /Zapier/)
+  assert.match(research, /Normalize \+ deduplicate/)
+  assert.match(research, /Protect existing relationships/)
+  assert.match(research, /Fallback \+ SLA/)
+  assert.match(research, /Version routing logic/)
 })
