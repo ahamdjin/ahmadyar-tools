@@ -19,6 +19,19 @@ const SELF_HOSTED = new Set<PlatformId>(['n8n-self-hosted', 'activepieces'])
 const ENTERPRISE = new Set<PlatformId>(['workato', 'tray', 'mulesoft', 'power-automate', 'salesforce-flow'])
 const NATIVE = new Set<PlatformId>(['crm-native', 'hubspot-native', 'gohighlevel-native', 'salesforce-flow', 'shopify-flow'])
 
+const QUESTION_PRIORITY: Record<string, number> = {
+  'failure-semantics': 100,
+  'software-boundary': 98,
+  'unknown-connectivity': 96,
+  'hosting-ownership': 94,
+  'native-boundary': 92,
+  'durable-jobs': 90,
+  'technical-ownership': 88,
+  'visual-complexity': 84,
+  governance: 80,
+  'growth-economics': 76,
+}
+
 function topEligible(advice: ArchitectureAdvice) {
   return advice.ranking.filter((item) => item.eligible).slice(0, 4)
 }
@@ -175,12 +188,14 @@ export function assessDecisionStability(input: AssessmentInput, advice: Architec
       ? `The leading options are close enough that one or two operating answers can still change the recommendation.`
       : `The current systems signal is useful, but unresolved architecture or ownership questions can still materially change the answer.`
 
+  const prioritizedQuestions = [...questions].sort((a, b) => (QUESTION_PRIORITY[b.id] ?? 0) - (QUESTION_PRIORITY[a.id] ?? 0))
+
   return {
     level,
     margin,
     confidence,
     canShortenAssessment,
     explanation,
-    highValueQuestions: questions.slice(0, 4),
+    highValueQuestions: prioritizedQuestions.slice(0, 4),
   }
 }
