@@ -7,6 +7,7 @@ import { SiteFooter, SiteHeader } from '@/components/site-shell'
 const IMMERSIVE_TOOL_PATHS = [
   '/automation-architecture-advisor',
   '/crm-automation-health-check',
+  '/client-onboarding-automation-planner',
 ] as const
 
 export function RouteFrame({ children }: { children: React.ReactNode }) {
