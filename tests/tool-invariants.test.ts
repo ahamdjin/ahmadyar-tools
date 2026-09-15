@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
+import { analyzeAutomationRoi, DEFAULT_AUTOMATION_ROI_INPUT, type RoiBaselineSource, type RoiProcessStability } from '../engine/automation-roi'
 import { analyzeCrmHealth, DEFAULT_CRM_HEALTH_INPUT, type CrmHealthLevel } from '../engine/crm-health'
 import {
   analyzeLeadRouting,
@@ -142,6 +143,38 @@ test('lead routing always preserves safety ordering across routing strategies an
       assert.equal(result.rules[1]?.label, 'Protect existing relationships')
       assert.equal(result.rules.at(-1)?.label, 'Fallback + SLA')
       assert.ok(result.testCases.length >= 6)
+    }
+  }
+})
+
+test('automation ROI remains bounded and conservative across baseline quality and process stability', () => {
+  const sources: RoiBaselineSource[] = ['measured', 'estimated', 'guess']
+  const stability: RoiProcessStability[] = ['stable', 'mostly-stable', 'changing']
+
+  for (const baselineSource of sources) {
+    for (const processStability of stability) {
+      for (const monthlyCases of [0, 100, 10000]) {
+        const result = analyzeAutomationRoi({
+          ...DEFAULT_AUTOMATION_ROI_INPUT,
+          baselineSource,
+          processStability,
+          monthlyCases,
+          automatablePct: 82,
+          humanReviewPct: 20,
+          exceptionPct: 12,
+        })
+
+        bounded(result.score, 'ROI score')
+        bounded(result.confidence, 'ROI confidence')
+        assert.ok(Number.isFinite(result.expected.firstYearNetValue))
+        assert.ok(Number.isFinite(result.conservative.firstYearNetValue))
+        assert.ok(result.conservative.firstYearNetValue <= result.expected.firstYearNetValue)
+        assert.ok(result.conservative.monthlyNetValue <= result.expected.monthlyNetValue)
+        assert.ok(result.expected.netHoursReturned >= 0)
+        assert.ok(result.expected.exceptionCases >= 0)
+        unique(result.reasons, 'ROI reasons')
+        unique(result.risks, 'ROI risks')
+      }
     }
   }
 })
