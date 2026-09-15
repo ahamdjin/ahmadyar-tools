@@ -24,8 +24,8 @@ export const TOOLS = [
     slug: 'lead-routing-rules-builder',
     title: 'Lead Routing Rules Builder',
     shortTitle: 'Lead Routing Builder',
-    status: 'live',
-    description: 'Create a routing blueprint for qualification, ownership, priority, duplicates, after-hours handling, and fallback.',
+    status: 'advanced',
+    description: 'Design and test routing precedence, existing-account protection, duplicates, eligibility, round robin or capacity, fallback, response SLAs, reassignment, and auditability.',
   },
 ] as const
 
