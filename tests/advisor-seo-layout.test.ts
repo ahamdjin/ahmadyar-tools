@@ -5,11 +5,14 @@ import test from 'node:test'
 const page = readFileSync('app/[slug]/page.tsx', 'utf8')
 const css = readFileSync('app/globals.css', 'utf8')
 const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
+const layout = readFileSync('app/layout.tsx', 'utf8')
 
 test('advisor owns the first viewport without trapping the whole page', () => {
-  assert.match(css, /width:\s*100vw/)
+  assert.match(css, /\.advisor-viewport[\s\S]*width:\s*100%/)
   assert.match(css, /height:\s*100dvh/)
   assert.match(css, /\.advisor-viewport > section[\s\S]*width:\s*100% !important/)
+  assert.match(css, /body:has\(\.advisor-viewport\) \.site-frame[\s\S]*max-width:\s*none !important/)
+  assert.match(layout, /site-frame/)
   assert.doesNotMatch(css, /body:has\(\.advisor-viewport\)[\s\S]*overflow:\s*hidden/)
   assert.doesNotMatch(css, /\.advisor-viewport\s*\{[\s\S]*position:\s*fixed/)
 })
