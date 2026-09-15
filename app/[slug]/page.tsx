@@ -5,6 +5,8 @@ import { ArchitectureAdvisor } from '@/components/architecture-advisor'
 import { ADVISOR_FAQS, AdvisorSeoContent } from '@/components/advisor-seo-content'
 import { CrmHealthCheck } from '@/components/crm-health-check'
 import { CRM_HEALTH_FAQS, CrmHealthSeoContent } from '@/components/crm-health-seo-content'
+import { LeadRoutingBuilder } from '@/components/lead-routing-builder'
+import { LEAD_ROUTING_FAQS, LeadRoutingSeoContent } from '@/components/lead-routing-seo-content'
 import { LegacyTool } from '@/components/legacy-tool'
 import { OnboardingPlanner } from '@/components/onboarding-planner'
 import { ONBOARDING_FAQS, OnboardingSeoContent } from '@/components/onboarding-seo-content'
@@ -20,6 +22,8 @@ const CRM_HEALTH_TITLE = 'CRM Automation Health Check | Find Revenue Leaks'
 const CRM_HEALTH_DESCRIPTION = 'Audit lead capture, CRM data quality, routing, response, follow-up, pipeline hygiene, handoffs, reporting, adoption, and automation reliability. Built for HubSpot, GoHighLevel, Salesforce and other CRMs.'
 const ONBOARDING_TITLE = 'Client Onboarding Automation Planner | Build the Right Flow'
 const ONBOARDING_DESCRIPTION = 'Design a reliable sales-to-delivery onboarding flow across your CRM, contracts, payments, intake, files, project management, communication, access, and kickoff systems.'
+const LEAD_ROUTING_TITLE = 'Lead Routing Rules Builder | Design Reliable Assignment Logic'
+const LEAD_ROUTING_DESCRIPTION = 'Build and test lead-routing logic for existing accounts, duplicates, territories, products, round robin, capacity, availability, fallbacks, response SLAs, reassignment, and auditability.'
 
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c')
@@ -33,6 +37,7 @@ function dedicatedMetadata(slug: string) {
   if (slug === 'automation-architecture-advisor') return { title: ADVISOR_TITLE, description: ADVISOR_DESCRIPTION }
   if (slug === 'crm-automation-health-check') return { title: CRM_HEALTH_TITLE, description: CRM_HEALTH_DESCRIPTION }
   if (slug === 'client-onboarding-automation-planner') return { title: ONBOARDING_TITLE, description: ONBOARDING_DESCRIPTION }
+  if (slug === 'lead-routing-rules-builder') return { title: LEAD_ROUTING_TITLE, description: LEAD_ROUTING_DESCRIPTION }
   return null
 }
 
@@ -84,6 +89,14 @@ function breadcrumbs(title: string, canonical: string) {
   }
 }
 
+function faqJsonLd(items: ReadonlyArray<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
+  }
+}
+
 export default async function ToolPage({ params }: Props) {
   const { slug } = await params
   const tool = getTool(slug)
@@ -121,25 +134,17 @@ export default async function ToolPage({ params }: Props) {
       mentions: ['HubSpot', 'GoHighLevel', 'Zapier', 'Make', 'n8n', 'Trigger.dev', 'Power Automate', 'Pipedream', 'Activepieces', 'Workato', 'Tray.ai', 'MuleSoft'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    const faqJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: ADVISOR_FAQS.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
-    }
 
     return (
       <>
         <div className="advisor-viewport tool-reveal">
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(ADVISOR_FAQS)) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} />
           <div className="advisor-toolbar">
             <BackLink />
-            <div className="min-w-0 text-right">
-              <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Automation tool</p>
-              <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
-            </div>
+            <div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Automation tool</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div>
           </div>
           <div className="advisor-workspace"><ArchitectureAdvisor /></div>
         </div>
@@ -150,102 +155,40 @@ export default async function ToolPage({ params }: Props) {
 
   if (tool.slug === 'crm-automation-health-check') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'WebPage',
-      name: CRM_HEALTH_TITLE,
-      url: canonical,
-      description: CRM_HEALTH_DESCRIPTION,
-      dateModified: '2026-09-15',
-      about: [
-        { '@type': 'Thing', name: 'CRM automation' },
-        { '@type': 'Thing', name: 'Lead management' },
-        { '@type': 'Thing', name: 'Revenue operations' },
-        { '@type': 'Thing', name: 'CRM data quality' },
-      ],
+      '@context': 'https://schema.org', '@type': 'WebPage', name: CRM_HEALTH_TITLE, url: canonical, description: CRM_HEALTH_DESCRIPTION, dateModified: '2026-09-15',
+      about: [{ '@type': 'Thing', name: 'CRM automation' }, { '@type': 'Thing', name: 'Lead management' }, { '@type': 'Thing', name: 'Revenue operations' }, { '@type': 'Thing', name: 'CRM data quality' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM', 'Close', 'Attio'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    const faqJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: CRM_HEALTH_FAQS.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
-    }
-
-    return (
-      <>
-        <div className="crm-health-viewport tool-reveal">
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} />
-          <div className="crm-health-toolbar">
-            <BackLink />
-            <div className="min-w-0 text-right">
-              <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM diagnostic</p>
-              <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
-            </div>
-          </div>
-          <div className="crm-health-workspace"><CrmHealthCheck /></div>
-        </div>
-        <CrmHealthSeoContent />
-      </>
-    )
+    return <><div className="crm-health-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(CRM_HEALTH_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="crm-health-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM diagnostic</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="crm-health-workspace"><CrmHealthCheck /></div></div><CrmHealthSeoContent /></>
   }
 
   if (tool.slug === 'client-onboarding-automation-planner') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'WebPage',
-      name: ONBOARDING_TITLE,
-      url: canonical,
-      description: ONBOARDING_DESCRIPTION,
-      dateModified: '2026-09-15',
-      about: [
-        { '@type': 'Thing', name: 'Client onboarding automation' },
-        { '@type': 'Thing', name: 'Sales to delivery handoff' },
-        { '@type': 'Thing', name: 'Business process automation' },
-        { '@type': 'Thing', name: 'Customer onboarding workflow' },
-      ],
+      '@context': 'https://schema.org', '@type': 'WebPage', name: ONBOARDING_TITLE, url: canonical, description: ONBOARDING_DESCRIPTION, dateModified: '2026-09-15',
+      about: [{ '@type': 'Thing', name: 'Client onboarding automation' }, { '@type': 'Thing', name: 'Sales to delivery handoff' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Customer onboarding workflow' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Stripe', 'DocuSign', 'Asana', 'ClickUp', 'monday.com', 'Typeform', 'Zapier', 'Make', 'n8n'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    const faqJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: ONBOARDING_FAQS.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
-    }
+    return <><div className="onboarding-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(ONBOARDING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="onboarding-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Onboarding planner</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="onboarding-workspace"><OnboardingPlanner /></div></div><OnboardingSeoContent /></>
+  }
 
-    return (
-      <>
-        <div className="onboarding-viewport tool-reveal">
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} />
-          <div className="onboarding-toolbar">
-            <BackLink />
-            <div className="min-w-0 text-right">
-              <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Onboarding planner</p>
-              <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
-            </div>
-          </div>
-          <div className="onboarding-workspace"><OnboardingPlanner /></div>
-        </div>
-        <OnboardingSeoContent />
-      </>
-    )
+  if (tool.slug === 'lead-routing-rules-builder') {
+    const webpageJsonLd = {
+      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_ROUTING_TITLE, url: canonical, description: LEAD_ROUTING_DESCRIPTION, dateModified: '2026-09-15',
+      about: [{ '@type': 'Thing', name: 'Lead routing' }, { '@type': 'Thing', name: 'Lead assignment' }, { '@type': 'Thing', name: 'Revenue operations' }, { '@type': 'Thing', name: 'Sales automation' }],
+      mentions: ['HubSpot', 'Salesforce', 'GoHighLevel', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM'].map((name) => ({ '@type': 'SoftwareApplication', name })),
+      isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
+    }
+    return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Lead routing builder</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /></>
   }
 
   return (
     <div className="space-y-12 pb-8 tool-reveal">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
       <BackLink />
-      <section className="max-w-2xl space-y-3">
-        <p className="text-xs text-zinc-500 dark:text-zinc-500">Free automation tool</p>
-        <h1 className="text-3xl font-medium tracking-[-0.05em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{tool.title}</h1>
-        <p className="max-w-xl text-sm leading-7 text-zinc-500 dark:text-zinc-400">{tool.description}</p>
-      </section>
-      <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor' | 'crm-automation-health-check' | 'client-onboarding-automation-planner'>} />
+      <section className="max-w-2xl space-y-3"><p className="text-xs text-zinc-500 dark:text-zinc-500">Free automation tool</p><h1 className="text-3xl font-medium tracking-[-0.05em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{tool.title}</h1><p className="max-w-xl text-sm leading-7 text-zinc-500 dark:text-zinc-400">{tool.description}</p></section>
+      <LegacyTool tool={tool.slug as Exclude<ToolSlug, 'automation-architecture-advisor' | 'crm-automation-health-check' | 'client-onboarding-automation-planner' | 'lead-routing-rules-builder'>} />
     </div>
   )
 }
