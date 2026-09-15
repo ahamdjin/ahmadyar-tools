@@ -12,11 +12,13 @@ test('machine-readable index describes every public tool without replacing visib
     'crm-automation-health-check',
     'client-onboarding-automation-planner',
     'lead-routing-rules-builder',
+    'automation-roi-calculator',
   ]) {
     assert.match(llms, new RegExp(slug))
   }
   assert.match(llms, /deterministic, testable decision engines/i)
   assert.match(llms, /visible guidance below each interactive tool/i)
+  assert.match(llms, /value-capture assumption/i)
 })
 
 test('tool sitemap uses canonical ahmadyar URLs from the shared registry', () => {
@@ -25,16 +27,18 @@ test('tool sitemap uses canonical ahmadyar URLs from the shared registry', () =>
   assert.match(sitemap, /\/tools\/\$\{tool\.slug\}/)
 })
 
-test('all four advanced tools have dedicated metadata and crawlable guidance', () => {
+test('all five advanced tools have dedicated metadata and crawlable guidance', () => {
   for (const token of [
     'ADVISOR_TITLE',
     'CRM_HEALTH_TITLE',
     'ONBOARDING_TITLE',
     'LEAD_ROUTING_TITLE',
+    'AUTOMATION_ROI_TITLE',
     '<AdvisorSeoContent />',
     '<CrmHealthSeoContent />',
     '<OnboardingSeoContent />',
     '<LeadRoutingSeoContent />',
+    '<AutomationRoiSeoContent />',
   ]) {
     assert.match(page, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
   }
