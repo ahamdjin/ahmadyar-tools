@@ -35,43 +35,46 @@
   animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Immersive tool routes are rendered outside the narrow portfolio frame by
-   RouteFrame. The canvas therefore uses normal document geometry: no 100vw
-   breakout, negative margin, :has() shell override, or translate centering. */
-.advisor-viewport {
+/* The portfolio is intentionally narrow. Tool routes fill that same frame
+   instead of escaping into viewport-width canvases. */
+.advisor-viewport,
+.crm-health-viewport,
+.onboarding-viewport,
+.routing-viewport {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   width: 100%;
-  max-width: none;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 100svh;
+  max-width: 100%;
+  height: calc(100dvh - 10rem);
+  min-height: 580px;
+  max-height: 820px;
   margin: 0;
   overflow: hidden;
   box-sizing: border-box;
-  background: white;
-  padding: max(14px, env(safe-area-inset-top)) 16px max(12px, env(safe-area-inset-bottom));
+  background: transparent;
 }
 
-.dark .advisor-viewport {
-  background: var(--color-zinc-950);
-}
-
-.advisor-toolbar {
+.advisor-toolbar,
+.crm-health-toolbar,
+.onboarding-toolbar,
+.routing-toolbar {
   display: flex;
   width: 100%;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
 }
 
-.advisor-workspace {
+.advisor-workspace,
+.crm-health-workspace,
+.onboarding-workspace,
+.routing-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  place-items: stretch center;
   width: 100%;
   min-width: 0;
   min-height: 0;
@@ -84,78 +87,109 @@
   transform: none !important;
   display: grid !important;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  width: min(100%, 1120px) !important;
-  max-width: 1120px !important;
+  width: 100% !important;
+  max-width: 100% !important;
   height: 100%;
   min-width: 0 !important;
   min-height: 0 !important;
-  margin: 0 auto !important;
-  align-self: stretch;
+  margin: 0 !important;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-.advisor-workspace > section > div:first-child {
+.advisor-workspace > section > div:first-child,
+.advisor-workspace > section > div:nth-child(2),
+.advisor-workspace > section > div:last-child {
   width: 100%;
   min-width: 0;
+}
+
+.advisor-workspace > section > div:first-child {
   margin-bottom: 12px;
 }
 
 .advisor-workspace > section > div:nth-child(2) {
-  width: 100%;
-  min-width: 0;
   min-height: 0 !important;
   max-width: none;
-  flex: 1 1 0%;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-right: 8px;
+  padding-right: 6px;
   scrollbar-width: thin;
 }
 
 .advisor-workspace > section > div:last-child {
-  width: 100%;
-  min-width: 0;
   margin-top: 8px;
   padding-top: 8px;
 }
 
+.crm-health-workspace > .crm-health-check,
+.onboarding-workspace > .onboarding-planner,
+.routing-workspace > .routing-check {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Keep the application surfaces visually quiet. Form-control borders remain
+   visible, while divider-line decoration is suppressed. */
 .advisor-viewport [class~='border-y'],
 .advisor-viewport [class~='border-t'],
 .advisor-viewport [class~='border-t-2'],
 .advisor-viewport [class~='border-b'],
-.advisor-viewport [class~='border-l'] {
+.advisor-viewport [class~='border-l'],
+.crm-health-viewport [class~='border-y'],
+.crm-health-viewport [class~='border-t'],
+.crm-health-viewport [class~='border-t-2'],
+.crm-health-viewport [class~='border-b'],
+.crm-health-viewport [class~='border-l'],
+.onboarding-viewport [class~='border-y'],
+.onboarding-viewport [class~='border-t'],
+.onboarding-viewport [class~='border-t-2'],
+.onboarding-viewport [class~='border-b'],
+.onboarding-viewport [class~='border-l'],
+.routing-viewport [class~='border-y'],
+.routing-viewport [class~='border-t'],
+.routing-viewport [class~='border-t-2'],
+.routing-viewport [class~='border-b'],
+.routing-viewport [class~='border-l'] {
   border-color: transparent !important;
 }
 
-@media (min-width: 1024px) {
-  .advisor-workspace section:has(input[placeholder^='Search HubSpot']) .mt-5.grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 24px;
-  }
-
-  .advisor-workspace section:has(input[placeholder^='Search HubSpot']) button[class*='min-h-14'] {
-    border-bottom-color: transparent !important;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .advisor-workspace section:has(input[placeholder^='Search HubSpot']) button[class*='min-h-14']:hover {
-    background: color-mix(in srgb, currentColor 5%, transparent);
-  }
+.advisor-guide,
+.crm-health-guide,
+.onboarding-guide,
+.routing-guide {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
-.advisor-guide {
-  width: min(92vw, 1080px);
-  margin-left: auto;
-  margin-right: auto;
+/* ahmadyar's current largest live display heading is sm:text-5xl (3rem).
+   Tool pages may be smaller, but never exceed the portfolio's type ceiling. */
+.site-frame :where(
+  [class*='text-6xl'],
+  [class*='text-7xl'],
+  [class*='text-8xl'],
+  [class*='text-9xl']
+) {
+  font-size: 3rem !important;
+  line-height: 1 !important;
 }
 
-@media (min-width: 640px) {
-  .advisor-viewport {
-    padding: max(18px, env(safe-area-inset-top)) 24px max(16px, env(safe-area-inset-bottom));
+@media (max-width: 639px) {
+  .advisor-viewport,
+  .crm-health-viewport,
+  .onboarding-viewport,
+  .routing-viewport {
+    height: calc(100dvh - 8rem);
+    min-height: 540px;
   }
 }
 
