@@ -40,6 +40,7 @@ test('editorial links point to the public portfolio domain and dedicated guides'
 })
 
 test('tool llms index pairs each tool with supporting reading', () => {
-  for (const slug of slugs) assert.ok(llms.includes(`/tool/${slug}`), slug)
+  assert.match(llms, /const root = `\$\{SITE\.origin\}\$\{SITE\.toolsPath\}`/)
+  for (const slug of slugs) assert.ok(llms.includes(`/${slug}`), slug)
   assert.ok(llms.includes('Supporting guide:'))
 })
