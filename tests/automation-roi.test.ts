@@ -138,6 +138,7 @@ test('ROI route is a dedicated portfolio-framed product with crawlable guidance'
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const frame = readFileSync('components/route-frame.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
+  const polish = readFileSync('app/roi-polish.css', 'utf8')
   const guide = readFileSync('components/automation-roi-seo-content.tsx', 'utf8')
 
   assert.match(page, /automation-roi-calculator/)
@@ -148,6 +149,9 @@ test('ROI route is a dedicated portfolio-framed product with crawlable guidance'
   assert.doesNotMatch(frame, /max-w-screen-sm/)
   assert.match(css, /\.roi-viewport/)
   assert.match(css, /\.roi-workspace > \.roi-calculator/)
+  assert.match(polish, /container-type:\s*inline-size/)
+  assert.match(polish, /input:focus,[\s\S]*box-shadow:\s*0 0 0 3px/)
+  assert.match(polish, /min-height:\s*64px/)
   assert.match(guide, /Time saved is not automatically cash saved/i)
   assert.match(guide, /conservative stress case/i)
 })
