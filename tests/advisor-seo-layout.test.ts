@@ -97,6 +97,14 @@ test('ROI calculator uses short decision steps and returns to the calculator top
   assert.match(roiCalculator, /ShieldCheckIcon/)
 })
 
+test('latest visual pass removes unnecessary question-card chrome across the suite', () => {
+  assert.match(visualCss, /\.crm-health-check fieldset\s*\{[^}]*background:\s*transparent !important/)
+  assert.match(visualCss, /\.onboarding-planner button\.rounded-xl,[\s\S]*box-shadow:\s*none !important/)
+  assert.match(visualCss, /\.routing-check button\.rounded-lg,[\s\S]*box-shadow:\s*none !important/)
+  assert.match(visualCss, /\.followup-check > div:nth-child\(2\) \.grid\.py-4\s*\{[^}]*background:\s*transparent !important/)
+  assert.match(visualCss, /selected choices and[\s\S]*output cards keep enough shape/)
+})
+
 test('follow-up planner reflows fields, channels and navigation instead of clipping', () => {
   assert.match(followUp, /followup-check grid h-full min-h-0 min-w-0/)
   assert.match(followUp, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
