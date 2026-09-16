@@ -143,7 +143,6 @@ export function AutomationRoiCalculator() {
   const index = pages.indexOf(page)
   const answerSteps = pages.slice(0, -1) as Array<Exclude<PageId, 'result'>>
   const answerStepCount = answerSteps.length
-  const progress = page === 'result' ? 100 : Math.round(((index + 1) / answerStepCount) * 100)
   const update = <K extends keyof AutomationRoiInput>(key: K, value: AutomationRoiInput[K]) => setInput((current) => ({ ...current, [key]: value }))
   const goTo = (nextPage: PageId) => { setPage(nextPage); scrollToStart() }
   const reset = () => { setInput(DEFAULT_AUTOMATION_ROI_INPUT); goTo('volume') }
