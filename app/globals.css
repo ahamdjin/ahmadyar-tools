@@ -11,7 +11,7 @@
   }
 
   html { scroll-behavior: smooth; }
-  body { margin: 0; overflow-x: clip; }
+  body { margin: 0; overflow-x: hidden; }
   button, input, select, textarea { font: inherit; }
 }
 
@@ -22,75 +22,68 @@
 
 .tool-reveal { animation: tool-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* The tools repository now owns a genuinely wide page frame, so application
-   surfaces no longer need viewport breakout tricks. Keep them in normal flow,
-   centered, and let the route frame provide the available width. */
-.tool-app-viewport {
-  position: relative;
-  width: 100%;
-  max-width: 1600px;
-  min-width: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.advisor-viewport,
-.crm-health-viewport,
-.onboarding-viewport,
-.routing-viewport {
-  z-index: 1;
+/*
+  Recreated Advisor application shell.
+  The application is ordinary document flow: no viewport breakout,
+  no left: 50%, no negative translate, and no dependency on the portfolio
+  article width. The route frame owns the available browser width.
+*/
+.advisor-app {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  max-width: 1600px;
   height: calc(100dvh - 9rem);
   min-height: 640px;
-  overflow: hidden;
+  min-width: 0;
+  margin: 0 auto;
   box-sizing: border-box;
-  background: transparent;
 }
 
-.advisor-toolbar,
-.crm-health-toolbar,
-.onboarding-toolbar,
-.routing-toolbar {
+.advisor-app-toolbar {
   display: flex;
-  width: min(100%, 1400px);
+  width: 100%;
+  max-width: 1440px;
   min-width: 0;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 0 clamp(0rem, 1vw, 1rem) 16px;
+  padding: 0 12px 16px;
+  box-sizing: border-box;
 }
 
-.advisor-workspace,
-.crm-health-workspace,
-.onboarding-workspace,
-.routing-workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  width: min(100%, 1400px);
+.advisor-app-workspace {
+  width: 100%;
+  max-width: 1440px;
   min-width: 0;
   min-height: 0;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.advisor-app-core {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
 }
 
-/* The Advisor used to contain its own viewport-width breakout. Neutralize that
-   legacy positioning at the application boundary so no child can shift left
-   or escape the centered workspace. */
-.advisor-workspace > section {
+/* The assessment now behaves as content inside the new shell. Its former
+   breakout wrapper is neutralized once at this boundary and nowhere else. */
+.advisor-app-core > section {
   position: static !important;
   inset: auto !important;
   left: auto !important;
   right: auto !important;
-  transform: none !important;
   translate: none !important;
+  transform: none !important;
   display: grid !important;
   grid-template-rows: auto minmax(0, 1fr) auto;
   width: 100% !important;
-  max-width: 100% !important;
+  max-width: none !important;
   height: 100%;
   min-width: 0 !important;
   min-height: 0 !important;
@@ -99,68 +92,48 @@
   box-sizing: border-box;
 }
 
-/* Progress, scrollable content, and navigation all share one visual center. */
-.advisor-workspace > section > div:first-child,
-.advisor-workspace > section > div:nth-child(2),
-.advisor-workspace > section > div:last-child {
-  width: min(100%, 1400px);
+.advisor-app-core > section > div:first-child,
+.advisor-app-core > section > div:nth-child(2),
+.advisor-app-core > section > div:last-child {
+  width: 100%;
+  max-width: 1240px;
   min-width: 0;
   margin-left: auto;
   margin-right: auto;
-}
-
-.advisor-workspace > section > div:first-child { margin-bottom: 14px; }
-
-.advisor-workspace > section > div:nth-child(2) {
-  min-height: 0 !important;
-  max-width: 1400px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 12px clamp(0.25rem, 0.75vw, 0.75rem) 28px;
-  scrollbar-width: thin;
-}
-
-.advisor-workspace > section > div:last-child {
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-.crm-health-workspace > .crm-health-check,
-.onboarding-workspace > .onboarding-planner,
-.routing-workspace > .routing-check {
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  margin: 0;
-  overflow: hidden;
   box-sizing: border-box;
 }
 
-/* Keep application surfaces visually quiet. Form-control borders remain
-   visible, while decorative divider lines are suppressed. */
-.advisor-viewport [class~='border-y'],
-.advisor-viewport [class~='border-t'],
-.advisor-viewport [class~='border-t-2'],
-.advisor-viewport [class~='border-b'],
-.advisor-viewport [class~='border-l'],
-.crm-health-viewport [class~='border-y'],
-.crm-health-viewport [class~='border-t'],
-.crm-health-viewport [class~='border-t-2'],
-.crm-health-viewport [class~='border-b'],
-.crm-health-viewport [class~='border-l'],
-.onboarding-viewport [class~='border-y'],
-.onboarding-viewport [class~='border-t'],
-.onboarding-viewport [class~='border-t-2'],
-.onboarding-viewport [class~='border-b'],
-.onboarding-viewport [class~='border-l'],
-.routing-viewport [class~='border-y'],
-.routing-viewport [class~='border-t'],
-.routing-viewport [class~='border-t-2'],
-.routing-viewport [class~='border-b'],
-.routing-viewport [class~='border-l'] {
+.advisor-app-core > section > div:first-child {
+  margin-bottom: 14px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.advisor-app-core > section > div:nth-child(2) {
+  min-height: 0 !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 8px 28px;
+  scrollbar-width: thin;
+}
+
+.advisor-app-core > section > div:last-child {
+  margin-top: 10px;
+  padding: 10px 8px 0;
+}
+
+/* Prevent intrinsic grid tracks or long labels from widening the app. */
+.advisor-app :where(.grid, fieldset, label, button, input, select, div, section) {
+  min-width: 0;
+}
+
+/* Decorative divider lines stay quiet; form-control borders still render. */
+.advisor-app [class~='border-y'],
+.advisor-app [class~='border-t'],
+.advisor-app [class~='border-t-2'],
+.advisor-app [class~='border-b'],
+.advisor-app [class~='border-l'] {
   border-color: transparent !important;
 }
 
@@ -175,8 +148,15 @@
   margin-right: auto;
 }
 
-/* ahmadyar's current largest live display heading is sm:text-5xl (3rem).
-   Tool pages may be smaller, but never exceed the portfolio's type ceiling. */
+.site-frame > header,
+.site-frame > footer {
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Keep the portfolio display type ceiling. */
 .site-frame :where(
   [class*='text-6xl'],
   [class*='text-7xl'],
@@ -188,35 +168,39 @@
 }
 
 @media (max-width: 900px) {
-  .advisor-toolbar,
-  .crm-health-toolbar,
-  .onboarding-toolbar,
-  .routing-toolbar {
-    padding-left: 0;
-    padding-right: 0;
+  .advisor-app {
+    height: calc(100dvh - 8rem);
+    min-height: 580px;
+  }
+
+  .advisor-app-toolbar {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .advisor-app-core > section > div:first-child,
+  .advisor-app-core > section > div:nth-child(2),
+  .advisor-app-core > section > div:last-child {
+    max-width: none;
   }
 }
 
 @media (max-width: 639px) {
-  .advisor-viewport,
-  .crm-health-viewport,
-  .onboarding-viewport,
-  .routing-viewport {
-    height: calc(100dvh - 7.5rem);
+  .advisor-app {
+    height: calc(100dvh - 7rem);
     min-height: 520px;
   }
 
-  .advisor-toolbar,
-  .crm-health-toolbar,
-  .onboarding-toolbar,
-  .routing-toolbar {
+  .advisor-app-toolbar {
     gap: 10px;
     padding-bottom: 10px;
   }
 
-  .advisor-workspace > section > div:nth-child(2) {
-    padding-left: 0;
-    padding-right: 0;
+  .advisor-app-core > section > div:first-child,
+  .advisor-app-core > section > div:nth-child(2),
+  .advisor-app-core > section > div:last-child {
+    padding-left: 2px;
+    padding-right: 2px;
   }
 }
 
