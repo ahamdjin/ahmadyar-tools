@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { ArrowUpRightIcon, SparklesIcon } from 'lucide-react'
 
+import { ToolIcon } from '@/components/tool-icon'
 import { TOOLS } from '@/lib/tools'
 
 const TOOL_META: Record<(typeof TOOLS)[number]['slug'], { eyebrow: string; note: string }> = {
@@ -33,20 +35,21 @@ export default function ToolsPage() {
   return (
     <div className="tools-index tool-reveal mx-auto w-full max-w-screen-sm pb-10">
       <section className="max-w-xl">
-        <p className="text-sm text-zinc-500 dark:text-zinc-500">
-          Practical tools for the work between strategy and implementation.
-        </p>
-        <h1 className="mt-4 max-w-lg text-3xl font-medium tracking-[-0.045em] text-zinc-950 sm:text-4xl dark:text-zinc-50">
+        <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 px-2.5 py-1.5 text-xs font-medium text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+          <SparklesIcon aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={1.8} />
+          Practical automation tools
+        </div>
+        <h1 className="mt-5 max-w-lg text-3xl font-medium tracking-[-0.045em] text-zinc-950 sm:text-4xl dark:text-zinc-50">
           Build better automation systems.
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-          Model the decision first. Each tool turns a messy operating question into a clearer architecture, rule set, health check, plan or business case.
+          Six focused tools for the decisions between strategy and implementation — architecture, CRM health, onboarding, routing, ROI and follow-up.
         </p>
         <div className="mt-5 flex flex-wrap gap-2 text-[11px] text-zinc-500 dark:text-zinc-500">
           <span className="rounded-full bg-zinc-100 px-2.5 py-1 dark:bg-zinc-900">6 tools</span>
           <span className="rounded-full bg-zinc-100 px-2.5 py-1 dark:bg-zinc-900">Free</span>
           <span className="rounded-full bg-zinc-100 px-2.5 py-1 dark:bg-zinc-900">No signup</span>
-          <span className="rounded-full bg-zinc-100 px-2.5 py-1 dark:bg-zinc-900">Built around real operating constraints</span>
+          <span className="rounded-full bg-zinc-100 px-2.5 py-1 dark:bg-zinc-900">Built for real operating constraints</span>
         </div>
       </section>
 
@@ -57,39 +60,37 @@ export default function ToolsPage() {
             <Link
               key={tool.slug}
               href={`/${tool.slug}`}
-              className="tool-index-card group relative flex min-h-[250px] flex-col overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_55px_rgba(15,23,42,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:bg-zinc-700/35 dark:hover:shadow-[0_18px_55px_rgba(0,0,0,0.25)]"
+              className="tool-index-card group relative flex min-h-[228px] flex-col overflow-hidden rounded-[22px] bg-zinc-50 p-5 transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_55px_rgba(24,24,27,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:bg-zinc-900/55 dark:hover:bg-zinc-900 dark:hover:shadow-[0_20px_55px_rgba(0,0,0,0.24)]"
             >
-              <div className="relative flex h-full flex-1 flex-col rounded-[15px] bg-white p-5 dark:bg-zinc-950">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-600">
-                      {String(index + 1).padStart(2, '0')} · {meta.eyebrow}
-                    </p>
-                  </div>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm text-zinc-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:bg-zinc-950 group-hover:text-white dark:bg-zinc-900 dark:text-zinc-400 dark:group-hover:bg-zinc-50 dark:group-hover:text-zinc-950">
-                    →
-                  </span>
-                </div>
+              <div className="flex items-start justify-between gap-4">
+                <span className="tool-index-icon flex h-10 w-10 items-center justify-center rounded-xl bg-white text-zinc-700 shadow-[0_1px_0_rgba(24,24,27,0.06)] transition-[transform,background-color,color] duration-300 group-hover:-rotate-2 group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white dark:bg-zinc-950 dark:text-zinc-300 dark:group-hover:bg-zinc-50 dark:group-hover:text-zinc-950">
+                  <ToolIcon slug={tool.slug} className="h-[18px] w-[18px]" />
+                </span>
+                <ArrowUpRightIcon aria-hidden="true" className="h-4 w-4 text-zinc-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-zinc-900 dark:text-zinc-600 dark:group-hover:text-zinc-100" />
+              </div>
 
-                <div className="mt-10">
-                  <h2 className="max-w-[15rem] text-lg font-medium tracking-[-0.03em] text-zinc-950 dark:text-zinc-50">
-                    {tool.shortTitle}
-                  </h2>
-                  <p className="mt-3 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
-                    {meta.note}
-                  </p>
-                </div>
-
-                <p className="mt-auto pt-7 text-xs leading-5 text-zinc-400 transition-colors group-hover:text-zinc-600 dark:text-zinc-600 dark:group-hover:text-zinc-400">
-                  {tool.description}
+              <div className="mt-7">
+                <p className="text-[10px] font-medium uppercase tracking-[0.17em] text-zinc-400 dark:text-zinc-600">
+                  {String(index + 1).padStart(2, '0')} · {meta.eyebrow}
                 </p>
+                <h2 className="mt-2 max-w-[15rem] text-lg font-medium tracking-[-0.03em] text-zinc-950 dark:text-zinc-50">
+                  {tool.shortTitle}
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
+                  {meta.note}
+                </p>
+              </div>
+
+              <div className="mt-auto flex items-center gap-1.5 pt-6 text-xs font-medium text-zinc-500 transition-colors group-hover:text-zinc-950 dark:text-zinc-500 dark:group-hover:text-zinc-100">
+                Open tool
+                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
               </div>
             </Link>
           )
         })}
       </section>
 
-      <section className="mt-10 rounded-2xl bg-zinc-50 p-5 sm:p-6 dark:bg-zinc-900/55">
+      <section className="mt-12 rounded-[22px] bg-zinc-50 p-5 sm:p-6 dark:bg-zinc-900/55">
         <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-600">
           How they are built
         </p>
@@ -97,7 +98,7 @@ export default function ToolsPage() {
           Decision logic first. Interface second.
         </h2>
         <p className="mt-3 max-w-xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-          The engines are kept separate from the UI so assumptions, platform rules and scenario tests can improve without turning the interface into a pile of one-off conditions. The goal is a useful answer, not a decorative calculator.
+          The engines are kept separate from the interface so assumptions, platform rules and scenario tests can improve without turning each tool into a pile of one-off conditions. The goal is a useful answer, not a decorative calculator.
         </p>
       </section>
     </div>
