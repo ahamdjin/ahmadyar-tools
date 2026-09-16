@@ -46,6 +46,9 @@ test('Architecture Advisor keeps its proven centered rebuild without viewport br
   assert.match(advisorCss, /\.advisor-workspace\s*\{[^}]*width:\s*min\(100%, 1180px\) !important/)
   assert.match(advisorCss, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*960px !important/)
   assert.match(advisorCss, /overflow-x:\s*hidden !important/)
+  assert.match(advisorCss, /grid-template-columns:\s*minmax\(180px, 230px\) minmax\(0, 1fr\)/)
+  assert.match(advisorCss, /grid-template-columns:\s*minmax\(0, 1fr\) 180px/)
+  assert.match(advisorCss, /@container \(max-width: 720px\)/)
   assert.doesNotMatch(advisorCss, /^\s*left:\s*50%/m)
   assert.doesNotMatch(advisorCss, /^\s*translate:\s*-50% 0/m)
 })
@@ -53,6 +56,7 @@ test('Architecture Advisor keeps its proven centered rebuild without viewport br
 test('public tools shell stays centered and the index uses cards instead of ruled rows', () => {
   assert.match(shell, /site-header[^"\n]*max-w-screen-sm/)
   assert.match(shell, /site-footer[^"\n]*max-w-screen-sm/)
+  assert.match(shell, /assets\/ahmad-profile\.webp/)
   assert.match(indexPage, /tools-index tool-reveal mx-auto w-full max-w-screen-sm/)
   assert.match(indexPage, /tool-index-card/)
   assert.match(indexPage, /rounded-2xl bg-zinc-300\/30 p-\[1px\]/)
