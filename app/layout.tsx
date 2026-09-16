@@ -14,6 +14,7 @@ import './experience-pass.css'
 import './visual-pass-v4.css'
 import { RouteFrame } from '@/components/route-frame'
 import { ThemeProvider } from '@/components/theme-provider'
+import { ToolStepNavigationScroll } from '@/components/tool-step-navigation-scroll'
 import { SITE } from '@/lib/site'
 
 const geist = Geist({ variable: '--font-geist', subsets: ['latin'] })
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}>
         <ThemeProvider>
+          <ToolStepNavigationScroll />
           <RouteFrame>{children}</RouteFrame>
         </ThemeProvider>
         <Analytics />
