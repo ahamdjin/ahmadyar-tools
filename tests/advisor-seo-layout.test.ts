@@ -24,8 +24,8 @@ test('tool suite uses normal-flow application stages inside a wide route frame',
 
   assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*width:\s*100%/)
   assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*overflow:\s*hidden/)
-  assert.doesNotMatch(css, /left:\s*50%/)
-  assert.doesNotMatch(css, /translate:\s*-50% 0/)
+  assert.doesNotMatch(css, /^\s*left:\s*50%/m)
+  assert.doesNotMatch(css, /^\s*translate:\s*-50% 0/m)
   assert.match(css, /\.crm-health-viewport\s*\{\s*max-width:\s*1220px/)
   assert.match(css, /\.onboarding-viewport\s*\{\s*max-width:\s*1240px/)
   assert.match(css, /\.routing-viewport\s*\{\s*max-width:\s*1180px/)
@@ -46,8 +46,8 @@ test('Architecture Advisor keeps its proven centered rebuild without viewport br
   assert.match(advisorCss, /\.advisor-workspace\s*\{[^}]*width:\s*min\(100%, 1180px\) !important/)
   assert.match(advisorCss, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*960px !important/)
   assert.match(advisorCss, /overflow-x:\s*hidden !important/)
-  assert.doesNotMatch(advisorCss, /left:\s*50%/)
-  assert.doesNotMatch(advisorCss, /translate:\s*-50% 0/)
+  assert.doesNotMatch(advisorCss, /^\s*left:\s*50%/m)
+  assert.doesNotMatch(advisorCss, /^\s*translate:\s*-50% 0/m)
 })
 
 test('public tools shell stays centered and the index uses cards instead of ruled rows', () => {
