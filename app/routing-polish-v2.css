@@ -1,0 +1,129 @@
+/* Second-pass Lead Routing Builder refinement.
+   Keep the rule-builder dense enough for operators, but calmer and more
+   deliberate than a generic admin form. */
+
+.routing-check {
+  container-type: inline-size;
+}
+
+.routing-check > div:first-child {
+  padding-inline: 2px;
+}
+
+.routing-check > div:nth-child(2) {
+  padding-top: 14px;
+}
+
+.routing-check [class*='sm:grid-cols-[230px_1fr]'] {
+  grid-template-columns: minmax(180px, 225px) minmax(0, 1fr) !important;
+  column-gap: clamp(1.5rem, 3vw, 2.5rem) !important;
+}
+
+.routing-check [class*='sm:grid-cols-[230px_1fr]'] > :last-child,
+.routing-check button,
+.routing-check button > span,
+.routing-check label,
+.routing-check input,
+.routing-check select {
+  min-width: 0;
+}
+
+.routing-check button.rounded-lg,
+.routing-check button.rounded-xl {
+  border-radius: 14px;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.routing-check button.rounded-lg:hover:not(:disabled),
+.routing-check button.rounded-xl:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.routing-check button[class~='bg-zinc-100'] {
+  background: rgb(250 250 250 / 0.86) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.58);
+}
+
+.routing-check button[class~='bg-zinc-950'] {
+  box-shadow: 0 10px 26px rgb(24 24 27 / 0.12);
+}
+
+.dark .routing-check button[class~='dark:bg-zinc-900'] {
+  background: rgb(39 39 42 / 0.7) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.55);
+}
+
+.dark .routing-check button[class~='dark:bg-zinc-50'] {
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.2);
+}
+
+.routing-check input,
+.routing-check select {
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.routing-check input:focus,
+.routing-check select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(24 24 27 / 0.08);
+}
+
+.dark .routing-check input:focus,
+.dark .routing-check select:focus {
+  box-shadow: 0 0 0 3px rgb(250 250 250 / 0.09);
+}
+
+.routing-check article {
+  border-radius: 20px;
+  background: rgb(250 250 250 / 0.78) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.5);
+}
+
+.dark .routing-check article {
+  background: rgb(24 24 27 / 0.58) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.42);
+}
+
+.routing-check > div:last-child {
+  min-height: 64px;
+  padding: 10px 12px !important;
+  background: rgb(250 250 250 / 0.82) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.45);
+}
+
+.dark .routing-check > div:last-child {
+  background: rgb(24 24 27 / 0.62) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.42);
+}
+
+@container (max-width: 720px) {
+  .routing-check [class*='sm:grid-cols-[230px_1fr]'] {
+    display: block !important;
+  }
+
+  .routing-check [class*='sm:grid-cols-[230px_1fr]'] > :last-child {
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 639px) {
+  .routing-check > div:nth-child(2) {
+    padding-top: 8px;
+  }
+
+  .routing-check > div:last-child {
+    min-height: 0;
+    padding-inline: 4px !important;
+    background: transparent !important;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .routing-check button.rounded-lg,
+  .routing-check button.rounded-xl,
+  .routing-check input,
+  .routing-check select {
+    transition: none;
+  }
+}
