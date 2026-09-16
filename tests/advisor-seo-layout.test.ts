@@ -7,17 +7,21 @@ const indexPage = readFileSync('app/page.tsx', 'utf8')
 const css = readFileSync('app/globals.css', 'utf8')
 const advisorCss = readFileSync('app/advisor-rebuild.css', 'utf8')
 const experienceCss = readFileSync('app/experience-pass.css', 'utf8')
+const visualCss = readFileSync('app/visual-pass-v4.css', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
 const shell = readFileSync('components/site-shell.tsx', 'utf8')
 const roiCalculator = readFileSync('components/automation-roi-calculator.tsx', 'utf8')
 const followUp = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
+const toolIcon = readFileSync('components/tool-icon.tsx', 'utf8')
+const stepScroll = readFileSync('components/use-step-scroll.ts', 'utf8')
 
 test('tool suite uses normal-flow application stages inside a wide route frame', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
   assert.match(layout, /import '\.\/experience-pass\.css'/)
+  assert.match(layout, /import '\.\/visual-pass-v4\.css'/)
   assert.match(routeFrame, /max-w-none/)
   assert.doesNotMatch(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /site-main min-w-0 w-full flex-1/)
@@ -53,13 +57,17 @@ test('Architecture Advisor keeps its proven centered rebuild without viewport br
   assert.doesNotMatch(advisorCss, /^\s*translate:\s*-50% 0/m)
 })
 
-test('public tools shell stays centered and the index uses cards instead of ruled rows', () => {
+test('public tools shell stays centered and the index uses the shared icon library', () => {
   assert.match(shell, /site-header[^"\n]*max-w-screen-sm/)
   assert.match(shell, /site-footer[^"\n]*max-w-screen-sm/)
   assert.match(shell, /assets\/ahmad-profile\.webp/)
   assert.match(indexPage, /tools-index tool-reveal mx-auto w-full max-w-screen-sm/)
   assert.match(indexPage, /tool-index-card/)
-  assert.match(indexPage, /rounded-2xl bg-zinc-300\/30 p-\[1px\]/)
+  assert.match(indexPage, /rounded-\[22px\] bg-zinc-50/)
+  assert.match(indexPage, /<ToolIcon slug=\{tool\.slug\}/)
+  assert.match(toolIcon, /WorkflowIcon/)
+  assert.match(toolIcon, /HeartPulseIcon/)
+  assert.match(toolIcon, /CalculatorIcon/)
   assert.doesNotMatch(indexPage, /border-y/)
   assert.doesNotMatch(indexPage, /divide-y/)
 })
@@ -70,18 +78,23 @@ test('tool workspaces use one document scroll instead of hidden nested scrolling
   assert.match(experienceCss, /\.advisor-workspace > section > div:nth-child\(2\),[\s\S]*\.followup-check > div:nth-child\(2\)\s*\{[^}]*overflow:\s*visible !important/)
   assert.match(experienceCss, /position:\s*sticky/)
   assert.match(experienceCss, /bottom:\s*max\(12px, env\(safe-area-inset-bottom\)\)/)
-  assert.match(experienceCss, /backdrop-filter:\s*blur\(18px\)/)
+  assert.match(visualCss, /floating control/)
 })
 
-test('ROI calculator uses short decision steps with no internal scroll region', () => {
+test('ROI calculator uses short decision steps and returns to the calculator top on navigation', () => {
   assert.match(roiCalculator, /type PageId = 'volume' \| 'baseline' \| 'automation' \| 'risk' \| 'cost' \| 'result'/)
   assert.match(roiCalculator, /pages: PageId\[\] = \['volume', 'baseline', 'automation', 'risk', 'cost', 'result'\]/)
   assert.match(roiCalculator, /Step \$\{index \+ 1\} of \$\{answerStepCount\}/)
-  assert.match(roiCalculator, /roi-calculator grid min-h-0 min-w-0/)
+  assert.match(roiCalculator, /roi-calculator scroll-mt-6 grid min-h-0 min-w-0/)
+  assert.match(roiCalculator, /useStepScroll\(\)/)
+  assert.match(roiCalculator, /const goTo = \(nextPage: PageId\) => \{ setPage\(nextPage\); scrollToStart\(\) \}/)
+  assert.match(stepScroll, /scrollIntoView\(\{ behavior, block: 'start' \}\)/)
   assert.doesNotMatch(roiCalculator, /overflow-y-auto/)
   assert.match(roiCalculator, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
   assert.match(roiCalculator, /mt-4 grid min-w-0 gap-3 sm:grid-cols-2/)
   assert.match(roiCalculator, /break-words[^"\n]*\[overflow-wrap:anywhere\]/)
+  assert.match(roiCalculator, /CircleDollarSignIcon/)
+  assert.match(roiCalculator, /ShieldCheckIcon/)
 })
 
 test('follow-up planner reflows fields, channels and navigation instead of clipping', () => {
@@ -95,18 +108,19 @@ test('tool typography cannot exceed the portfolio display ceiling', () => {
   assert.match(css, /font-size:\s*3rem !important/)
 })
 
-test('guidance is presented as an editorial field guide instead of a text dump', () => {
+test('guidance uses a restrained editorial layout instead of large SEO slabs', () => {
   assert.match(page, /<AdvisorSeoContent \/>/)
   assert.ok(page.indexOf('<AdvisorSeoContent />') > page.indexOf('<ArchitectureAdvisor />'))
   assert.match(page, /SoftwareApplication/)
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
-  assert.match(experienceCss, /width:\s*min\(100%, 980px\) !important/)
-  assert.match(experienceCss, /magazine deck/)
   assert.match(experienceCss, /counter-increment:\s*guide-section/)
   assert.match(experienceCss, /text-wrap:\s*balance/)
   assert.match(experienceCss, /text-wrap:\s*pretty/)
+  assert.match(visualCss, /width:\s*min\(100%, 900px\) !important/)
+  assert.match(visualCss, /background:\s*transparent !important/)
+  assert.match(visualCss, /Cards are reserved for things a reader may want to scan/)
 })
 
 test('tool canonicals use the shared singular /tool path', () => {
