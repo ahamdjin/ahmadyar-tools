@@ -14,6 +14,7 @@ import { LEAD_ROUTING_FAQS, LeadRoutingSeoContent } from '@/components/lead-rout
 import { OnboardingPlanner } from '@/components/onboarding-planner'
 import { ONBOARDING_FAQS, OnboardingSeoContent } from '@/components/onboarding-seo-content'
 import { BackLink } from '@/components/site-shell'
+import { ToolRouteHeading } from '@/components/tool-route-heading'
 import { SITE } from '@/lib/site'
 import { TOOLS, getTool } from '@/lib/tools'
 
@@ -148,7 +149,7 @@ export default async function ToolPage({ params }: Props) {
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} />
           <div className="advisor-toolbar">
             <BackLink />
-            <div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Automation tool</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div>
+            <ToolRouteHeading slug={tool.slug} label="Automation advisor" title={tool.title} />
           </div>
           <div className="advisor-workspace"><ArchitectureAdvisor /></div>
         </div>
@@ -164,7 +165,7 @@ export default async function ToolPage({ params }: Props) {
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM', 'Close', 'Attio'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="crm-health-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(CRM_HEALTH_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="crm-health-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM diagnostic</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="crm-health-workspace"><CrmHealthCheck /></div></div><CrmHealthSeoContent /></>
+    return <><div className="crm-health-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(CRM_HEALTH_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="crm-health-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="CRM diagnostic" title={tool.title} /></div><div className="crm-health-workspace"><CrmHealthCheck /></div></div><CrmHealthSeoContent /></>
   }
 
   if (tool.slug === 'client-onboarding-automation-planner') {
@@ -174,7 +175,7 @@ export default async function ToolPage({ params }: Props) {
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Stripe', 'DocuSign', 'Asana', 'ClickUp', 'monday.com', 'Typeform', 'Zapier', 'Make', 'n8n'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="onboarding-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(ONBOARDING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="onboarding-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Onboarding planner</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="onboarding-workspace"><OnboardingPlanner /></div></div><OnboardingSeoContent /></>
+    return <><div className="onboarding-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(ONBOARDING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="onboarding-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Onboarding planner" title={tool.title} /></div><div className="onboarding-workspace"><OnboardingPlanner /></div></div><OnboardingSeoContent /></>
   }
 
   if (tool.slug === 'lead-routing-rules-builder') {
@@ -184,7 +185,7 @@ export default async function ToolPage({ params }: Props) {
       mentions: ['HubSpot', 'Salesforce', 'GoHighLevel', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Lead routing builder</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /></>
+    return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Lead routing builder" title={tool.title} /></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /></>
   }
 
   if (tool.slug === 'automation-roi-calculator') {
@@ -193,7 +194,7 @@ export default async function ToolPage({ params }: Props) {
       about: [{ '@type': 'Thing', name: 'Automation ROI' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Automation payback period' }, { '@type': 'Thing', name: 'Automation business case' }],
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="roi-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(AUTOMATION_ROI_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="roi-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">ROI calculator</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="roi-workspace"><AutomationRoiCalculator /></div></div><AutomationRoiSeoContent /></>
+    return <><div className="roi-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(AUTOMATION_ROI_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="roi-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="ROI calculator" title={tool.title} /></div><div className="roi-workspace"><AutomationRoiCalculator /></div></div><AutomationRoiSeoContent /></>
   }
 
   if (tool.slug === 'lead-follow-up-automation-planner') {
@@ -203,7 +204,7 @@ export default async function ToolPage({ params }: Props) {
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="followup-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_FOLLOW_UP_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="followup-toolbar"><BackLink /><div className="min-w-0 text-right"><p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Follow-up planner</p><h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1></div></div><div className="followup-workspace"><LeadFollowUpPlanner /></div></div><LeadFollowUpSeoContent /></>
+    return <><div className="followup-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_FOLLOW_UP_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="followup-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Follow-up planner" title={tool.title} /></div><div className="followup-workspace"><LeadFollowUpPlanner /></div></div><LeadFollowUpSeoContent /></>
   }
 
   notFound()
