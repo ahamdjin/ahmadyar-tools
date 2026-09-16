@@ -171,6 +171,104 @@
 }
 
 /*
+  Form surfaces: the earlier pass put nearly every question inside another box.
+  Pull that back. Question groups use whitespace by default; selected choices and
+  output cards keep enough shape to remain obvious.
+*/
+.crm-health-check fieldset {
+  margin-block: 2px !important;
+  padding: 16px 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.crm-health-check fieldset button {
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease, box-shadow 180ms ease !important;
+}
+
+.crm-health-check fieldset button:hover:not(:disabled) {
+  background: rgb(250 250 250 / 0.88) !important;
+}
+
+.crm-health-check fieldset button[class~='bg-zinc-100'] {
+  background: rgb(244 244 245 / 0.92) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.78) !important;
+}
+
+.dark .crm-health-check fieldset button:hover:not(:disabled) {
+  background: rgb(24 24 27 / 0.54) !important;
+}
+
+.dark .crm-health-check fieldset button[class~='dark:bg-zinc-900'] {
+  background: rgb(39 39 42 / 0.72) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.62) !important;
+}
+
+/* Onboarding choices should read as choices, not a wall of outlined cards. */
+.onboarding-planner button.rounded-xl,
+.onboarding-planner button.rounded-lg {
+  box-shadow: none !important;
+}
+
+.onboarding-planner button.rounded-xl:hover:not(:disabled),
+.onboarding-planner button.rounded-lg:hover:not(:disabled) {
+  background: rgb(244 244 245 / 0.78);
+}
+
+.dark .onboarding-planner button.rounded-xl:hover:not(:disabled),
+.dark .onboarding-planner button.rounded-lg:hover:not(:disabled) {
+  background: rgb(39 39 42 / 0.68);
+}
+
+.onboarding-planner button[class~='bg-zinc-100'] {
+  box-shadow: inset 0 0 0 1px rgb(212 212 216 / 0.78), 0 8px 22px rgb(24 24 27 / 0.035) !important;
+}
+
+.dark .onboarding-planner button[class~='dark:bg-zinc-900'] {
+  box-shadow: inset 0 0 0 1px rgb(82 82 91 / 0.62), 0 9px 24px rgb(0 0 0 / 0.15) !important;
+}
+
+/* Routing already uses background contrast to express state; extra inset rings
+   only make the screen busier. */
+.routing-check button.rounded-lg,
+.routing-check button.rounded-xl {
+  box-shadow: none !important;
+}
+
+.routing-check button[class~='bg-zinc-950'] {
+  box-shadow: 0 9px 22px rgb(24 24 27 / 0.11) !important;
+}
+
+.dark .routing-check button[class~='dark:bg-zinc-50'] {
+  box-shadow: 0 9px 24px rgb(0 0 0 / 0.2) !important;
+}
+
+/* Follow-up used a card around every field. Match the calmer ROI rhythm. */
+.followup-check > div:nth-child(2) .grid.py-4 {
+  margin-block: 2px;
+  padding: 14px 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.followup-check button.rounded-lg,
+.followup-check button.rounded-xl {
+  box-shadow: none;
+}
+
+.followup-check button[class~='bg-zinc-950'],
+.followup-check button[class~='bg-zinc-100'] {
+  box-shadow: inset 0 0 0 1px var(--followup-ring), 0 8px 22px rgb(24 24 27 / 0.045) !important;
+}
+
+.dark .followup-check button[class~='dark:bg-zinc-50'],
+.dark .followup-check button[class~='dark:bg-zinc-900'] {
+  box-shadow: inset 0 0 0 1px var(--followup-ring), 0 8px 22px rgb(0 0 0 / 0.14) !important;
+}
+
+/*
   Editorial guides: remove the large slab treatment from the previous pass.
   The portfolio is strongest when the content breathes and the ideas provide
   the structure. Cards are reserved for things a reader may want to scan.
@@ -286,6 +384,11 @@
 @media (max-width: 639px) {
   .roi-field {
     padding: 14px;
+  }
+
+  .crm-health-check fieldset,
+  .followup-check > div:nth-child(2) .grid.py-4 {
+    padding-inline: 0 !important;
   }
 
   .tool-index-card {
