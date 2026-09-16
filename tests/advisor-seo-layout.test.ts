@@ -6,6 +6,7 @@ const page = readFileSync('app/[slug]/page.tsx', 'utf8')
 const indexPage = readFileSync('app/page.tsx', 'utf8')
 const css = readFileSync('app/globals.css', 'utf8')
 const advisorCss = readFileSync('app/advisor-rebuild.css', 'utf8')
+const experienceCss = readFileSync('app/experience-pass.css', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
 const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
@@ -16,6 +17,7 @@ const followUp = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
 test('tool suite uses normal-flow application stages inside a wide route frame', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
+  assert.match(layout, /import '\.\/experience-pass\.css'/)
   assert.match(routeFrame, /max-w-none/)
   assert.doesNotMatch(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /site-main min-w-0 w-full flex-1/)
@@ -23,7 +25,6 @@ test('tool suite uses normal-flow application stages inside a wide route frame',
   assert.match(routeFrame, /<SiteFooter \/>/)
 
   assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*width:\s*100%/)
-  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*overflow:\s*hidden/)
   assert.doesNotMatch(css, /^\s*left:\s*50%/m)
   assert.doesNotMatch(css, /^\s*translate:\s*-50% 0/m)
   assert.match(css, /\.crm-health-viewport\s*\{\s*max-width:\s*1220px/)
@@ -45,7 +46,6 @@ test('Architecture Advisor keeps its proven centered rebuild without viewport br
   assert.match(advisorCss, /\.advisor-toolbar\s*\{[^}]*width:\s*min\(100%, 1180px\) !important/)
   assert.match(advisorCss, /\.advisor-workspace\s*\{[^}]*width:\s*min\(100%, 1180px\) !important/)
   assert.match(advisorCss, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*960px !important/)
-  assert.match(advisorCss, /overflow-x:\s*hidden !important/)
   assert.match(advisorCss, /grid-template-columns:\s*minmax\(180px, 230px\) minmax\(0, 1fr\)/)
   assert.match(advisorCss, /grid-template-columns:\s*minmax\(0, 1fr\) 180px/)
   assert.match(advisorCss, /@container \(max-width: 720px\)/)
@@ -64,25 +64,28 @@ test('public tools shell stays centered and the index uses cards instead of rule
   assert.doesNotMatch(indexPage, /divide-y/)
 })
 
-test('tool workspaces contain horizontal overflow and reflow at phone width', () => {
-  assert.match(css, /grid-template-columns:\s*minmax\(0, 1fr\)/)
-  assert.match(css, /min-width:\s*0/)
-  assert.match(css, /@media \(max-width: 639px\)[\s\S]*min-height:\s*520px/)
-  assert.match(css, /overflow-x:\s*hidden/)
+test('tool workspaces use one document scroll instead of hidden nested scrolling', () => {
+  assert.match(experienceCss, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*height:\s*auto !important/)
+  assert.match(experienceCss, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*overflow:\s*visible !important/)
+  assert.match(experienceCss, /\.advisor-workspace > section > div:nth-child\(2\),[\s\S]*\.followup-check > div:nth-child\(2\)\s*\{[^}]*overflow:\s*visible !important/)
+  assert.match(experienceCss, /position:\s*sticky/)
+  assert.match(experienceCss, /bottom:\s*max\(12px, env\(safe-area-inset-bottom\)\)/)
+  assert.match(experienceCss, /backdrop-filter:\s*blur\(18px\)/)
 })
 
-test('ROI calculator cannot force horizontal overflow inside the integrated branch', () => {
-  assert.match(roiCalculator, /roi-calculator grid h-full min-h-0 min-w-0/)
-  assert.match(roiCalculator, /overflow-x-hidden overflow-y-auto/)
+test('ROI calculator uses short decision steps with no internal scroll region', () => {
+  assert.match(roiCalculator, /type PageId = 'volume' \| 'baseline' \| 'automation' \| 'risk' \| 'cost' \| 'result'/)
+  assert.match(roiCalculator, /pages: PageId\[\] = \['volume', 'baseline', 'automation', 'risk', 'cost', 'result'\]/)
+  assert.match(roiCalculator, /Step \$\{index \+ 1\} of \$\{answerStepCount\}/)
+  assert.match(roiCalculator, /roi-calculator grid min-h-0 min-w-0/)
+  assert.doesNotMatch(roiCalculator, /overflow-y-auto/)
   assert.match(roiCalculator, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
   assert.match(roiCalculator, /mt-4 grid min-w-0 gap-3 sm:grid-cols-2/)
   assert.match(roiCalculator, /break-words[^"\n]*\[overflow-wrap:anywhere\]/)
-  assert.doesNotMatch(roiCalculator, /mt-4 grid grid-cols-2 gap-3/)
 })
 
 test('follow-up planner reflows fields, channels and navigation instead of clipping', () => {
   assert.match(followUp, /followup-check grid h-full min-h-0 min-w-0/)
-  assert.match(followUp, /overflow-x-hidden overflow-y-auto/)
   assert.match(followUp, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
   assert.match(followUp, /Channels[\s\S]*grid min-w-0 gap-2 sm:grid-cols-2/)
   assert.match(followUp, /flex min-w-0 flex-wrap items-center justify-between/)
@@ -92,14 +95,18 @@ test('tool typography cannot exceed the portfolio display ceiling', () => {
   assert.match(css, /font-size:\s*3rem !important/)
 })
 
-test('advisor page exposes crawlable guidance below the interactive tool', () => {
+test('guidance is presented as an editorial field guide instead of a text dump', () => {
   assert.match(page, /<AdvisorSeoContent \/>/)
   assert.ok(page.indexOf('<AdvisorSeoContent />') > page.indexOf('<ArchitectureAdvisor />'))
   assert.match(page, /SoftwareApplication/)
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
-  assert.match(css, /\.advisor-guide,[\s\S]*\.followup-guide\s*\{[^}]*max-width:\s*900px/)
+  assert.match(experienceCss, /width:\s*min\(100%, 980px\) !important/)
+  assert.match(experienceCss, /magazine deck/)
+  assert.match(experienceCss, /counter-increment:\s*guide-section/)
+  assert.match(experienceCss, /text-wrap:\s*balance/)
+  assert.match(experienceCss, /text-wrap:\s*pretty/)
 })
 
 test('tool canonicals use the shared singular /tool path', () => {
