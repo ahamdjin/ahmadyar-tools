@@ -102,6 +102,7 @@ test('CRM health route uses the dedicated diagnostic inside the portfolio frame'
   assert.match(component, /Search 140\+ systems/)
   assert.match(component, /Fix the leaks in this order/)
   assert.match(css, /\.crm-health-workspace/)
-  assert.match(frame, /max-w-screen-sm/)
+  assert.match(frame, /max-w-none/)
+  assert.doesNotMatch(frame, /max-w-screen-sm/)
   assert.doesNotMatch(frame, /IMMERSIVE_TOOL_PATHS/)
 })

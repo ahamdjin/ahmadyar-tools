@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const tool = getTool(slug)
   if (!tool) return {}
-  const canonical = `${SITE.origin}/tools/${tool.slug}`
+  const canonical = `${SITE.origin}${SITE.toolsPath}/${tool.slug}`
   const dedicated = dedicatedMetadata(tool.slug)
 
   if (dedicated) {
@@ -87,7 +87,7 @@ function breadcrumbs(title: string, canonical: string) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Tools', item: `${SITE.origin}/tools` },
+      { '@type': 'ListItem', position: 1, name: 'Tools', item: `${SITE.origin}${SITE.toolsPath}` },
       { '@type': 'ListItem', position: 2, name: title, item: canonical },
     ],
   }
@@ -106,7 +106,7 @@ export default async function ToolPage({ params }: Props) {
   const tool = getTool(slug)
   if (!tool) notFound()
 
-  const canonical = `${SITE.origin}/tools/${tool.slug}`
+  const canonical = `${SITE.origin}${SITE.toolsPath}/${tool.slug}`
   const dedicated = dedicatedMetadata(tool.slug)
   const description = dedicated?.description ?? tool.description
   const softwareJsonLd = {

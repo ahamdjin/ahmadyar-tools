@@ -3,35 +3,68 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
 const page = readFileSync('app/[slug]/page.tsx', 'utf8')
+const indexPage = readFileSync('app/page.tsx', 'utf8')
 const css = readFileSync('app/globals.css', 'utf8')
-const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
+const advisorCss = readFileSync('app/advisor-rebuild.css', 'utf8')
 const layout = readFileSync('app/layout.tsx', 'utf8')
+const guide = readFileSync('components/advisor-seo-content.tsx', 'utf8')
 const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
+const shell = readFileSync('components/site-shell.tsx', 'utf8')
 const roiCalculator = readFileSync('components/automation-roi-calculator.tsx', 'utf8')
 const followUp = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
 
-test('Architecture Advisor uses a centered application stage while other tools keep the wider canvas', () => {
+test('tool suite uses normal-flow application stages inside a wide route frame', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
   assert.match(layout, /<RouteFrame>\{children\}<\/RouteFrame>/)
+  assert.match(routeFrame, /max-w-none/)
+  assert.doesNotMatch(routeFrame, /max-w-screen-sm/)
+  assert.match(routeFrame, /site-main min-w-0 w-full flex-1/)
   assert.match(routeFrame, /<SiteHeader \/>/)
   assert.match(routeFrame, /<SiteFooter \/>/)
-  assert.match(css, /\.advisor-viewport\s*\{[^}]*left:\s*50%/)
-  assert.match(css, /\.advisor-viewport\s*\{[^}]*translate:\s*-50% 0/)
-  assert.match(css, /\.advisor-viewport\s*\{[^}]*width:\s*min\(calc\(100dvw - 2rem\), 1180px\)/)
-  assert.match(css, /\.advisor-viewport\s*\{[^}]*max-width:\s*1180px/)
-  assert.match(css, /\.advisor-toolbar,[\s\S]*\.advisor-workspace\s*\{[^}]*width:\s*min\(100%, 1080px\)/)
-  assert.match(css, /\.advisor-workspace > section > div:first-child,[\s\S]*width:\s*min\(100%, 960px\)/)
-  assert.match(css, /\.crm-health-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*width:\s*min\(calc\(100dvw - 2rem\), 1600px\)/)
-  assert.match(css, /\.followup-workspace > \.followup-check\s*\{[^}]*width:\s*min\(100%, 1240px\)/)
-  assert.match(css, /\.roi-workspace > \.roi-calculator,[\s\S]*max-width:\s*1240px/)
+
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*width:\s*100%/)
+  assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*overflow:\s*hidden/)
+  assert.doesNotMatch(css, /^\s*left:\s*50%/m)
+  assert.doesNotMatch(css, /^\s*translate:\s*-50% 0/m)
+  assert.match(css, /\.crm-health-viewport\s*\{\s*max-width:\s*1220px/)
+  assert.match(css, /\.onboarding-viewport\s*\{\s*max-width:\s*1240px/)
+  assert.match(css, /\.routing-viewport\s*\{\s*max-width:\s*1180px/)
+  assert.match(css, /\.roi-viewport\s*\{\s*max-width:\s*1180px/)
+  assert.match(css, /\.followup-viewport\s*\{\s*max-width:\s*1220px/)
+  assert.match(css, /\.crm-health-workspace > \.crm-health-check\s*\{[^}]*max-width:\s*1060px/)
+  assert.match(css, /\.onboarding-workspace > \.onboarding-planner\s*\{[^}]*max-width:\s*1080px/)
+  assert.match(css, /\.routing-workspace > \.routing-check\s*\{[^}]*max-width:\s*1020px/)
+  assert.match(css, /\.roi-workspace > \.roi-calculator\s*\{[^}]*max-width:\s*1040px/)
+  assert.match(css, /\.followup-workspace > \.followup-check\s*\{[^}]*max-width:\s*1060px/)
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
-  assert.doesNotMatch(css, /\.site-frame:has\(/)
 })
 
-test('tool workspaces reflow down to phone width without two-dimensional scrolling', () => {
-  assert.match(css, /@media \(max-width: 900px\)[\s\S]*width:\s*calc\(100dvw - 1\.5rem\) !important/)
-  assert.match(css, /@media \(max-width: 639px\)[\s\S]*width:\s*calc\(100dvw - 1rem\) !important/)
-  assert.match(css, /overflow-x:\s*clip/)
+test('Architecture Advisor keeps its proven centered rebuild without viewport breakout', () => {
+  assert.match(advisorCss, /\.advisor-viewport\s*\{[^}]*width:\s*100% !important/)
+  assert.match(advisorCss, /\.advisor-viewport\s*\{[^}]*max-width:\s*1600px !important/)
+  assert.match(advisorCss, /\.advisor-toolbar\s*\{[^}]*width:\s*min\(100%, 1180px\) !important/)
+  assert.match(advisorCss, /\.advisor-workspace\s*\{[^}]*width:\s*min\(100%, 1180px\) !important/)
+  assert.match(advisorCss, /\.advisor-workspace > section\s*\{[^}]*max-width:\s*960px !important/)
+  assert.match(advisorCss, /overflow-x:\s*hidden !important/)
+  assert.doesNotMatch(advisorCss, /^\s*left:\s*50%/m)
+  assert.doesNotMatch(advisorCss, /^\s*translate:\s*-50% 0/m)
+})
+
+test('public tools shell stays centered and the index uses cards instead of ruled rows', () => {
+  assert.match(shell, /site-header[^"\n]*max-w-screen-sm/)
+  assert.match(shell, /site-footer[^"\n]*max-w-screen-sm/)
+  assert.match(indexPage, /tools-index tool-reveal mx-auto w-full max-w-screen-sm/)
+  assert.match(indexPage, /tool-index-card/)
+  assert.match(indexPage, /rounded-2xl bg-zinc-300\/30 p-\[1px\]/)
+  assert.doesNotMatch(indexPage, /border-y/)
+  assert.doesNotMatch(indexPage, /divide-y/)
+})
+
+test('tool workspaces contain horizontal overflow and reflow at phone width', () => {
+  assert.match(css, /grid-template-columns:\s*minmax\(0, 1fr\)/)
+  assert.match(css, /min-width:\s*0/)
+  assert.match(css, /@media \(max-width: 639px\)[\s\S]*min-height:\s*520px/)
+  assert.match(css, /overflow-x:\s*hidden/)
 })
 
 test('ROI calculator cannot force horizontal overflow inside the integrated branch', () => {
@@ -63,6 +96,12 @@ test('advisor page exposes crawlable guidance below the interactive tool', () =>
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /price:\s*'0'/)
   assert.match(css, /\.advisor-guide,[\s\S]*\.followup-guide\s*\{[^}]*max-width:\s*900px/)
+})
+
+test('tool canonicals use the shared singular /tool path', () => {
+  assert.match(page, /const canonical = `\$\{SITE\.origin\}\$\{SITE\.toolsPath\}\/\$\{tool\.slug\}`/)
+  assert.match(page, /name: 'Tools', item: `\$\{SITE\.origin\}\$\{SITE\.toolsPath\}`/)
+  assert.doesNotMatch(page, /SITE\.origin\}\/tools/)
 })
 
 test('search and AI guidance covers native, no-code, orchestration, durable jobs, and software', () => {
