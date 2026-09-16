@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { ArchitectureAdvisor } from '@/components/architecture-advisor'
+import { ArchitectureAdvisorApp } from '@/components/architecture-advisor-app'
 import { ADVISOR_FAQS, AdvisorSeoContent } from '@/components/advisor-seo-content'
 import { LegacyTool } from '@/components/legacy-tool'
 import { BackLink } from '@/components/site-shell'
@@ -101,7 +101,7 @@ export default async function ToolPage({ params }: Props) {
       name: ADVISOR_TITLE,
       url: canonical,
       description: ADVISOR_DESCRIPTION,
-      dateModified: '2026-09-15',
+      dateModified: '2026-09-16',
       about: [
         { '@type': 'Thing', name: 'Automation architecture' },
         { '@type': 'Thing', name: 'Workflow automation' },
@@ -162,22 +162,11 @@ export default async function ToolPage({ params }: Props) {
 
     return (
       <>
-        <div className="tool-app-viewport advisor-viewport tool-reveal">
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd) }} />
-          <div className="advisor-toolbar">
-            <BackLink />
-            <div className="min-w-0 text-right">
-              <p className="text-[10px] uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Automation tool</p>
-              <h1 className="truncate text-sm font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">{tool.title}</h1>
-            </div>
-          </div>
-          <div className="advisor-workspace">
-            <ArchitectureAdvisor />
-          </div>
-        </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd) }} />
+        <ArchitectureAdvisorApp title={tool.title} />
         <AdvisorSeoContent />
       </>
     )
