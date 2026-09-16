@@ -1,0 +1,269 @@
+/* UX design pass: one document scroll, always-visible navigation, and human-first reading guides. */
+
+/*
+  Tool interaction model
+  ----------------------
+  The page owns vertical scrolling. The calculator never hides more questions
+  inside a second scroll container. Navigation stays visible near the bottom of
+  the viewport so a user always understands how to move forward.
+*/
+.advisor-viewport,
+.crm-health-viewport,
+.onboarding-viewport,
+.routing-viewport,
+.roi-viewport,
+.followup-viewport {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.advisor-workspace,
+.crm-health-workspace,
+.onboarding-workspace,
+.routing-workspace,
+.roi-workspace,
+.followup-workspace {
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.advisor-workspace > section,
+.crm-health-workspace > .crm-health-check,
+.onboarding-workspace > .onboarding-planner,
+.routing-workspace > .routing-check,
+.roi-workspace > .roi-calculator,
+.followup-workspace > .followup-check {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.advisor-workspace > section {
+  grid-template-rows: auto !important;
+}
+
+.crm-health-check,
+.onboarding-planner,
+.routing-check,
+.roi-calculator,
+.followup-check {
+  grid-template-rows: auto !important;
+}
+
+.advisor-workspace > section > div:nth-child(2),
+.crm-health-check > div:nth-child(2),
+.onboarding-planner > div:nth-child(2),
+.routing-check > div:nth-child(2),
+.roi-calculator > div:nth-child(2),
+.followup-check > div:nth-child(2) {
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior: auto !important;
+  scrollbar-gutter: auto !important;
+}
+
+/* Keep the action obvious even on a long answer screen. */
+.advisor-workspace > section > div:last-child,
+.crm-health-check > div:last-child,
+.onboarding-planner > div:last-child,
+.routing-check > div:last-child,
+.roi-calculator > div:last-child,
+.followup-check > div:last-child {
+  position: sticky;
+  z-index: 35;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  margin-top: 18px !important;
+  padding: 10px 12px !important;
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.88) !important;
+  box-shadow: 0 14px 44px rgb(24 24 27 / 0.08);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+}
+
+.dark .advisor-workspace > section > div:last-child,
+.dark .crm-health-check > div:last-child,
+.dark .onboarding-planner > div:last-child,
+.dark .routing-check > div:last-child,
+.dark .roi-calculator > div:last-child,
+.dark .followup-check > div:last-child {
+  background: rgb(9 9 11 / 0.88) !important;
+  box-shadow: 0 14px 44px rgb(0 0 0 / 0.28);
+}
+
+/* Long screens should read as a sequence, not a dense settings panel. */
+.crm-health-check fieldset,
+.onboarding-planner > div:nth-child(2) > div > div,
+.routing-check > div:nth-child(2) > div > div,
+.roi-calculator > div:nth-child(2) > div > div,
+.followup-check > div:nth-child(2) > div > div {
+  scroll-margin-top: 24px;
+}
+
+/*
+  Editorial guide model
+  ---------------------
+  SEO content should feel like a useful field guide a human chose to keep
+  reading: quiet typography, deliberate rhythm, visual chapters and soft
+  editorial surfaces instead of a wall of keyword-shaped text.
+*/
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) {
+  --guide-soft: rgb(250 250 250 / 0.78);
+  --guide-soft-strong: rgb(244 244 245 / 0.92);
+  --guide-ink: rgb(24 24 27);
+  width: min(100%, 980px) !important;
+  max-width: 980px !important;
+  margin-inline: auto;
+  padding-inline: clamp(0px, 1vw, 10px);
+}
+
+.dark :where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) {
+  --guide-soft: rgb(24 24 27 / 0.48);
+  --guide-soft-strong: rgb(39 39 42 / 0.62);
+  --guide-ink: rgb(250 250 250);
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) :where(h2, h3, h4) {
+  text-wrap: balance;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) :where(p, li) {
+  text-wrap: pretty;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) :where(section) {
+  scroll-margin-top: 32px;
+}
+
+/* The opening behaves like a magazine deck rather than another product card. */
+.advisor-guide > section:first-child,
+.crm-health-guide > section:first-child,
+.routing-guide > section:first-child,
+.roi-guide > section:first-child,
+.followup-guide > section:first-child,
+.onboarding-guide > article > header {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: none !important;
+  padding: clamp(24px, 5vw, 48px);
+  border-radius: 30px;
+  background: var(--guide-soft);
+}
+
+.advisor-guide > section:first-child::after,
+.crm-health-guide > section:first-child::after,
+.routing-guide > section:first-child::after,
+.roi-guide > section:first-child::after,
+.followup-guide > section:first-child::after,
+.onboarding-guide > article > header::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -90px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgb(24 24 27 / 0.08), transparent 68%);
+  pointer-events: none;
+}
+
+.dark .advisor-guide > section:first-child::after,
+.dark .crm-health-guide > section:first-child::after,
+.dark .routing-guide > section:first-child::after,
+.dark .roi-guide > section:first-child::after,
+.dark .followup-guide > section:first-child::after,
+.dark .onboarding-guide > article > header::after {
+  background: radial-gradient(circle, rgb(250 250 250 / 0.09), transparent 68%);
+}
+
+/* Give chapters different visual weight so the eye always knows where it is. */
+.advisor-guide > section:nth-of-type(even),
+.crm-health-guide > section:nth-of-type(even),
+.routing-guide > section:nth-of-type(even),
+.roi-guide > section:nth-of-type(even),
+.followup-guide > section:nth-of-type(even),
+.onboarding-guide > article > section:nth-of-type(even) {
+  padding: clamp(22px, 3.5vw, 34px);
+  border-radius: 26px;
+  background: var(--guide-soft);
+}
+
+/* Small information cards should feel tactile without becoming dashboard UI. */
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where([class~='rounded-2xl'][class*='bg-zinc-50'], [class~='rounded-2xl'][class*='bg-zinc-100']) {
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.42);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+}
+
+.dark :where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where([class~='rounded-2xl'][class*='bg-zinc-900']) {
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.38);
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where([class~='rounded-2xl'][class*='bg-zinc-50'], [class~='rounded-2xl'][class*='bg-zinc-100']):hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.6), 0 18px 44px rgb(24 24 27 / 0.06);
+}
+
+/* Related reading should look like an intentional next step, not footer SEO. */
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) article {
+  counter-reset: guide-section;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) article > section {
+  counter-increment: guide-section;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) article > section > p:first-child[class*='uppercase']::before {
+  content: counter(guide-section, decimal-leading-zero) '  ';
+  font-family: var(--font-geist-mono), monospace;
+  letter-spacing: 0;
+  opacity: 0.52;
+}
+
+@media (max-width: 639px) {
+  .advisor-workspace > section > div:last-child,
+  .crm-health-check > div:last-child,
+  .onboarding-planner > div:last-child,
+  .routing-check > div:last-child,
+  .roi-calculator > div:last-child,
+  .followup-check > div:last-child {
+    bottom: max(8px, env(safe-area-inset-bottom));
+    margin-inline: -2px;
+    padding: 8px 10px !important;
+    border-radius: 16px;
+  }
+
+  .advisor-guide > section:first-child,
+  .crm-health-guide > section:first-child,
+  .routing-guide > section:first-child,
+  .roi-guide > section:first-child,
+  .followup-guide > section:first-child,
+  .onboarding-guide > article > header,
+  .advisor-guide > section:nth-of-type(even),
+  .crm-health-guide > section:nth-of-type(even),
+  .routing-guide > section:nth-of-type(even),
+  .roi-guide > section:nth-of-type(even),
+  .followup-guide > section:nth-of-type(even),
+  .onboarding-guide > article > section:nth-of-type(even) {
+    border-radius: 22px;
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+    :where([class~='rounded-2xl']) {
+    transition: none;
+  }
+}
