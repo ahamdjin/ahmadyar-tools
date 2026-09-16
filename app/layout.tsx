@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 
 import './globals.css'
+import './advisor-rebuild.css'
 import { RouteFrame } from '@/components/route-frame'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SITE } from '@/lib/site'

@@ -1,0 +1,120 @@
+/* Rebuilt Architecture Advisor layout.
+   This is intentionally ordinary centered flow: no viewport breakout,
+   no left: 50%, no negative translate, and no dependency on a narrow article column. */
+
+.advisor-viewport {
+  position: relative !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  translate: none !important;
+  transform: none !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100% !important;
+  max-width: 1600px !important;
+  height: calc(100dvh - 9rem);
+  min-height: 640px;
+  min-width: 0;
+  margin: 0 auto !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.advisor-toolbar {
+  display: flex !important;
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  min-width: 0;
+  margin: 0 auto !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 8px 16px;
+  box-sizing: border-box;
+}
+
+.advisor-workspace {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 1180px) !important;
+  max-width: 1180px !important;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
+/* The questionnaire itself stays at the same 960px visual width, but is now
+   centered with normal flow instead of transform-based breakout positioning. */
+.advisor-workspace > section {
+  position: static !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  translate: none !important;
+  transform: none !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: 100% !important;
+  max-width: 960px !important;
+  height: 100%;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
+.advisor-workspace > section > div:first-child,
+.advisor-workspace > section > div:nth-child(2),
+.advisor-workspace > section > div:last-child {
+  width: 100% !important;
+  max-width: 960px !important;
+  min-width: 0;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
+
+.advisor-workspace > section > div:first-child {
+  margin-bottom: 14px !important;
+}
+
+.advisor-workspace > section > div:nth-child(2) {
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  padding: 12px 8px 28px;
+  scrollbar-width: thin;
+}
+
+.advisor-workspace > section > div:last-child {
+  margin-top: 10px !important;
+  padding: 10px 8px 0;
+}
+
+.advisor-viewport :where(.grid, fieldset, label, button, input, select, div, section) {
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .advisor-viewport {
+    height: calc(100dvh - 7rem);
+    min-height: 520px;
+  }
+
+  .advisor-toolbar {
+    gap: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 10px;
+  }
+
+  .advisor-workspace > section > div:nth-child(2) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
