@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 
 import './globals.css'
 import './advisor-rebuild.css'
+import './tool-polish.css'
 import { RouteFrame } from '@/components/route-frame'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SITE } from '@/lib/site'
