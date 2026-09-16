@@ -14,6 +14,7 @@ import { LEAD_ROUTING_FAQS, LeadRoutingSeoContent } from '@/components/lead-rout
 import { OnboardingPlanner } from '@/components/onboarding-planner'
 import { ONBOARDING_FAQS, OnboardingSeoContent } from '@/components/onboarding-seo-content'
 import { BackLink } from '@/components/site-shell'
+import { ToolEditorialLinks } from '@/components/tool-editorial-links'
 import { ToolRouteHeading } from '@/components/tool-route-heading'
 import { SITE } from '@/lib/site'
 import { TOOLS, getTool } from '@/lib/tools'
@@ -63,6 +64,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: dedicated.title,
       description: dedicated.description,
       alternates: { canonical },
+      authors: [{ name: SITE.name, url: SITE.origin }],
+      creator: SITE.name,
       category: 'Business automation',
       robots: {
         index: true,
@@ -130,7 +133,7 @@ export default async function ToolPage({ params }: Props) {
       name: ADVISOR_TITLE,
       url: canonical,
       description: ADVISOR_DESCRIPTION,
-      dateModified: '2026-09-15',
+      dateModified: '2026-09-16',
       about: [
         { '@type': 'Thing', name: 'Automation architecture' },
         { '@type': 'Thing', name: 'Workflow automation' },
@@ -154,57 +157,58 @@ export default async function ToolPage({ params }: Props) {
           <div className="advisor-workspace"><ArchitectureAdvisor /></div>
         </div>
         <AdvisorSeoContent />
+        <ToolEditorialLinks slug={tool.slug} />
       </>
     )
   }
 
   if (tool.slug === 'crm-automation-health-check') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: CRM_HEALTH_TITLE, url: canonical, description: CRM_HEALTH_DESCRIPTION, dateModified: '2026-09-15',
+      '@context': 'https://schema.org', '@type': 'WebPage', name: CRM_HEALTH_TITLE, url: canonical, description: CRM_HEALTH_DESCRIPTION, dateModified: '2026-09-16',
       about: [{ '@type': 'Thing', name: 'CRM automation' }, { '@type': 'Thing', name: 'Lead management' }, { '@type': 'Thing', name: 'Revenue operations' }, { '@type': 'Thing', name: 'CRM data quality' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM', 'Close', 'Attio'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="crm-health-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(CRM_HEALTH_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="crm-health-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="CRM diagnostic" title={tool.title} /></div><div className="crm-health-workspace"><CrmHealthCheck /></div></div><CrmHealthSeoContent /></>
+    return <><div className="crm-health-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(CRM_HEALTH_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="crm-health-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="CRM diagnostic" title={tool.title} /></div><div className="crm-health-workspace"><CrmHealthCheck /></div></div><CrmHealthSeoContent /><ToolEditorialLinks slug={tool.slug} /></>
   }
 
   if (tool.slug === 'client-onboarding-automation-planner') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: ONBOARDING_TITLE, url: canonical, description: ONBOARDING_DESCRIPTION, dateModified: '2026-09-15',
+      '@context': 'https://schema.org', '@type': 'WebPage', name: ONBOARDING_TITLE, url: canonical, description: ONBOARDING_DESCRIPTION, dateModified: '2026-09-16',
       about: [{ '@type': 'Thing', name: 'Client onboarding automation' }, { '@type': 'Thing', name: 'Sales to delivery handoff' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Customer onboarding workflow' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Stripe', 'DocuSign', 'Asana', 'ClickUp', 'monday.com', 'Typeform', 'Zapier', 'Make', 'n8n'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="onboarding-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(ONBOARDING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="onboarding-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Onboarding planner" title={tool.title} /></div><div className="onboarding-workspace"><OnboardingPlanner /></div></div><OnboardingSeoContent /></>
+    return <><div className="onboarding-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(ONBOARDING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="onboarding-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Onboarding planner" title={tool.title} /></div><div className="onboarding-workspace"><OnboardingPlanner /></div></div><OnboardingSeoContent /><ToolEditorialLinks slug={tool.slug} /></>
   }
 
   if (tool.slug === 'lead-routing-rules-builder') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_ROUTING_TITLE, url: canonical, description: LEAD_ROUTING_DESCRIPTION, dateModified: '2026-09-15',
+      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_ROUTING_TITLE, url: canonical, description: LEAD_ROUTING_DESCRIPTION, dateModified: '2026-09-16',
       about: [{ '@type': 'Thing', name: 'Lead routing' }, { '@type': 'Thing', name: 'Lead assignment' }, { '@type': 'Thing', name: 'Revenue operations' }, { '@type': 'Thing', name: 'Sales automation' }],
       mentions: ['HubSpot', 'Salesforce', 'GoHighLevel', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Lead routing builder" title={tool.title} /></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /></>
+    return <><div className="routing-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_ROUTING_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="routing-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Lead routing builder" title={tool.title} /></div><div className="routing-workspace"><LeadRoutingBuilder /></div></div><LeadRoutingSeoContent /><ToolEditorialLinks slug={tool.slug} /></>
   }
 
   if (tool.slug === 'automation-roi-calculator') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: AUTOMATION_ROI_TITLE, url: canonical, description: AUTOMATION_ROI_DESCRIPTION, dateModified: '2026-09-15',
+      '@context': 'https://schema.org', '@type': 'WebPage', name: AUTOMATION_ROI_TITLE, url: canonical, description: AUTOMATION_ROI_DESCRIPTION, dateModified: '2026-09-16',
       about: [{ '@type': 'Thing', name: 'Automation ROI' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Automation payback period' }, { '@type': 'Thing', name: 'Automation business case' }],
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="roi-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(AUTOMATION_ROI_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="roi-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="ROI calculator" title={tool.title} /></div><div className="roi-workspace"><AutomationRoiCalculator /></div></div><AutomationRoiSeoContent /></>
+    return <><div className="roi-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(AUTOMATION_ROI_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="roi-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="ROI calculator" title={tool.title} /></div><div className="roi-workspace"><AutomationRoiCalculator /></div></div><AutomationRoiSeoContent /><ToolEditorialLinks slug={tool.slug} /></>
   }
 
   if (tool.slug === 'lead-follow-up-automation-planner') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_FOLLOW_UP_TITLE, url: canonical, description: LEAD_FOLLOW_UP_DESCRIPTION, dateModified: '2026-09-15',
+      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_FOLLOW_UP_TITLE, url: canonical, description: LEAD_FOLLOW_UP_DESCRIPTION, dateModified: '2026-09-16',
       about: [{ '@type': 'Thing', name: 'Lead follow-up automation' }, { '@type': 'Thing', name: 'Sales cadence' }, { '@type': 'Thing', name: 'Speed to lead' }, { '@type': 'Thing', name: 'CRM automation' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce'].map((name) => ({ '@type': 'SoftwareApplication', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
-    return <><div className="followup-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_FOLLOW_UP_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="followup-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Follow-up planner" title={tool.title} /></div><div className="followup-workspace"><LeadFollowUpPlanner /></div></div><LeadFollowUpSeoContent /></>
+    return <><div className="followup-viewport tool-reveal"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(softwareJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(webpageJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd(LEAD_FOLLOW_UP_FAQS)) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs(tool.title, canonical)) }} /><div className="followup-toolbar"><BackLink /><ToolRouteHeading slug={tool.slug} label="Follow-up planner" title={tool.title} /></div><div className="followup-workspace"><LeadFollowUpPlanner /></div></div><LeadFollowUpSeoContent /><ToolEditorialLinks slug={tool.slug} /></>
   }
 
   notFound()
