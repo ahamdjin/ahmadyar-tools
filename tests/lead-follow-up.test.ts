@@ -65,6 +65,7 @@ test('lead follow-up route is a dedicated viewport-sized planner with crawlable 
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const component = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
+  const polish = readFileSync('app/followup-polish.css', 'utf8')
   const guide = readFileSync('components/lead-follow-up-seo-content.tsx', 'utf8')
 
   assert.match(page, /lead-follow-up-automation-planner/)
@@ -79,6 +80,9 @@ test('lead follow-up route is a dedicated viewport-sized planner with crawlable 
   assert.doesNotMatch(css, /^\s*left:\s*50%/m)
   assert.doesNotMatch(css, /^\s*translate:\s*-50% 0/m)
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/)
+  assert.match(polish, /container-type:\s*inline-size/)
+  assert.match(polish, /input:focus,[\s\S]*box-shadow:\s*0 0 0 3px/)
+  assert.match(polish, /min-height:\s*64px/)
   assert.match(guide, /Think in states/i)
   assert.match(guide, /Stop conditions matter more than clever copy/i)
 })
