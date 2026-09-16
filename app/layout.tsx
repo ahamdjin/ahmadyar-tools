@@ -31,9 +31,36 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.origin),
-  title: { default: 'Automation Tools | Ahmad Yar', template: '%s | Ahmad Yar' },
-  description: 'Practical automation architecture, CRM, onboarding, and lead-routing tools by Ahmad Yar.',
+  title: { default: 'Free Automation Planning Tools | Ahmad Yar', template: '%s | Ahmad Yar' },
+  description: 'Free tools for automation architecture, CRM health, client onboarding, lead routing, ROI, and follow-up. Built for real business decisions.',
   alternates: { canonical: SITE.toolsPath },
+  icons: {
+    icon: `${SITE.origin}/favicon-light.png?v=4`,
+    apple: `${SITE.origin}/favicon-light.png?v=4`,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  openGraph: {
+    title: 'Free Automation Planning Tools | Ahmad Yar',
+    description: 'Free tools for automation architecture, CRM health, onboarding, lead routing, ROI, and follow-up.',
+    url: `${SITE.origin}${SITE.toolsPath}`,
+    siteName: SITE.name,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Free Automation Planning Tools | Ahmad Yar',
+    description: 'Free tools for automation architecture, CRM health, onboarding, lead routing, ROI, and follow-up.',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

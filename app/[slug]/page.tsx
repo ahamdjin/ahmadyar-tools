@@ -21,18 +21,18 @@ import { TOOLS, getTool } from '@/lib/tools'
 
 type Props = { params: Promise<{ slug: string }> }
 
-const ADVISOR_TITLE = 'Automation Architecture Advisor | Choose the Right Stack'
-const ADVISOR_DESCRIPTION = 'Compare HubSpot, GoHighLevel, Zapier, Make, n8n, Trigger.dev, Power Automate and more based on your systems, workflows, scale, ownership, reliability, and budget.'
-const CRM_HEALTH_TITLE = 'CRM Automation Health Check | Find Revenue Leaks'
-const CRM_HEALTH_DESCRIPTION = 'Audit lead capture, CRM data quality, routing, response, follow-up, pipeline hygiene, handoffs, reporting, adoption, and automation reliability. Built for HubSpot, GoHighLevel, Salesforce and other CRMs.'
-const ONBOARDING_TITLE = 'Client Onboarding Automation Planner | Build the Right Flow'
-const ONBOARDING_DESCRIPTION = 'Design a reliable sales-to-delivery onboarding flow across your CRM, contracts, payments, intake, files, project management, communication, access, and kickoff systems.'
-const LEAD_ROUTING_TITLE = 'Lead Routing Rules Builder | Design Reliable Assignment Logic'
-const LEAD_ROUTING_DESCRIPTION = 'Build and test lead-routing logic for existing accounts, duplicates, territories, products, round robin, capacity, availability, fallbacks, response SLAs, reassignment, and auditability.'
-const AUTOMATION_ROI_TITLE = 'Automation ROI Calculator | Payback, Savings & Build Decision'
-const AUTOMATION_ROI_DESCRIPTION = 'Calculate automation ROI using real volume, handling time, human review, exceptions, value capture, error cost, build cost, software, maintenance, payback, break-even volume and a conservative stress case.'
-const LEAD_FOLLOW_UP_TITLE = 'Lead Follow-Up Automation Planner | Cadence, SLA & Stop Rules'
-const LEAD_FOLLOW_UP_DESCRIPTION = 'Design lead follow-up automation with response SLAs, email, SMS, calls or WhatsApp, reply and booking stop rules, consent, opt-out, ownership, human handoff, monitoring and CRM-native architecture.'
+const ADVISOR_TITLE = 'Automation Architecture Advisor'
+const ADVISOR_DESCRIPTION = 'Choose where an automation should live across native CRM workflows, Zapier, Make, n8n, developer orchestration, or custom software.'
+const CRM_HEALTH_TITLE = 'CRM Automation Health Check'
+const CRM_HEALTH_DESCRIPTION = 'Find CRM leaks across lead capture, duplicates, routing, follow-up, pipeline hygiene, handoffs, reporting, and automation reliability.'
+const ONBOARDING_TITLE = 'Client Onboarding Automation Planner'
+const ONBOARDING_DESCRIPTION = 'Plan a reliable client onboarding flow across contracts, payments, intake, access, project setup, reminders, ownership, and exceptions.'
+const LEAD_ROUTING_TITLE = 'Lead Routing Rules Builder'
+const LEAD_ROUTING_DESCRIPTION = 'Build reliable lead assignment rules for existing owners, territory, round robin, capacity, availability, fallbacks, and response SLAs.'
+const AUTOMATION_ROI_TITLE = 'Automation ROI Calculator'
+const AUTOMATION_ROI_DESCRIPTION = 'Estimate automation payback using real volume, time, review, exceptions, value capture, build cost, software, maintenance, and risk.'
+const LEAD_FOLLOW_UP_TITLE = 'Lead Follow-Up Automation Planner'
+const LEAD_FOLLOW_UP_DESCRIPTION = 'Design lead follow-up around response time, ownership, channels, stop rules, consent, human handoff, monitoring, and clear CRM outcomes.'
 
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c')

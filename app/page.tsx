@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowUpRightIcon, SparklesIcon } from 'lucide-react'
 
 import { ToolIcon } from '@/components/tool-icon'
+import { SITE } from '@/lib/site'
 import { TOOLS } from '@/lib/tools'
 
 const TOOL_META: Record<(typeof TOOLS)[number]['slug'], { eyebrow: string; note: string }> = {
@@ -31,9 +32,34 @@ const TOOL_META: Record<(typeof TOOLS)[number]['slug'], { eyebrow: string; note:
   },
 }
 
+const toolsPageUrl = `${SITE.origin}${SITE.toolsPath}`
+const toolsJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Free Automation Planning Tools',
+  url: toolsPageUrl,
+  description: 'Free tools for automation architecture, CRM health, client onboarding, lead routing, ROI, and follow-up.',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: TOOLS.map((tool, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: tool.title,
+      url: `${toolsPageUrl}/${tool.slug}`,
+    })),
+  },
+  isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
+}
+
 export default function ToolsPage() {
   return (
     <div className="tools-index tool-reveal mx-auto w-full max-w-screen-sm pb-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(toolsJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
       <section className="max-w-xl">
         <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 px-2.5 py-1.5 text-xs font-medium text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
           <SparklesIcon aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={1.8} />

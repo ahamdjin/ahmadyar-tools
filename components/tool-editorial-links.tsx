@@ -3,74 +3,74 @@ import { SITE } from '@/lib/site'
 const READING_BY_TOOL: Record<string, Array<{ href: string; label: string; note: string }>> = {
   'automation-architecture-advisor': [
     {
+      href: '/blog/when-should-you-stop-using-zapier-or-n8n',
+      label: 'When should you stop using Zapier or n8n?',
+      note: 'A practical boundary between workflow automation and a custom software build.',
+    },
+    {
       href: '/blog/how-to-choose-an-automation-stack-without-overengineering',
       label: 'How to choose an automation stack without overengineering it',
       note: 'Native CRM, Zapier, Make, n8n, developer orchestration, and software boundaries.',
     },
-    {
-      href: '/blog/n8n-vs-zapier-business-automation',
-      label: 'n8n vs Zapier for business automation',
-      note: 'A narrower platform comparison for common business workflows.',
-    },
   ],
   'crm-automation-health-check': [
+    {
+      href: '/blog/how-to-clean-up-a-messy-crm',
+      label: 'How to clean up a messy CRM',
+      note: 'Stop new bad data first, then fix duplicates, ownership, fields, pipeline state, and monitoring.',
+    },
     {
       href: '/blog/crm-automation-health-check-what-to-fix-first',
       label: 'CRM automation health check: what to fix first',
       note: 'A deeper audit of capture, identity, ownership, response, pipeline truth, handoffs, and operations.',
     },
-    {
-      href: '/blog/what-is-crm-automation-simple-guide-small-business',
-      label: 'CRM automation for small business',
-      note: 'The simpler foundation: what CRM automation is and where it helps.',
-    },
   ],
   'client-onboarding-automation-planner': [
+    {
+      href: '/blog/what-should-happen-after-a-client-signs',
+      label: 'What should happen after a client signs?',
+      note: 'A simple path from signed deal to a delivery-ready client without the access and intake chase.',
+    },
     {
       href: '/blog/client-onboarding-automation-what-to-automate-keep-human',
       label: 'Client onboarding automation: what to automate and keep human',
       note: 'Triggers, readiness, intake, access, project setup, exceptions, and the human relationship.',
     },
-    {
-      href: '/blog/zapier-automation-examples-practical-workflows-for-business',
-      label: 'Practical Zapier automation examples',
-      note: 'Simple cross-system patterns for onboarding and other business handoffs.',
-    },
   ],
   'lead-routing-rules-builder': [
+    {
+      href: '/blog/should-you-use-round-robin-lead-routing',
+      label: 'Should you use round robin lead routing?',
+      note: 'When simple rotation works, when it breaks, and which eligibility rules should run first.',
+    },
     {
       href: '/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break',
       label: 'Lead routing rules that do not turn into a house of cards',
       note: 'Existing ownership, eligibility, round robin, capacity, fallbacks, SLAs, and auditability.',
     },
-    {
-      href: '/blog/what-is-revenue-operations-revops-plain-english',
-      label: 'Revenue operations in plain English',
-      note: 'Why routing is part of a connected revenue operating system rather than an isolated workflow.',
-    },
   ],
   'automation-roi-calculator': [
+    {
+      href: '/blog/does-time-saved-count-as-automation-roi',
+      label: 'Does time saved count as automation ROI?',
+      note: 'Separate returned capacity from financial value before calling saved hours a return.',
+    },
     {
       href: '/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself',
       label: 'Automation ROI without fooling yourself',
       note: 'Value capture, review, exceptions, maintenance, risk, payback, and conservative assumptions.',
     },
-    {
-      href: '/blog/when-is-automation-worth-it',
-      label: 'When is automation worth it?',
-      note: 'A simpler first-pass decision for deciding whether a workflow deserves investment.',
-    },
   ],
   'lead-follow-up-automation-planner': [
+    {
+      href: '/blog/how-fast-should-you-follow-up-with-a-new-lead',
+      label: 'How fast should you follow up with a new lead?',
+      note: 'Set a realistic response SLA and separate instant acknowledgement from meaningful human response.',
+    },
     {
       href: '/blog/how-to-automate-lead-follow-up-without-losing-human-touch',
       label: 'Automate lead follow-up without losing the human touch',
       note: 'Ownership, response, stop rules, pipeline attention, AI assistance, and human judgement.',
-    },
-    {
-      href: '/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system',
-      label: 'From lead form to CRM to follow-up',
-      note: 'The end-to-end system around capture, CRM state, ownership, and follow-up.',
     },
   ],
 }
