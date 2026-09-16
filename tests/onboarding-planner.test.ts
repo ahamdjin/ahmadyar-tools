@@ -87,6 +87,7 @@ test('onboarding route uses the dedicated planner and crawlable guide inside the
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const routeFrame = readFileSync('components/route-frame.tsx', 'utf8')
   const css = readFileSync('app/globals.css', 'utf8')
+  const polish = readFileSync('app/onboarding-polish-v2.css', 'utf8')
   const guide = readFileSync('components/onboarding-seo-content.tsx', 'utf8')
 
   assert.match(page, /client-onboarding-automation-planner/)
@@ -98,6 +99,9 @@ test('onboarding route uses the dedicated planner and crawlable guide inside the
   assert.doesNotMatch(routeFrame, /IMMERSIVE_TOOL_PATHS/)
   assert.match(css, /\.onboarding-viewport/)
   assert.match(css, /\.onboarding-workspace > \.onboarding-planner/)
+  assert.match(polish, /grid-template-columns:\s*minmax\(170px, 220px\) minmax\(0, 1fr\)/)
+  assert.match(polish, /grid-template-columns:\s*minmax\(185px, 230px\) minmax\(0, 1fr\)/)
+  assert.match(polish, /@container \(max-width: 760px\)/)
   assert.match(guide, /ready-for-delivery/i)
   assert.match(guide, /idempotent|duplicate protection/i)
 })
