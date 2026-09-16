@@ -1,0 +1,412 @@
+/* Visual pass v4 — quieter surfaces, stronger interaction cues, less dashboard chrome. */
+
+/* Index cards: tactile, but still in the restrained portfolio language. */
+.tool-index-card::before {
+  inset: -30% -15% auto auto;
+  width: 72%;
+  height: 72%;
+  background: radial-gradient(circle at 72% 22%, rgb(24 24 27 / 0.07), transparent 68%);
+}
+
+.dark .tool-index-card::before {
+  background: radial-gradient(circle at 72% 22%, rgb(250 250 250 / 0.07), transparent 68%);
+}
+
+.tool-index-card:active {
+  transform: translateY(0) scale(0.992);
+}
+
+/* Inputs should communicate interactivity before focus, without adding more rules. */
+:where(.crm-health-check, .onboarding-planner, .routing-check, .roi-calculator, .followup-check)
+  :where(input, select, textarea) {
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+:where(.crm-health-check, .onboarding-planner, .routing-check, .roi-calculator, .followup-check)
+  :where(input, select, textarea):hover:not(:focus) {
+  border-color: rgb(161 161 170 / 0.9);
+}
+
+.dark :where(.crm-health-check, .onboarding-planner, .routing-check, .roi-calculator, .followup-check)
+  :where(input, select, textarea):hover:not(:focus) {
+  border-color: rgb(113 113 122 / 0.95);
+}
+
+:where(.crm-health-check, .onboarding-planner, .routing-check, .roi-calculator, .followup-check)
+  :where(input, select, textarea):focus {
+  box-shadow: 0 0 0 3px rgb(24 24 27 / 0.08);
+}
+
+.dark :where(.crm-health-check, .onboarding-planner, .routing-check, .roi-calculator, .followup-check)
+  :where(input, select, textarea):focus {
+  box-shadow: 0 0 0 3px rgb(250 250 250 / 0.09);
+}
+
+/* The sticky nav should feel like a floating control, not another content card. */
+.advisor-workspace > section > div:last-child,
+.crm-health-check > div:last-child,
+.onboarding-planner > div:last-child,
+.routing-check > div:last-child,
+.roi-calculator > div:last-child,
+.followup-check > div:last-child {
+  padding: 9px 10px !important;
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.94) !important;
+  box-shadow: 0 10px 34px rgb(24 24 27 / 0.08), inset 0 0 0 1px rgb(228 228 231 / 0.68);
+}
+
+.dark .advisor-workspace > section > div:last-child,
+.dark .crm-health-check > div:last-child,
+.dark .onboarding-planner > div:last-child,
+.dark .routing-check > div:last-child,
+.dark .roi-calculator > div:last-child,
+.dark .followup-check > div:last-child {
+  background: rgb(9 9 11 / 0.94) !important;
+  box-shadow: 0 12px 36px rgb(0 0 0 / 0.3), inset 0 0 0 1px rgb(63 63 70 / 0.64);
+}
+
+.tool-primary-action {
+  box-shadow: 0 8px 22px rgb(24 24 27 / 0.16);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease, opacity 180ms ease !important;
+}
+
+.dark .tool-primary-action {
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.26);
+}
+
+.tool-primary-action:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 13px 28px rgb(24 24 27 / 0.2);
+}
+
+.dark .tool-primary-action:hover:not(:disabled) {
+  box-shadow: 0 13px 30px rgb(0 0 0 / 0.34);
+}
+
+.tool-primary-action:active:not(:disabled),
+.tool-secondary-action:active:not(:disabled) {
+  transform: translateY(0) scale(0.985) !important;
+}
+
+.tool-primary-action svg,
+.tool-secondary-action svg {
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tool-primary-action:hover svg {
+  transform: translateX(2px);
+}
+
+.tool-secondary-action:hover svg {
+  transform: translateX(-2px);
+}
+
+/* ROI now behaves like a guided conversation instead of a spreadsheet. */
+.roi-step-header {
+  padding: 4px 4px 10px;
+}
+
+.roi-field {
+  background: transparent;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.roi-field:hover {
+  background: rgb(250 250 250 / 0.86);
+}
+
+.roi-field:focus-within {
+  background: rgb(250 250 250 / 0.98);
+  box-shadow: 0 10px 30px rgb(24 24 27 / 0.045);
+  transform: translateY(-1px);
+}
+
+.dark .roi-field:hover,
+.dark .roi-field:focus-within {
+  background: rgb(24 24 27 / 0.5);
+}
+
+.dark .roi-field:focus-within {
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.18);
+}
+
+.roi-progress > div:first-child span {
+  transform-origin: left center;
+}
+
+.roi-live-read {
+  position: relative;
+  overflow: hidden;
+}
+
+.roi-live-read::after {
+  content: '';
+  position: absolute;
+  top: -55px;
+  right: -45px;
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgb(24 24 27 / 0.07), transparent 69%);
+  pointer-events: none;
+}
+
+.dark .roi-live-read::after {
+  background: radial-gradient(circle, rgb(250 250 250 / 0.07), transparent 69%);
+}
+
+.roi-metric {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.roi-metric:hover {
+  transform: translateY(-2px);
+  background: rgb(250 250 250);
+  box-shadow: 0 14px 36px rgb(24 24 27 / 0.055);
+}
+
+.dark .roi-metric:hover {
+  background: rgb(39 39 42 / 0.82);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 0.2);
+}
+
+/*
+  Form surfaces: the earlier pass put nearly every question inside another box.
+  Pull that back. Question groups use whitespace by default; selected choices and
+  output cards keep enough shape to remain obvious.
+*/
+.crm-health-check fieldset {
+  margin-block: 2px !important;
+  padding: 16px 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.crm-health-check fieldset button {
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease, box-shadow 180ms ease !important;
+}
+
+.crm-health-check fieldset button:hover:not(:disabled) {
+  background: rgb(250 250 250 / 0.88) !important;
+}
+
+.crm-health-check fieldset button[class~='bg-zinc-100'] {
+  background: rgb(244 244 245 / 0.92) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.78) !important;
+}
+
+.dark .crm-health-check fieldset button:hover:not(:disabled) {
+  background: rgb(24 24 27 / 0.54) !important;
+}
+
+.dark .crm-health-check fieldset button[class~='dark:bg-zinc-900'] {
+  background: rgb(39 39 42 / 0.72) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.62) !important;
+}
+
+/* Onboarding choices should read as choices, not a wall of outlined cards. */
+.onboarding-planner button.rounded-xl,
+.onboarding-planner button.rounded-lg {
+  box-shadow: none !important;
+}
+
+.onboarding-planner button.rounded-xl:hover:not(:disabled),
+.onboarding-planner button.rounded-lg:hover:not(:disabled) {
+  background: rgb(244 244 245 / 0.78);
+}
+
+.dark .onboarding-planner button.rounded-xl:hover:not(:disabled),
+.dark .onboarding-planner button.rounded-lg:hover:not(:disabled) {
+  background: rgb(39 39 42 / 0.68);
+}
+
+.onboarding-planner button[class~='bg-zinc-100'] {
+  box-shadow: inset 0 0 0 1px rgb(212 212 216 / 0.78), 0 8px 22px rgb(24 24 27 / 0.035) !important;
+}
+
+.dark .onboarding-planner button[class~='dark:bg-zinc-900'] {
+  box-shadow: inset 0 0 0 1px rgb(82 82 91 / 0.62), 0 9px 24px rgb(0 0 0 / 0.15) !important;
+}
+
+/* Routing already uses background contrast to express state; extra inset rings
+   only make the screen busier. */
+.routing-check button.rounded-lg,
+.routing-check button.rounded-xl {
+  box-shadow: none !important;
+}
+
+.routing-check button[class~='bg-zinc-950'] {
+  box-shadow: 0 9px 22px rgb(24 24 27 / 0.11) !important;
+}
+
+.dark .routing-check button[class~='dark:bg-zinc-50'] {
+  box-shadow: 0 9px 24px rgb(0 0 0 / 0.2) !important;
+}
+
+/* Follow-up used a card around every field. Match the calmer ROI rhythm. */
+.followup-check > div:nth-child(2) .grid.py-4 {
+  margin-block: 2px;
+  padding: 14px 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.followup-check button.rounded-lg,
+.followup-check button.rounded-xl {
+  box-shadow: none;
+}
+
+.followup-check button[class~='bg-zinc-950'],
+.followup-check button[class~='bg-zinc-100'] {
+  box-shadow: inset 0 0 0 1px var(--followup-ring), 0 8px 22px rgb(24 24 27 / 0.045) !important;
+}
+
+.dark .followup-check button[class~='dark:bg-zinc-50'],
+.dark .followup-check button[class~='dark:bg-zinc-900'] {
+  box-shadow: inset 0 0 0 1px var(--followup-ring), 0 8px 22px rgb(0 0 0 / 0.14) !important;
+}
+
+/*
+  Editorial guides: remove the large slab treatment from the previous pass.
+  The portfolio is strongest when the content breathes and the ideas provide
+  the structure. Cards are reserved for things a reader may want to scan.
+*/
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) {
+  width: min(100%, 900px) !important;
+  max-width: 900px !important;
+}
+
+.advisor-guide > section:first-child,
+.crm-health-guide > section:first-child,
+.routing-guide > section:first-child,
+.roi-guide > section:first-child,
+.followup-guide > section:first-child,
+.onboarding-guide > article > header {
+  overflow: visible;
+  padding: 0 0 clamp(10px, 2vw, 20px) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.advisor-guide > section:first-child::after,
+.crm-health-guide > section:first-child::after,
+.routing-guide > section:first-child::after,
+.roi-guide > section:first-child::after,
+.followup-guide > section:first-child::after,
+.onboarding-guide > article > header::after {
+  display: none;
+}
+
+.advisor-guide > section:nth-of-type(even),
+.crm-health-guide > section:nth-of-type(even),
+.routing-guide > section:nth-of-type(even),
+.roi-guide > section:nth-of-type(even),
+.followup-guide > section:nth-of-type(even),
+.onboarding-guide > article > section:nth-of-type(even) {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where(article > section, > section) {
+  position: relative;
+}
+
+:where(.advisor-guide, .crm-health-guide, .routing-guide, .roi-guide, .followup-guide) > section > p:first-child[class*='uppercase'],
+.onboarding-guide > article > header > p:first-child,
+.onboarding-guide > article > section > p:first-child[class*='uppercase'] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgb(244 244 245 / 0.88);
+  letter-spacing: 0.11em !important;
+}
+
+.dark :where(.advisor-guide, .crm-health-guide, .routing-guide, .roi-guide, .followup-guide) > section > p:first-child[class*='uppercase'],
+.dark .onboarding-guide > article > header > p:first-child,
+.dark .onboarding-guide > article > section > p:first-child[class*='uppercase'] {
+  background: rgb(39 39 42 / 0.74);
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where([class~='rounded-2xl'][class*='bg-zinc-50'], [class~='rounded-2xl'][class*='bg-zinc-100']) {
+  box-shadow: none;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), background-color 220ms ease, box-shadow 220ms ease;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where([class~='rounded-2xl'][class*='bg-zinc-50'], [class~='rounded-2xl'][class*='bg-zinc-100']):hover {
+  transform: translateY(-3px);
+  background: rgb(244 244 245 / 0.84);
+  box-shadow: 0 18px 44px rgb(24 24 27 / 0.055);
+}
+
+.dark :where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide)
+  :where([class~='rounded-2xl'][class*='bg-zinc-900']):hover {
+  background: rgb(39 39 42 / 0.76);
+  box-shadow: 0 18px 44px rgb(0 0 0 / 0.18);
+}
+
+/* FAQ-like plain grid cells get enough shape to be scannable without becoming boxes everywhere. */
+.onboarding-guide article > section > div.grid > div:not([class]) {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgb(250 250 250 / 0.72);
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms ease;
+}
+
+.onboarding-guide article > section > div.grid > div:not([class]):hover {
+  transform: translateY(-2px);
+  background: rgb(244 244 245 / 0.86);
+}
+
+.dark .onboarding-guide article > section > div.grid > div:not([class]) {
+  background: rgb(24 24 27 / 0.42);
+}
+
+.dark .onboarding-guide article > section > div.grid > div:not([class]):hover {
+  background: rgb(39 39 42 / 0.66);
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) a {
+  transition: color 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+:where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) a:hover {
+  opacity: 0.72;
+}
+
+@media (max-width: 639px) {
+  .roi-field {
+    padding: 14px;
+  }
+
+  .crm-health-check fieldset,
+  .followup-check > div:nth-child(2) .grid.py-4 {
+    padding-inline: 0 !important;
+  }
+
+  .tool-index-card {
+    min-height: 210px;
+  }
+
+  :where(.advisor-guide, .crm-health-guide, .onboarding-guide, .routing-guide, .roi-guide, .followup-guide) {
+    padding-inline: 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-index-card,
+  .roi-field,
+  .roi-metric,
+  .tool-primary-action,
+  .tool-primary-action svg,
+  .tool-secondary-action svg {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,277 @@
+/* Tool-by-tool finishing passes. Keep these rules local to each product so
+   the portfolio shell can stay quiet while the applications feel deliberate. */
+
+/* CRM Automation Health Check */
+.crm-health-check {
+  --tool-soft: rgb(250 250 250 / 0.92);
+  --tool-soft-strong: rgb(244 244 245 / 0.96);
+  --tool-ring: rgb(228 228 231 / 0.9);
+}
+
+.dark .crm-health-check {
+  --tool-soft: rgb(24 24 27 / 0.58);
+  --tool-soft-strong: rgb(39 39 42 / 0.72);
+  --tool-ring: rgb(63 63 70 / 0.72);
+}
+
+.crm-health-check > div:first-child {
+  padding: 0 4px 12px;
+}
+
+.crm-health-check > div:nth-child(2) {
+  overflow-x: hidden;
+  padding: 10px 4px 28px 0;
+  scrollbar-gutter: stable;
+}
+
+.crm-health-check > div:last-child {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: var(--tool-soft);
+}
+
+.crm-health-check h2,
+.crm-health-check h3 {
+  text-wrap: balance;
+}
+
+.crm-health-check p {
+  text-wrap: pretty;
+}
+
+.crm-health-check fieldset {
+  margin: 5px 0;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgb(250 250 250 / 0.56);
+}
+
+.dark .crm-health-check fieldset {
+  background: rgb(24 24 27 / 0.34);
+}
+
+.crm-health-check fieldset button {
+  background: var(--tool-soft);
+  box-shadow: inset 0 0 0 1px transparent;
+}
+
+.crm-health-check fieldset button[class~='bg-zinc-100'] {
+  background: var(--tool-soft-strong) !important;
+  box-shadow: inset 0 0 0 1px var(--tool-ring), 0 8px 24px rgb(24 24 27 / 0.04);
+}
+
+.dark .crm-health-check fieldset button[class~='dark:bg-zinc-900'] {
+  background: var(--tool-soft-strong) !important;
+}
+
+.crm-health-check section > .grid > button.rounded-xl,
+.crm-health-check section > div.grid > button.rounded-xl {
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.55);
+}
+
+.dark .crm-health-check section > .grid > button.rounded-xl,
+.dark .crm-health-check section > div.grid > button.rounded-xl {
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.45);
+}
+
+.crm-health-check article {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+}
+
+.crm-health-check article:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgb(24 24 27 / 0.06);
+}
+
+.dark .crm-health-check article:hover {
+  box-shadow: 0 14px 34px rgb(0 0 0 / 0.22);
+}
+
+/* Client Onboarding Automation Planner */
+.onboarding-planner {
+  --tool-soft: rgb(250 250 250 / 0.9);
+  --tool-soft-strong: rgb(244 244 245 / 0.96);
+  --tool-ring: rgb(228 228 231 / 0.82);
+}
+
+.dark .onboarding-planner {
+  --tool-soft: rgb(24 24 27 / 0.54);
+  --tool-soft-strong: rgb(39 39 42 / 0.72);
+  --tool-ring: rgb(63 63 70 / 0.7);
+}
+
+.onboarding-planner > div:first-child {
+  padding: 0 4px 10px;
+}
+
+.onboarding-planner > div:nth-child(2) {
+  overflow-x: hidden;
+  padding: 10px 4px 28px 0;
+  scrollbar-gutter: stable;
+}
+
+.onboarding-planner > div:last-child {
+  margin-top: 10px !important;
+  padding: 10px 12px !important;
+  border-radius: 18px;
+  background: var(--tool-soft);
+}
+
+.onboarding-planner h2,
+.onboarding-planner h3 {
+  text-wrap: balance;
+}
+
+.onboarding-planner p,
+.onboarding-planner li {
+  text-wrap: pretty;
+}
+
+.onboarding-planner button.rounded-xl,
+.onboarding-planner button.rounded-lg {
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.45);
+}
+
+.dark .onboarding-planner button.rounded-xl,
+.dark .onboarding-planner button.rounded-lg {
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.38);
+}
+
+.onboarding-planner button[class~='bg-zinc-100'],
+.onboarding-planner button[class~='bg-zinc-950'] {
+  box-shadow: inset 0 0 0 1px var(--tool-ring), 0 8px 22px rgb(24 24 27 / 0.045);
+}
+
+.dark .onboarding-planner button[class~='dark:bg-zinc-900'],
+.dark .onboarding-planner button[class~='dark:bg-zinc-50'] {
+  box-shadow: inset 0 0 0 1px var(--tool-ring), 0 8px 22px rgb(0 0 0 / 0.14);
+}
+
+.onboarding-planner article,
+.onboarding-planner section > div.grid > div.rounded-xl,
+.onboarding-planner section > div.grid > div.rounded-2xl {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+}
+
+.onboarding-planner article:hover,
+.onboarding-planner section > div.grid > div.rounded-xl:hover,
+.onboarding-planner section > div.grid > div.rounded-2xl:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgb(24 24 27 / 0.055);
+}
+
+.dark .onboarding-planner article:hover,
+.dark .onboarding-planner section > div.grid > div.rounded-xl:hover,
+.dark .onboarding-planner section > div.grid > div.rounded-2xl:hover {
+  box-shadow: 0 14px 34px rgb(0 0 0 / 0.2);
+}
+
+/* Lead Routing Rules Builder */
+.routing-check {
+  --tool-soft: rgb(250 250 250 / 0.92);
+  --tool-ring: rgb(228 228 231 / 0.84);
+}
+
+.dark .routing-check {
+  --tool-soft: rgb(24 24 27 / 0.56);
+  --tool-ring: rgb(63 63 70 / 0.7);
+}
+
+.routing-check > div:first-child {
+  padding: 0 4px 12px;
+}
+
+.routing-check > div:nth-child(2) {
+  overflow-x: hidden;
+  padding: 10px 6px 30px 0;
+  scrollbar-gutter: stable;
+}
+
+.routing-check > div:last-child {
+  margin-top: 10px;
+  padding: 10px 12px !important;
+  border-radius: 18px;
+  background: var(--tool-soft);
+}
+
+.routing-check h2,
+.routing-check h3 {
+  text-wrap: balance;
+}
+
+.routing-check p,
+.routing-check li {
+  text-wrap: pretty;
+}
+
+.routing-check button.rounded-lg,
+.routing-check button.rounded-xl {
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.5);
+}
+
+.dark .routing-check button.rounded-lg,
+.dark .routing-check button.rounded-xl {
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.42);
+}
+
+.routing-check button[class~='bg-zinc-950'],
+.routing-check button[class~='bg-zinc-100'] {
+  box-shadow: inset 0 0 0 1px var(--tool-ring), 0 8px 22px rgb(24 24 27 / 0.05);
+}
+
+.dark .routing-check button[class~='dark:bg-zinc-50'],
+.dark .routing-check button[class~='dark:bg-zinc-900'] {
+  box-shadow: inset 0 0 0 1px var(--tool-ring), 0 8px 22px rgb(0 0 0 / 0.16);
+}
+
+.routing-check article,
+.routing-check section > div.grid > div.rounded-2xl,
+.routing-check section > div.grid > div.rounded-xl {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+}
+
+.routing-check article:hover,
+.routing-check section > div.grid > div.rounded-2xl:hover,
+.routing-check section > div.grid > div.rounded-xl:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgb(24 24 27 / 0.055);
+}
+
+.dark .routing-check article:hover,
+.dark .routing-check section > div.grid > div.rounded-2xl:hover,
+.dark .routing-check section > div.grid > div.rounded-xl:hover {
+  box-shadow: 0 14px 34px rgb(0 0 0 / 0.2);
+}
+
+@media (max-width: 639px) {
+  .crm-health-check > div:nth-child(2),
+  .onboarding-planner > div:nth-child(2),
+  .routing-check > div:nth-child(2) {
+    padding-right: 0;
+  }
+
+  .crm-health-check > div:last-child,
+  .onboarding-planner > div:last-child,
+  .routing-check > div:last-child {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    background: transparent;
+  }
+
+  .crm-health-check fieldset {
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-health-check article,
+  .onboarding-planner article,
+  .onboarding-planner section > div.grid > div.rounded-xl,
+  .onboarding-planner section > div.grid > div.rounded-2xl,
+  .routing-check article,
+  .routing-check section > div.grid > div.rounded-xl,
+  .routing-check section > div.grid > div.rounded-2xl {
+    transition: none;
+  }
+}

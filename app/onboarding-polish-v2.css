@@ -1,0 +1,131 @@
+/* Second-pass Client Onboarding Planner refinement.
+   This tool is intentionally a little more process-oriented than the CRM audit,
+   but it still follows the portfolio's quiet spacing and soft-surface language. */
+
+.onboarding-planner {
+  container-type: inline-size;
+}
+
+.onboarding-planner > div:first-child {
+  padding-inline: 2px;
+}
+
+.onboarding-planner > div:nth-child(2) {
+  padding-top: 14px;
+}
+
+.onboarding-planner [class*='sm:grid-cols-[220px_1fr]'] {
+  grid-template-columns: minmax(170px, 220px) minmax(0, 1fr) !important;
+}
+
+.onboarding-planner [class*='sm:grid-cols-[240px_1fr]'] {
+  grid-template-columns: minmax(185px, 230px) minmax(0, 1fr) !important;
+}
+
+.onboarding-planner [class*='sm:grid-cols-[220px_1fr]'] > :last-child,
+.onboarding-planner [class*='sm:grid-cols-[240px_1fr]'] > :last-child,
+.onboarding-planner button > span,
+.onboarding-planner button > span > span:last-child {
+  min-width: 0;
+}
+
+.onboarding-planner .rounded-2xl[class*='bg-zinc-50'] {
+  background: rgb(250 250 250 / 0.72) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.48);
+}
+
+.dark .onboarding-planner .rounded-2xl[class*='dark:bg-zinc-900'] {
+  background: rgb(24 24 27 / 0.48) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.4);
+}
+
+.onboarding-planner button.rounded-xl {
+  border-radius: 14px;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.onboarding-planner button.rounded-xl:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.onboarding-planner button[class~='bg-zinc-100'] {
+  background: white !important;
+  box-shadow: inset 0 0 0 1px rgb(212 212 216 / 0.88), 0 9px 26px rgb(24 24 27 / 0.04);
+}
+
+.dark .onboarding-planner button[class~='dark:bg-zinc-900'] {
+  background: rgb(39 39 42 / 0.76) !important;
+  box-shadow: inset 0 0 0 1px rgb(82 82 91 / 0.72), 0 10px 28px rgb(0 0 0 / 0.17);
+}
+
+.onboarding-planner input,
+.onboarding-planner select {
+  min-width: 0;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.onboarding-planner input:focus,
+.onboarding-planner select:focus {
+  box-shadow: 0 0 0 3px rgb(24 24 27 / 0.08);
+}
+
+.dark .onboarding-planner input:focus,
+.dark .onboarding-planner select:focus {
+  box-shadow: 0 0 0 3px rgb(250 250 250 / 0.09);
+}
+
+.onboarding-planner article {
+  border-radius: 20px;
+  background: rgb(250 250 250 / 0.76) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.48);
+}
+
+.dark .onboarding-planner article {
+  background: rgb(24 24 27 / 0.56) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.4);
+}
+
+.onboarding-planner > div:last-child {
+  min-height: 64px;
+  padding: 10px 12px !important;
+  background: rgb(250 250 250 / 0.82) !important;
+  box-shadow: inset 0 0 0 1px rgb(228 228 231 / 0.45);
+}
+
+.dark .onboarding-planner > div:last-child {
+  background: rgb(24 24 27 / 0.62) !important;
+  box-shadow: inset 0 0 0 1px rgb(63 63 70 / 0.42);
+}
+
+@container (max-width: 760px) {
+  .onboarding-planner [class*='sm:grid-cols-[220px_1fr]'],
+  .onboarding-planner [class*='sm:grid-cols-[240px_1fr]'] {
+    display: block !important;
+  }
+
+  .onboarding-planner [class*='sm:grid-cols-[220px_1fr]'] > :last-child,
+  .onboarding-planner [class*='sm:grid-cols-[240px_1fr]'] > :last-child {
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 639px) {
+  .onboarding-planner > div:nth-child(2) {
+    padding-top: 8px;
+  }
+
+  .onboarding-planner > div:last-child {
+    min-height: 0;
+    padding-inline: 4px !important;
+    background: transparent !important;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-planner button.rounded-xl,
+  .onboarding-planner input,
+  .onboarding-planner select {
+    transition: none;
+  }
+}

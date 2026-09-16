@@ -1,6 +1,6 @@
 /* Rebuilt Architecture Advisor layout.
    This is intentionally ordinary centered flow: no viewport breakout,
-   no left: 50%, no negative translate, and no dependency on a narrow article column. */
+   no transform-based centering, and no dependency on a narrow article column. */
 
 .advisor-viewport {
   position: relative !important;
@@ -46,8 +46,9 @@
   box-sizing: border-box;
 }
 
-/* The questionnaire itself stays at the same 960px visual width, but is now
-   centered with normal flow instead of transform-based breakout positioning. */
+/* The questionnaire itself stays at the same 960px visual width. The wrapper
+   neutralizes the legacy component positioning so the application stage owns
+   placement and scrolling. */
 .advisor-workspace > section {
   position: static !important;
   inset: auto !important;
@@ -65,6 +66,7 @@
   margin: 0 auto !important;
   overflow: hidden !important;
   box-sizing: border-box;
+  container-type: inline-size;
 }
 
 .advisor-workspace > section > div:first-child,
@@ -100,6 +102,54 @@
   min-width: 0;
 }
 
+/* Intrinsic text should never make the fixed-label layouts wider than their
+   application stage. Keep fixed information columns, but make the content
+   track explicitly shrinkable. */
+.advisor-viewport [class*='sm:grid-cols-[230px_1fr]'] {
+  grid-template-columns: minmax(180px, 230px) minmax(0, 1fr) !important;
+}
+
+.advisor-viewport [class*='sm:grid-cols-[1fr_180px]'] {
+  grid-template-columns: minmax(0, 1fr) 180px !important;
+}
+
+.advisor-viewport [class*='sm:grid-cols-[170px_190px_1fr]'] {
+  grid-template-columns: 170px 190px minmax(0, 1fr) !important;
+}
+
+.advisor-viewport [class*='sm:grid-cols-[210px_1fr_190px]'] {
+  grid-template-columns: 210px minmax(0, 1fr) 190px !important;
+}
+
+.advisor-viewport [class*='sm:grid-cols-[34px_180px_60px_80px_1fr]'] {
+  grid-template-columns: 34px 180px 60px 80px minmax(0, 1fr) !important;
+}
+
+.advisor-viewport input,
+.advisor-viewport select {
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.advisor-viewport input:focus,
+.advisor-viewport select:focus {
+  box-shadow: 0 0 0 3px rgb(24 24 27 / 0.08);
+}
+
+.dark .advisor-viewport input:focus,
+.dark .advisor-viewport select:focus {
+  box-shadow: 0 0 0 3px rgb(250 250 250 / 0.09);
+}
+
+@container (max-width: 720px) {
+  .advisor-viewport [class*='sm:grid-cols-[230px_1fr]'],
+  .advisor-viewport [class*='sm:grid-cols-[1fr_180px]'],
+  .advisor-viewport [class*='sm:grid-cols-[170px_190px_1fr]'],
+  .advisor-viewport [class*='sm:grid-cols-[210px_1fr_190px]'],
+  .advisor-viewport [class*='sm:grid-cols-[34px_180px_60px_80px_1fr]'] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
 @media (max-width: 639px) {
   .advisor-viewport {
     height: calc(100dvh - 7rem);
@@ -116,5 +166,12 @@
   .advisor-workspace > section > div:nth-child(2) {
     padding-left: 0;
     padding-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .advisor-viewport input,
+  .advisor-viewport select {
+    transition: none;
   }
 }
