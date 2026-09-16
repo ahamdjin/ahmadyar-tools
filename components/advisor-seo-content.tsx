@@ -180,10 +180,11 @@ export function AdvisorSeoContent() {
       <section className="mt-24 rounded-3xl bg-zinc-950 px-6 py-8 text-white sm:px-8 sm:py-10 dark:bg-zinc-100 dark:text-zinc-950">
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-zinc-400 dark:text-zinc-500">Keep going</p>
         <h2 className="mt-3 max-w-2xl text-2xl font-medium tracking-[-0.035em] sm:text-3xl">Use the result as an architecture hypothesis, then validate the workflows that matter most.</h2>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-300 dark:text-zinc-600">For deeper reading, compare the trade-offs between n8n and Zapier, review CRM automation patterns, or see how I approach AI automation systems in practice.</p>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-300 dark:text-zinc-600">For deeper reading, start with the architecture guide, compare the trade-offs between n8n and Zapier, or review the CRM layer underneath the workflows.</p>
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium">
+          <a href={`${SITE.origin}/blog/how-to-choose-an-automation-stack-without-overengineering`} className="transition-opacity hover:opacity-70">Architecture guide →</a>
           <a href={`${SITE.origin}/blog/n8n-vs-zapier-business-automation`} className="transition-opacity hover:opacity-70">n8n vs Zapier →</a>
-          <a href={`${SITE.origin}/crm-automation`} className="transition-opacity hover:opacity-70">CRM automation →</a>
+          <a href={`${SITE.origin}/ai-automation/crm`} className="transition-opacity hover:opacity-70">CRM automation →</a>
           <a href={`${SITE.origin}/ai-automation`} className="transition-opacity hover:opacity-70">AI automation →</a>
         </div>
       </section>
