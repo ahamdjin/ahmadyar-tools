@@ -102,7 +102,7 @@ test('CRM health route uses the dedicated diagnostic inside the portfolio frame'
   assert.match(page, /<CrmHealthCheck \/>/)
   assert.match(component, /APP_CATALOG\.filter\(\(app\) => app\.category !== 'crm'/)
   assert.match(component, /Search forms, ads, email, billing, spreadsheets, automation/)
-  assert.match(component, /Fix the leaks in this order/)
+  assert.match(component, /Repair the leaks in this order/)
   assert.match(css, /\.crm-health-workspace/)
   assert.match(frame, /max-w-none/)
   assert.doesNotMatch(frame, /max-w-screen-sm/)
