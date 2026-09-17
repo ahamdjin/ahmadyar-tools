@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon } from 'lucide-react'
+import { ArrowLeftIcon, ArrowRightIcon, RotateCcwIcon } from 'lucide-react'
 
 import { ToolResultActions } from '@/components/tool-result-actions'
 import { APP_BY_ID, APP_CATALOG, type AppCategory, type AppDefinition } from '@/engine/apps'
