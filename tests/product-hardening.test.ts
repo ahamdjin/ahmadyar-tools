@@ -35,3 +35,19 @@ test('rebuilt tool components do not reintroduce nested vertical scrolling', () 
     assert.doesNotMatch(source, /overflow-y-auto/, `${path} should leave vertical scrolling to the document`)
   }
 })
+
+
+test('step navigation returns every tool to the decision header without nested scrolling', () => {
+  const hook = read('components/use-tool-step-navigation.ts')
+  assert.match(hook, /scrollIntoView\(\{/)
+  assert.match(hook, /prefers-reduced-motion: reduce/)
+  assert.match(hook, /requestAnimationFrame/)
+
+  for (const path of productComponents) {
+    const source = read(path)
+    assert.match(source, /useToolStepNavigation/, `${path} should use shared step navigation`)
+    assert.match(source, /ref=\{rootRef\}/, `${path} should anchor step navigation to the tool root`)
+    assert.match(source, /scroll-mt-24/, `${path} should leave room for the site header after navigation`)
+    assert.match(source, /const goTo = \(nextStep: StepId\)/, `${path} should route next, back, edit and reset through one navigation path`)
+  }
+})
