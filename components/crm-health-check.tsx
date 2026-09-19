@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon, SearchIcon, XIcon } from 'lucide-react'
 
 import { ToolResultActions } from '@/components/tool-result-actions'
+import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import { APP_BY_ID, APP_CATALOG, type AppDefinition } from '@/engine/apps'
 import { analyzeCrmHealth, DEFAULT_CRM_HEALTH_INPUT, type CrmHealthInput, type CrmHealthLevel } from '@/engine/crm-health'
 
@@ -199,21 +200,23 @@ function Result({ input, onEdit }: { input: CrmHealthInput; onEdit: (step: StepI
 export function CrmHealthCheck() {
   const [input, setInput] = useState<CrmHealthInput>(DEFAULT_CRM_HEALTH_INPUT)
   const [step, setStep] = useState<StepId>('context')
+  const { rootRef, scrollToStart } = useToolStepNavigation()
   const index = STEPS.indexOf(step)
   const progress = step === 'result' ? 100 : Math.round(((index + 1) / 3) * 100)
   const canContinue = step !== 'context' || Boolean(input.crmId)
   const update = <K extends keyof CrmHealthInput>(key: K, value: CrmHealthInput[K]) => setInput((current) => ({ ...current, [key]: value }))
-  const next = () => setStep(STEPS[Math.min(STEPS.length - 1, index + 1)])
-  const back = () => setStep(STEPS[Math.max(0, index - 1)])
-  const reset = () => { setInput(DEFAULT_CRM_HEALTH_INPUT); setStep('context') }
+  const goTo = (nextStep: StepId) => { setStep(nextStep); scrollToStart() }
+  const next = () => goTo(STEPS[Math.min(STEPS.length - 1, index + 1)])
+  const back = () => goTo(STEPS[Math.max(0, index - 1)])
+  const reset = () => { setInput(DEFAULT_CRM_HEALTH_INPUT); goTo('context') }
 
   return (
-    <section className="mx-auto w-full max-w-5xl">
+    <section ref={rootRef} className="mx-auto w-full max-w-5xl scroll-mt-24 sm:scroll-mt-28">
       <div className="mb-8 rounded-2xl bg-zinc-50 p-4 sm:p-5 dark:bg-zinc-900/55"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">A repair audit, not a vanity score.</p><p className="mt-1 max-w-xl text-xs leading-5 text-zinc-500">About 3 minutes. You get the first leaks to fix, a repair order, native-first actions and the areas that still need manual inspection.</p></div><button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50"><RotateCcwIcon className="h-3.5 w-3.5" />Start over</button></div><div className="mt-4 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"><div className="h-full rounded-full bg-zinc-950 transition-[width] duration-500 dark:bg-zinc-50" style={{ width: `${progress}%` }} /></div><div className="mt-2 flex items-center justify-between text-[11px] text-zinc-500"><span>{step === 'result' ? 'Audit complete' : `Step ${index + 1} of 3`}</span><span>{progress}%</span></div></div>
 
-      <div className="min-h-[500px]">{step === 'context' ? <ContextStep input={input} setInput={setInput} update={update} /> : null}{step === 'truth' ? <TruthStep input={input} update={update} /> : null}{step === 'operations' ? <OperationsStep input={input} update={update} /> : null}{step === 'result' ? <Result input={input} onEdit={setStep} /> : null}</div>
+      <div className="min-h-[500px]">{step === 'context' ? <ContextStep input={input} setInput={setInput} update={update} /> : null}{step === 'truth' ? <TruthStep input={input} update={update} /> : null}{step === 'operations' ? <OperationsStep input={input} update={update} /> : null}{step === 'result' ? <Result input={input} onEdit={goTo} /> : null}</div>
 
-      {step !== 'result' ? <div className="mt-10 flex items-center justify-between border-t border-zinc-200 pt-5 dark:border-zinc-800"><button type="button" onClick={back} disabled={index === 0} className="inline-flex min-h-11 items-center gap-2 px-1 text-sm font-medium text-zinc-600 disabled:invisible dark:text-zinc-400"><ArrowLeftIcon className="h-4 w-4" />Back</button><button type="button" onClick={next} disabled={!canContinue} className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-zinc-950 px-5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-35 dark:bg-zinc-50 dark:text-zinc-950">{step === 'operations' ? 'See repair plan' : 'Continue'}<ArrowRightIcon className="h-4 w-4" /></button></div> : <div className="mt-10 border-t border-zinc-200 pt-5 dark:border-zinc-800"><button type="button" onClick={() => setStep('context')} className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300"><ArrowLeftIcon className="h-4 w-4" />Edit audit</button></div>}
+      {step !== 'result' ? <div className="mt-10 flex items-center justify-between border-t border-zinc-200 pt-5 dark:border-zinc-800"><button type="button" onClick={back} disabled={index === 0} className="inline-flex min-h-11 items-center gap-2 px-1 text-sm font-medium text-zinc-600 disabled:invisible dark:text-zinc-400"><ArrowLeftIcon className="h-4 w-4" />Back</button><button type="button" onClick={next} disabled={!canContinue} className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-zinc-950 px-5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-35 dark:bg-zinc-50 dark:text-zinc-950">{step === 'operations' ? 'See repair plan' : 'Continue'}<ArrowRightIcon className="h-4 w-4" /></button></div> : <div className="mt-10 border-t border-zinc-200 pt-5 dark:border-zinc-800"><button type="button" onClick={() => goTo('context')} className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300"><ArrowLeftIcon className="h-4 w-4" />Edit audit</button></div>}
     </section>
   )
 }
