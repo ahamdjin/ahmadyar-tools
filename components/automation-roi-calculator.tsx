@@ -24,7 +24,14 @@ function Select({ value, onChange, children }: { value: string | number; onChang
 }
 
 function NumberInput({ value, onChange, min = 0, max, step = 1, suffix }: { value: number; onChange: (value: number) => void; min?: number; max?: number; step?: number; suffix?: string }) {
-  return <label className="relative block min-w-0"><input type="number" value={value} min={min} max={max} step={step} onChange={(event) => onChange(Number(event.target.value))} className={`min-h-12 min-w-0 w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2.5 text-sm font-medium text-zinc-950 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-100 ${suffix ? 'pr-14' : ''}`} />{suffix ? <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-zinc-500">{suffix}</span> : null}</label>
+  const commitValue = (raw: string) => {
+    const parsed = Number(raw)
+    if (!Number.isFinite(parsed)) return
+    const upper = max ?? Number.POSITIVE_INFINITY
+    onChange(Math.min(upper, Math.max(min, parsed)))
+  }
+
+  return <label className="relative block min-w-0"><input type="number" value={value} min={min} max={max} step={step} onChange={(event) => commitValue(event.target.value)} className={`min-h-12 min-w-0 w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2.5 text-sm font-medium text-zinc-950 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-100 ${suffix ? 'pr-14' : ''}`} />{suffix ? <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-zinc-500">{suffix}</span> : null}</label>
 }
 
 function Field({ label, helper, children }: { label: string; helper?: string; children: React.ReactNode }) {
