@@ -75,3 +75,11 @@ test('print export keeps the decision and removes surrounding site chrome', () =
   assert.match(css, /print-color-adjust:\s*exact/)
   assert.match(css, /\.roi-calculator,[\s\S]*max-width:\s*none !important/)
 })
+
+
+test('ROI numeric inputs clamp impossible negative and over-limit values before analysis', () => {
+  const source = read('components/automation-roi-calculator.tsx')
+  assert.match(source, /const commitValue = \(raw: string\)/)
+  assert.match(source, /Number\.isFinite\(parsed\)/)
+  assert.match(source, /Math\.min\(upper, Math\.max\(min, parsed\)\)/)
+})
