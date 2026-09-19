@@ -66,3 +66,12 @@ test('tool progress and result actions remain accessible in both themes', () => 
   assert.match(actions, /text-white/)
   assert.match(actions, /dark:text-zinc-800/)
 })
+
+
+test('print export keeps the decision and removes surrounding site chrome', () => {
+  const css = read('app/experience-pass.css')
+  assert.match(css, /@media print/)
+  assert.match(css, /\.site-header,[\s\S]*\.followup-guide,[\s\S]*display:\s*none !important/)
+  assert.match(css, /print-color-adjust:\s*exact/)
+  assert.match(css, /\.roi-calculator,[\s\S]*max-width:\s*none !important/)
+})
