@@ -646,8 +646,8 @@ export function ArchitectureAdvisor() {
           </div>
           <button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-950 dark:hover:text-zinc-50"><RotateCcwIcon className="h-3.5 w-3.5" />Start over</button>
         </div>
-        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"><div className="h-full rounded-full bg-zinc-950 transition-[width] duration-500 dark:bg-zinc-50" style={{ width: `${progress}%` }} /></div>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-zinc-500"><span>{step === 'result' ? 'Analysis complete' : `Step ${index + 1} of 3`}</span><span>{progress}%</span></div>
+        <div role="progressbar" aria-label="Tool progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} className="mt-4 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"><div className="h-full rounded-full bg-zinc-950 transition-[width] duration-500 dark:bg-zinc-50" style={{ width: `${progress}%` }} /></div>
+        <div className="mt-2 flex items-center justify-between text-[11px] text-zinc-500"><span aria-live="polite">{step === 'result' ? 'Analysis complete' : `Step ${index + 1} of 3`}</span><span>{progress}%</span></div>
       </div>
 
       <div className="min-h-[500px]">
