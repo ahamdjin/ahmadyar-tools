@@ -51,3 +51,18 @@ test('step navigation returns every tool to the decision header without nested s
     assert.match(source, /const goTo = \(nextStep: StepId\)/, `${path} should route next, back, edit and reset through one navigation path`)
   }
 })
+
+
+test('tool progress and result actions remain accessible in both themes', () => {
+  for (const path of productComponents) {
+    const source = read(path)
+    assert.match(source, /role="progressbar"/, `${path} should expose progress semantics`)
+    assert.match(source, /aria-valuenow=\{progress\}/, `${path} should report current progress`)
+    assert.match(source, /aria-live="polite"/, `${path} should announce step changes`)
+  }
+
+  const actions = read('components/tool-result-actions.tsx')
+  assert.match(actions, /border-white\/30/)
+  assert.match(actions, /text-white/)
+  assert.match(actions, /dark:text-zinc-800/)
+})
