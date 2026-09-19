@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 
 import { ToolResultActions } from '@/components/tool-result-actions'
+import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import {
   analyzeArchitecture,
   APP_BY_ID,
@@ -624,17 +625,19 @@ function Result({ input, onEdit }: { input: AssessmentInput; onEdit: (step: Step
 export function ArchitectureAdvisor() {
   const [input, setInput] = useState<AssessmentInput>(DEFAULT_ASSESSMENT)
   const [step, setStep] = useState<StepId>('systems')
+  const { rootRef, scrollToStart } = useToolStepNavigation()
   const index = STEPS.indexOf(step)
   const progress = step === 'result' ? 100 : Math.round(((index + 1) / 3) * 100)
   const canContinue = step !== 'systems' || input.selectedApps.length + input.customSystems.length + input.otherSystemsCount > 0
 
   const update = <K extends keyof AssessmentInput>(key: K, value: AssessmentInput[K]) => setInput((current) => ({ ...current, [key]: value }))
-  const next = () => setStep(STEPS[Math.min(STEPS.length - 1, index + 1)])
-  const back = () => setStep(STEPS[Math.max(0, index - 1)])
-  const reset = () => { setInput(DEFAULT_ASSESSMENT); setStep('systems') }
+  const goTo = (nextStep: StepId) => { setStep(nextStep); scrollToStart() }
+  const next = () => goTo(STEPS[Math.min(STEPS.length - 1, index + 1)])
+  const back = () => goTo(STEPS[Math.max(0, index - 1)])
+  const reset = () => { setInput(DEFAULT_ASSESSMENT); goTo('systems') }
 
   return (
-    <section className="relative left-1/2 w-[min(94vw,960px)] -translate-x-1/2">
+    <section ref={rootRef} className="mx-auto w-full max-w-[960px] scroll-mt-24 sm:scroll-mt-28">
       <div className="mb-8 rounded-2xl bg-zinc-50 p-4 sm:p-5 dark:bg-zinc-900/55">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -651,7 +654,7 @@ export function ArchitectureAdvisor() {
         {step === 'systems' ? <SystemsStep input={input} setInput={setInput} /> : null}
         {step === 'shape' ? <ShapeStep input={input} update={update} /> : null}
         {step === 'ownership' ? <OwnershipStep input={input} setInput={setInput} update={update} /> : null}
-        {step === 'result' ? <Result input={input} onEdit={setStep} /> : null}
+        {step === 'result' ? <Result input={input} onEdit={goTo} /> : null}
       </div>
 
       {step !== 'result' ? (
@@ -661,7 +664,7 @@ export function ArchitectureAdvisor() {
         </div>
       ) : (
         <div className="mt-10 border-t border-zinc-200 pt-5 dark:border-zinc-800">
-          <button type="button" onClick={() => setStep('systems')} className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"><ArrowLeftIcon className="h-4 w-4" />Edit inputs</button>
+          <button type="button" onClick={() => goTo('systems')} className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"><ArrowLeftIcon className="h-4 w-4" />Edit inputs</button>
         </div>
       )}
     </section>
