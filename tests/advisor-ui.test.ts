@@ -5,27 +5,44 @@ import test from 'node:test'
 
 const read = (file: string) => readFile(path.join(process.cwd(), file), 'utf8')
 
-test('advisor is a guided form with a single progress line instead of step tabs', async () => {
+test('advisor uses a short three-step decision flow with common starting points', async () => {
   const source = await read('components/architecture-advisor.tsx')
+  assert.match(source, /Architecture decision, not a platform quiz\./)
+  assert.match(source, /About 3 minutes/)
+  assert.match(source, /const STEPS: StepId\[\] = \['systems', 'shape', 'ownership', 'result'\]/)
+  assert.match(source, /Common starting points/)
+  assert.match(source, /CRM \+ sales operations/)
+  assert.match(source, /Agency \/ client operations/)
+  assert.match(source, /Ecommerce operations/)
+  assert.match(source, /Microsoft-first business/)
+  assert.match(source, /Product \/ internal software/)
   assert.match(source, /style=\{\{ width: `\$\{progress\}%` \}\}/)
-  assert.match(source, /Search HubSpot, Slack, Stripe, PostgreSQL/)
-  assert.match(source, /Something missing\?/)
-  assert.match(source, /Preliminary read/)
-  assert.match(source, /Stress-test the recommendation/)
-  assert.match(source, /Do not force every workflow onto one platform/)
-  assert.doesNotMatch(source, /const STEPS/)
 })
 
-test('advisor exposes systems, portfolio, ownership, economics, workflow depth, and reliability inputs', async () => {
+test('advisor asks the architecture questions that materially change production fit', async () => {
   const source = await read('components/architecture-advisor.tsx')
   for (const phrase of [
-    'Which systems are in your world?',
-    'Expected in 12–24 months',
-    'Strongest day-to-day owner',
-    'Automation software budget',
-    'What makes the harder workflows hard?',
-    'What happens when it breaks?',
-    'Running an important action twice could cause damage',
-    'Usage economics',
+    'Workflow portfolio',
+    'Monthly workflow runs',
+    'Custom APIs or webhooks',
+    'Database / shared state',
+    'Human approval gates',
+    'Day-to-day owner',
+    'Process stability',
+    'Worst realistic failure',
+    'Sensitive / regulated data',
+    'Controlled publishing / governance',
   ]) assert.match(source, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+})
+
+test('advisor result prioritizes a decision, reasons, next actions and uncertainty before raw scores', async () => {
+  const source = await read('components/architecture-advisor.tsx')
+  assert.match(source, /Why this landed here/)
+  assert.match(source, /Do this next/)
+  assert.match(source, /Architecture boundary/)
+  assert.match(source, /What would change the answer\?/)
+  assert.match(source, /Other viable options/)
+  assert.match(source, /Technical comparison/)
+  assert.match(source, /ToolResultActions/)
+  assert.match(source, /Scores are comparative decision signals/)
 })
