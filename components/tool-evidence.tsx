@@ -4,6 +4,7 @@ const EVIDENCE_BY_TOOL: Record<string, EvidenceItem[]> = {
   'automation-architecture-advisor': [
     { label: 'n8n — idempotency and retry safety', href: 'https://blog.n8n.io/idempotency-api/', note: 'Supports the tool’s emphasis on deduplication, bounded retries, and safe recovery for higher-impact workflows.' },
     { label: 'Zapier — business automation patterns', href: 'https://zapier.com/automations/business-owners', note: 'Shows the common owner problems the advisor models: handoffs, follow-up, disconnected systems, approvals, and onboarding.' },
+    { label: 'Make — workflow automation guide (2026)', href: 'https://www.make.com/en/blog/workflow-automation', note: 'Reinforces an important architecture boundary: predictable business processes are usually best kept deterministic, adding AI only where inputs genuinely require judgment.' },
   ],
   'crm-automation-health-check': [
     { label: 'HubSpot — CRM data management', href: 'https://blog.hubspot.com/marketing/keep-customer-data-up-to-date-everywhere', note: 'Supports prevention-first checks for duplicate detection, validation, clean records, and documented data standards.' },
@@ -36,7 +37,7 @@ export function ToolEvidence({ slug }: { slug: string }) {
       <div className="rounded-2xl border border-zinc-200/80 p-6 sm:p-8 dark:border-zinc-800">
         <p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-500">Research & evidence</p>
         <h2 className="mt-3 text-xl font-medium tracking-[-0.03em] text-zinc-950 sm:text-2xl dark:text-zinc-50">What informed this tool</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">Reviewed 21 September 2026. These sources support the operating concerns the tool asks about; vendor claims and survey statistics are not silently converted into scoring rules.</p>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">Reviewed 28 September 2026. These sources support the operating concerns the tool asks about; vendor claims and survey statistics are not silently converted into scoring rules.</p>
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           {items.map((item) => (
             <a key={item.href} href={item.href} target="_blank" rel="noreferrer" className="group block">
