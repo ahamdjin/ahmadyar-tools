@@ -22,7 +22,8 @@ test('every public tool has a research evidence entry', () => {
 
 test('evidence explains methodology boundaries instead of turning vendor claims into scoring rules', () => {
   assert.match(evidence, /vendor claims and survey statistics are not silently converted into scoring rules/i)
-  assert.match(evidence, /Reviewed 21 September 2026/)
+  assert.match(evidence, /Reviewed 28 September 2026/)
+  assert.match(evidence, /predictable business processes are usually best kept deterministic/i)
 })
 
 test('evidence is rendered through the shared editorial surface', () => {
