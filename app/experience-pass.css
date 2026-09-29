@@ -267,3 +267,74 @@
     transition: none;
   }
 }
+
+
+/*
+  Result export
+  -------------
+  The print action should produce the decision output, not the whole SEO page,
+  site navigation, or sticky editing controls.
+*/
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .site-header,
+  .site-footer,
+  .advisor-toolbar,
+  .crm-health-toolbar,
+  .onboarding-toolbar,
+  .routing-toolbar,
+  .roi-toolbar,
+  .followup-toolbar,
+  .advisor-guide,
+  .crm-health-guide,
+  .onboarding-guide,
+  .routing-guide,
+  .roi-guide,
+  .followup-guide,
+  .advisor-workspace > section > div:last-child,
+  .crm-health-check > div:last-child,
+  .onboarding-planner > div:last-child,
+  .routing-check > div:last-child,
+  .roi-calculator > div:last-child,
+  .followup-check > div:last-child {
+    display: none !important;
+  }
+
+  .advisor-viewport,
+  .crm-health-viewport,
+  .onboarding-viewport,
+  .routing-viewport,
+  .roi-viewport,
+  .followup-viewport,
+  .advisor-workspace,
+  .crm-health-workspace,
+  .onboarding-workspace,
+  .routing-workspace,
+  .roi-workspace,
+  .followup-workspace {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .advisor-workspace > section,
+  .crm-health-check,
+  .onboarding-planner,
+  .routing-check,
+  .roi-calculator,
+  .followup-check {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+  }
+}

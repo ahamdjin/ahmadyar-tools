@@ -1,234 +1,170 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon } from 'lucide-react'
+import { ArrowLeftIcon, ArrowRightIcon, RotateCcwIcon } from 'lucide-react'
 
+import { ToolResultActions } from '@/components/tool-result-actions'
+import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import { APP_BY_ID, APP_CATALOG, type AppCategory, type AppDefinition } from '@/engine/apps'
 import {
   analyzeOnboarding,
   DEFAULT_ONBOARDING_INPUT,
+  type AccessComplexity,
   type OnboardingInput,
   type OnboardingLevel,
+  type OnboardingOwner,
   type TriggerMode,
 } from '@/engine/onboarding'
 
-type PageId = 'systems' | 'trigger' | 'setup' | 'reliability' | 'result'
+type StepId = 'commercial' | 'readiness' | 'delivery' | 'result'
+const STEPS: StepId[] = ['commercial', 'readiness', 'delivery', 'result']
 
-type RoleDefinition = {
+type Role = {
   key: keyof Pick<OnboardingInput, 'crmId' | 'contractAppId' | 'billingAppId' | 'projectAppId' | 'intakeAppId' | 'communicationAppId' | 'fileAppId'>
   label: string
-  helper: string
   categories: AppCategory[]
   required?: boolean
 }
 
-const SYSTEM_ROLES: RoleDefinition[] = [
-  { key: 'crmId', label: 'CRM / source of truth', helper: 'Where the deal and client record live.', categories: ['crm'], required: true },
-  { key: 'contractAppId', label: 'Contract / signature', helper: 'Optional. The system that knows when the agreement is complete.', categories: ['documents'] },
-  { key: 'billingAppId', label: 'Payment / billing', helper: 'Optional. The system that owns payment state.', categories: ['finance', 'commerce'] },
-  { key: 'projectAppId', label: 'Delivery workspace', helper: 'Where projects, tasks, dates and delivery ownership live.', categories: ['project'] },
-  { key: 'intakeAppId', label: 'Client intake', helper: 'Form or system used to collect delivery information.', categories: ['forms', 'project', 'crm'] },
-  { key: 'communicationAppId', label: 'Client communication', helper: 'Primary welcome / onboarding communication channel.', categories: ['communication', 'crm'] },
-  { key: 'fileAppId', label: 'Files / assets', helper: 'Where client assets and working files should live.', categories: ['documents', 'project'] },
+const ROLES: Role[] = [
+  { key: 'crmId', label: 'CRM / commercial source of truth', categories: ['crm'], required: true },
+  { key: 'contractAppId', label: 'Contract / signature', categories: ['documents'] },
+  { key: 'billingAppId', label: 'Payment / billing', categories: ['finance', 'commerce'] },
+  { key: 'projectAppId', label: 'Delivery workspace', categories: ['project'] },
+  { key: 'intakeAppId', label: 'Client intake', categories: ['forms', 'project', 'crm'] },
+  { key: 'communicationAppId', label: 'Client communication', categories: ['communication', 'crm'] },
+  { key: 'fileAppId', label: 'Files / assets', categories: ['documents', 'project'] },
 ]
 
-const LEVEL_COPY: Record<string, Array<{ value: OnboardingLevel; label: string; detail: string }>> = {
-  repeatability: [
-    { value: 0, label: 'Every client is different', detail: 'The process changes materially each time.' },
-    { value: 1, label: 'Some common steps', detail: 'A loose process exists, but exceptions dominate.' },
-    { value: 2, label: 'Mostly repeatable', detail: 'A few service variants cover most clients.' },
-    { value: 3, label: 'Standardized', detail: 'Clear service families, gates, owners and templates.' },
-  ],
-  handoff: [
-    { value: 0, label: 'Sales explains it manually', detail: 'Scope and promises can live in calls or messages.' },
-    { value: 1, label: 'Some fields / notes transfer', detail: 'Delivery still asks for missing context.' },
-    { value: 2, label: 'Required handoff fields exist', detail: 'Delivery gets scope, contacts, dates and commercial context.' },
-    { value: 3, label: 'Validated handoff payload', detail: 'Missing required context blocks readiness.' },
-  ],
-  intake: [
-    { value: 0, label: 'Mostly email / chat', detail: 'Information arrives in different places and formats.' },
-    { value: 1, label: 'One basic form', detail: 'Useful, but not matched to service requirements.' },
-    { value: 2, label: 'Structured by service', detail: 'Known data is prefilled and required inputs are clear.' },
-    { value: 3, label: 'Validated and adaptive', detail: 'Questions change by service and missing information is visible.' },
-  ],
-  tracking: [
-    { value: 0, label: 'People chase it manually', detail: 'Missing items are buried in messages.' },
-    { value: 1, label: 'A checklist exists', detail: 'Someone still has to watch it.' },
-    { value: 2, label: 'Owned checklist + reminders', detail: 'Every required item has status and accountability.' },
-    { value: 3, label: 'Verified readiness gate', detail: 'Required access is checked before delivery can start.' },
-  ],
-  template: [
-    { value: 0, label: 'Built from scratch', detail: 'Projects and tasks are recreated manually.' },
-    { value: 1, label: 'Copied from an old project', detail: 'Some consistency, but easy to drift.' },
-    { value: 2, label: 'Service templates', detail: 'Tasks, roles and relative dates are standardized.' },
-    { value: 3, label: 'Governed templates', detail: 'Templates have owners, versioning and controlled exceptions.' },
-  ],
-  communication: [
-    { value: 0, label: 'Manual each time', detail: 'Welcome and expectations depend on memory.' },
-    { value: 1, label: 'Template message', detail: 'Consistent copy, but manually initiated.' },
-    { value: 2, label: 'Triggered automatically', detail: 'Welcome is personalized from source data.' },
-    { value: 3, label: 'State-aware communication', detail: 'Messages change based on missing items and readiness.' },
-  ],
-  kickoff: [
-    { value: 0, label: 'Booked ad hoc', detail: 'Kickoff can happen before prerequisites are complete.' },
-    { value: 1, label: 'Scheduling link sent', detail: 'Simple, but not tied to readiness.' },
-    { value: 2, label: 'Scheduled after prerequisites', detail: 'Kickoff timing respects intake and access.' },
-    { value: 3, label: 'Readiness-aware scheduling', detail: 'Reschedules, owners and service rules are handled explicitly.' },
-  ],
-  owner: [
-    { value: 0, label: 'No clear owner', detail: 'Everyone helps, so nobody owns the finish line.' },
-    { value: 1, label: 'Someone usually takes it', detail: 'Ownership is informal.' },
-    { value: 2, label: 'One owner assigned', detail: 'Accountability is explicit from the start.' },
-    { value: 3, label: 'Owner + backup + SLA', detail: 'Coverage and escalation are defined.' },
-  ],
-  reminders: [
-    { value: 0, label: 'Manual chasing', detail: 'Follow-up depends on memory.' },
-    { value: 1, label: 'Basic reminders', detail: 'Some nudges exist.' },
-    { value: 2, label: 'Missing-item reminders', detail: 'Reminders stop automatically when complete.' },
-    { value: 3, label: 'Escalation by age / risk', detail: 'Different blockers trigger different actions.' },
-  ],
-  gate: [
-    { value: 0, label: 'No formal ready state', detail: 'Sold and ready-for-delivery mean the same thing.' },
-    { value: 1, label: 'People know what ready means', detail: 'The rule is not enforced in systems.' },
-    { value: 2, label: 'Explicit readiness checklist', detail: 'Required conditions are visible.' },
-    { value: 3, label: 'System-enforced readiness', detail: 'Delivery cannot start until required gates pass.' },
-  ],
-  duplicate: [
-    { value: 0, label: 'Not considered', detail: 'Repeated events could create duplicate projects/messages.' },
-    { value: 1, label: 'People notice duplicates', detail: 'Recovery is manual.' },
-    { value: 2, label: 'Stable key / duplicate check', detail: 'Creation actions are guarded.' },
-    { value: 3, label: 'Idempotent + resumable', detail: 'Retries safely continue from recorded state.' },
-  ],
-  exceptions: [
-    { value: 0, label: 'Handled in chat', detail: 'The happy path is automated; unusual cases disappear.' },
-    { value: 1, label: 'Manual exception list', detail: 'Someone tracks problems separately.' },
-    { value: 2, label: 'Visible exception queue', detail: 'Reason, owner and next action are explicit.' },
-    { value: 3, label: 'Resumable exception workflow', detail: 'Resolved cases continue from the correct point.' },
-  ],
-  monitoring: [
-    { value: 0, label: 'We find out from people', detail: 'Failures are silent.' },
-    { value: 1, label: 'Logs checked sometimes', detail: 'Reactive monitoring.' },
-    { value: 2, label: 'Critical failures alert an owner', detail: 'Someone knows when setup fails.' },
-    { value: 3, label: 'Alerts + reconciliation', detail: 'Missing projects/status mismatches are detected proactively.' },
-  ],
-}
-
-function AppIcon({ app }: { app: AppDefinition }) {
-  if (!app.icon) return <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-[10px] font-semibold text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">{app.name.slice(0, 2).toUpperCase()}</span>
-  return <span aria-hidden="true" className="h-8 w-8 shrink-0 rounded-md bg-zinc-100 bg-[length:66%] bg-center bg-no-repeat dark:bg-zinc-900" style={{ backgroundImage: `url(https://cdn.simpleicons.org/${app.icon})` }} />
+const LEVELS: Record<string, readonly [string, string, string, string]> = {
+  repeatability: ['Different every time','Some common steps','Mostly repeatable','Standardized + governed'],
+  handoff: ['Lives in calls / chat','Some fields transfer','Required handoff payload','Validated before start'],
+  intake: ['Email / chat','One basic form','Structured by service','Adaptive + validated'],
+  access: ['No tracking','Checklist only','Owned + reminders','Verified before ready'],
+  welcome: ['Manual each time','Template message','Triggered + personalized','State-aware'],
+  reminders: ['Manual chasing','Basic reminders','Missing-item reminders','Age / risk escalation'],
+  gate: ['No ready state','People know it','Explicit checklist','System-enforced'],
+  template: ['Built from scratch','Copy old project','Service templates','Governed templates'],
+  kickoff: ['Booked ad hoc','Scheduling link','After prerequisites','Readiness-aware'],
+  owner: ['No clear owner','Informal owner','Assigned owner','Owner + backup + SLA'],
+  duplicate: ['Not considered','Manual recovery','Stable key / duplicate check','Idempotent + resumable'],
+  exceptions: ['Handled in chat','Manual exception list','Visible queue','Resumable workflow'],
+  monitoring: ['People report failures','Logs checked sometimes','Critical alerts','Alerts + reconciliation'],
 }
 
 function Select({ value, onChange, children }: { value: string | number; onChange: (value: string) => void; children: React.ReactNode }) {
   return <select value={value} onChange={(event) => onChange(event.target.value)} className="min-h-12 w-full rounded-xl border border-zinc-300 bg-white px-3.5 text-sm font-medium text-zinc-950 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-100">{children}</select>
 }
 
-function SystemRole({ role, value, onChange }: { role: RoleDefinition; value: string | null; onChange: (value: string | null) => void }) {
+function Field({ label, helper, children }: { label: string; helper?: string; children: React.ReactNode }) {
+  return <div className="grid gap-3 border-b border-zinc-200 py-4 last:border-b-0 sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-7 dark:border-zinc-800"><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{label}</p>{helper ? <p className="mt-1 text-xs leading-5 text-zinc-500">{helper}</p> : null}</div><div className="min-w-0 self-center">{children}</div></div>
+}
+
+function Level({ value, onChange, labels }: { value: OnboardingLevel; onChange: (value: OnboardingLevel) => void; labels: readonly [string, string, string, string] }) {
+  return <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{labels.map((label, index) => <button key={label} type="button" onClick={() => onChange(index as OnboardingLevel)} className={`min-h-14 rounded-xl px-2.5 py-2 text-left text-xs leading-4 transition-colors ${value === index ? 'bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950' : 'bg-zinc-50 text-zinc-600 hover:bg-zinc-100 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-900'}`}><span className="block font-mono text-[9px] opacity-60">{index}</span><span className="mt-1 block font-medium">{label}</span></button>)}</div>
+}
+
+function StepIntro({ eyebrow, title, body }: { eyebrow: string; title: string; body: string }) {
+  return <header className="max-w-2xl"><p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-500">{eyebrow}</p><h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-zinc-950 sm:text-3xl dark:text-zinc-50">{title}</h2><p className="mt-3 max-w-xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">{body}</p></header>
+}
+
+function AppIcon({ app }: { app: AppDefinition }) {
+  if (!app.icon) return <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-[9px] font-semibold text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">{app.name.slice(0, 2).toUpperCase()}</span>
+  return <span aria-hidden="true" className="h-7 w-7 shrink-0 rounded-md bg-zinc-100 bg-[length:66%] bg-center bg-no-repeat dark:bg-zinc-900" style={{ backgroundImage: `url(https://cdn.simpleicons.org/${app.icon})` }} />
+}
+
+function SystemSelect({ role, value, onChange }: { role: Role; value: string | null; onChange: (value: string | null) => void }) {
   const apps = APP_CATALOG.filter((app) => role.categories.includes(app.category)).sort((a, b) => b.nativeAutomation - a.nativeAutomation || a.name.localeCompare(b.name))
   const selected = value ? APP_BY_ID.get(value) : null
-  return (
-    <div className="grid gap-3 py-4 sm:grid-cols-[220px_1fr] sm:items-center sm:gap-8">
-      <div>
-        <p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{role.label}{role.required ? ' *' : ''}</p>
-        <p className="mt-1 text-xs leading-5 text-zinc-500">{role.helper}</p>
-      </div>
-      <div className="flex min-w-0 items-center gap-3">
-        {selected ? <AppIcon app={selected} /> : <span className="h-8 w-8 shrink-0 rounded-md bg-zinc-100 dark:bg-zinc-900" />}
-        <Select value={value ?? ''} onChange={(next) => onChange(next || null)}>
-          <option value="">{role.required ? 'Choose a system' : 'Not used / not needed'}</option>
-          {apps.map((app) => <option key={app.id} value={app.id}>{app.name}</option>)}
-        </Select>
-      </div>
-    </div>
-  )
+  return <div className="flex min-w-0 items-center gap-3">{selected ? <AppIcon app={selected} /> : <span className="h-7 w-7 shrink-0 rounded-md bg-zinc-100 dark:bg-zinc-900" />}<Select value={value ?? ''} onChange={(next) => onChange(next || null)}><option value="">{role.required ? 'Choose a system' : 'Not used / not needed'}</option>{apps.map((app) => <option key={app.id} value={app.id}>{app.name}</option>)}</Select></div>
 }
 
-function LevelField({ label, helper, value, options, onChange }: { label: string; helper: string; value: OnboardingLevel; options: Array<{ value: OnboardingLevel; label: string; detail: string }>; onChange: (value: OnboardingLevel) => void }) {
-  return (
-    <div className="py-4 sm:grid sm:grid-cols-[240px_1fr] sm:gap-8">
-      <div>
-        <p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{label}</p>
-        <p className="mt-1 text-xs leading-5 text-zinc-500">{helper}</p>
-      </div>
-      <div className="mt-3 grid gap-2 sm:mt-0 sm:grid-cols-2">
-        {options.map((option) => {
-          const active = option.value === value
-          return <button key={option.value} type="button" onClick={() => onChange(option.value)} className={`min-h-16 rounded-xl px-3 py-3 text-left transition-colors ${active ? 'bg-zinc-100 dark:bg-zinc-900' : 'hover:bg-zinc-50 dark:hover:bg-zinc-900/60'}`}><span className="flex items-start gap-2"><span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${active ? 'border-zinc-950 bg-zinc-950 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-950' : 'border-zinc-300 dark:border-zinc-700'}`}>{active ? <CheckIcon className="h-3 w-3" /> : null}</span><span><span className="block text-sm font-medium text-zinc-900 dark:text-zinc-100">{option.label}</span><span className="mt-0.5 block text-xs leading-5 text-zinc-500">{option.detail}</span></span></span></button>
-        })}
-      </div>
-    </div>
-  )
+function CommercialStep({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
+  const commercialRoles = ROLES.slice(0, 3)
+  return <div className="space-y-8">
+    <StepIntro eyebrow="1 · Commercial handoff" title="Define when a sold client is actually allowed to start onboarding." body="A deal being won, a contract being signed and a payment landing are different events. Pick the authoritative start condition so delivery never starts early, late or twice." />
+    <section className="border-y border-zinc-200 dark:border-zinc-800">{commercialRoles.map((role) => <Field key={role.key} label={role.label}><SystemSelect role={role} value={input[role.key]} onChange={(value) => update(role.key, value)} /></Field>)}</section>
+    <section className="border-y border-zinc-200 dark:border-zinc-800">
+      <Field label="Canonical onboarding trigger"><Select value={input.triggerMode} onChange={(value) => update('triggerMode', value as TriggerMode)}><option value="deal-won">Deal marked won</option><option value="contract-signed">Contract signed</option><option value="payment-received">Payment received</option><option value="compound">Several conditions must be true</option><option value="manual">Manual approval</option></Select></Field>
+      {input.triggerMode === 'compound' ? <Field label="Required commercial gates" helper="Choose the prerequisites that must all be true."><div className="grid gap-2 sm:grid-cols-3">{([['requireWon','Deal won'],['requireSigned','Signed'],['requirePaid','Paid']] as const).map(([key, label]) => <button key={key} type="button" onClick={() => update(key, !input[key])} className={`min-h-11 rounded-xl px-3 text-xs font-medium ${input[key] ? 'bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950' : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-900/60 dark:text-zinc-400'}`}>{label}</button>)}</div></Field> : null}
+      <Field label="Clients / month"><Select value={input.monthlyClients} onChange={(value) => update('monthlyClients', Number(value))}><option value={5}>Under 10</option><option value={15}>10–25</option><option value={40}>25–60</option><option value={100}>60–150</option><option value={250}>150+</option></Select></Field>
+      <Field label="Service variants" helper="How many materially different onboarding paths exist?"><Select value={input.serviceVariants} onChange={(value) => update('serviceVariants', Number(value))}><option value={1}>1 standard service</option><option value={3}>2–4 variants</option><option value={6}>5–8 variants</option><option value={12}>9–15 variants</option><option value={20}>15+</option></Select></Field>
+      <Field label="Accountable onboarding owner"><Select value={input.owner} onChange={(value) => update('owner', value as OnboardingOwner)}><option value="operations">Operations</option><option value="account-management">Account management</option><option value="delivery">Delivery</option><option value="sales">Sales</option><option value="shared">Shared / unclear</option></Select></Field>
+    </section>
+  </div>
 }
 
-function SystemsPage({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
-  return (
-    <div className="space-y-6">
-      <header className="max-w-2xl">
-        <p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Start with the actual handoff stack.</p>
-        <h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-zinc-950 sm:text-3xl dark:text-zinc-50">Where does a sold client move next?</h2>
-        <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-zinc-400">Choose the systems that own each state. The planner uses this to avoid asking questions that your stack already answers.</p>
-      </header>
-      <div className="rounded-2xl bg-zinc-50 px-4 sm:px-5 dark:bg-zinc-900/50">
-        {SYSTEM_ROLES.map((role) => <SystemRole key={role.key} role={role} value={input[role.key]} onChange={(value) => update(role.key, value)} />)}
-      </div>
-      <div className="grid gap-3 sm:grid-cols-[220px_1fr] sm:items-center sm:gap-8">
-        <div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Internal / niche systems</p><p className="mt-1 text-xs leading-5 text-zinc-500">Comma-separated is enough. Unknown systems raise integration uncertainty.</p></div>
-        <input value={input.customSystems.join(', ')} onChange={(event) => update('customSystems', event.target.value.split(',').map((item) => item.trim()).filter(Boolean))} placeholder="e.g. Internal quoting system, legacy portal" className="min-h-12 w-full rounded-xl border border-zinc-300 bg-white px-3.5 text-sm text-zinc-950 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-100" />
-      </div>
-    </div>
-  )
+function ReadinessStep({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
+  return <div className="space-y-8">
+    <StepIntro eyebrow="2 · Client readiness" title="Separate “bought” from “ready for delivery.”" body="Most onboarding friction happens between those two states: missing context, incomplete intake, access chasing and reminders that never stop. Make readiness explicit before automating more messages." />
+    <section className="border-y border-zinc-200 dark:border-zinc-800">
+      <Field label="Process repeatability"><Level value={input.processRepeatability} onChange={(value) => update('processRepeatability', value)} labels={LEVELS.repeatability} /></Field>
+      <Field label="Sales-to-delivery handoff"><Level value={input.handoffData} onChange={(value) => update('handoffData', value)} labels={LEVELS.handoff} /></Field>
+      <Field label="Client intake"><Level value={input.intakeQuality} onChange={(value) => update('intakeQuality', value)} labels={LEVELS.intake} /></Field>
+      <Field label="Access / asset complexity"><Select value={input.accessComplexity} onChange={(value) => update('accessComplexity', value as AccessComplexity)}><option value="none">No meaningful access needed</option><option value="light">A few files / simple access</option><option value="multi">Several accounts, files or permissions</option><option value="sensitive">Sensitive credentials / regulated access</option></Select></Field>
+      <Field label="Access tracking"><Level value={input.accessTracking} onChange={(value) => update('accessTracking', value)} labels={LEVELS.access} /></Field>
+      <Field label="Welcome communication"><Level value={input.clientWelcome} onChange={(value) => update('clientWelcome', value)} labels={LEVELS.welcome} /></Field>
+      <Field label="Missing-item reminders"><Level value={input.reminders} onChange={(value) => update('reminders', value)} labels={LEVELS.reminders} /></Field>
+      <Field label="Ready-for-delivery gate"><Level value={input.readinessGate} onChange={(value) => update('readinessGate', value)} labels={LEVELS.gate} /></Field>
+    </section>
+  </div>
 }
 
-function TriggerPage({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
-  const triggerOptions: Array<{ value: TriggerMode; label: string; detail: string }> = [
-    { value: 'deal-won', label: 'Deal marked won', detail: 'Good when commercial approval means work may start.' },
-    { value: 'contract-signed', label: 'Contract signed', detail: 'Use when signature is the real commitment point.' },
-    { value: 'payment-received', label: 'Payment received', detail: 'Use when payment must clear before delivery begins.' },
-    { value: 'compound', label: 'Several conditions must be true', detail: 'For example: won + signed + paid.' },
-    { value: 'manual', label: 'Manual approval', detail: 'Useful when judgment is still required before onboarding.' },
-  ]
-  return (
-    <div className="space-y-7">
-      <header className="max-w-2xl"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Define readiness before automation.</p><h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-zinc-950 sm:text-3xl dark:text-zinc-50">What event really means “start onboarding”?</h2></header>
-      <div className="grid gap-2 sm:grid-cols-2">{triggerOptions.map((option) => { const active = input.triggerMode === option.value; return <button key={option.value} type="button" onClick={() => update('triggerMode', option.value)} className={`rounded-xl px-4 py-4 text-left transition-colors ${active ? 'bg-zinc-100 dark:bg-zinc-900' : 'hover:bg-zinc-50 dark:hover:bg-zinc-900/60'}`}><span className="flex items-start gap-3"><span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${active ? 'border-zinc-950 bg-zinc-950 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-950' : 'border-zinc-300 dark:border-zinc-700'}`}>{active ? <CheckIcon className="h-3 w-3" /> : null}</span><span><span className="block text-sm font-medium text-zinc-950 dark:text-zinc-50">{option.label}</span><span className="mt-1 block text-xs leading-5 text-zinc-500">{option.detail}</span></span></span></button> })}</div>
-      {input.triggerMode === 'compound' ? <div className="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-900/50"><p className="mb-3 text-sm font-medium text-zinc-950 dark:text-zinc-50">Required before onboarding may start</p><div className="grid gap-2 sm:grid-cols-3">{([['requireWon', 'Deal won'], ['requireSigned', 'Contract signed'], ['requirePaid', 'Payment received']] as const).map(([key, label]) => <button key={key} type="button" onClick={() => update(key, !input[key])} className={`flex min-h-12 items-center gap-2 rounded-lg px-3 text-left text-sm ${input[key] ? 'bg-zinc-200 font-medium dark:bg-zinc-800' : 'bg-white dark:bg-zinc-950'}`}><span className={`flex h-5 w-5 items-center justify-center rounded border ${input[key] ? 'border-zinc-950 bg-zinc-950 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-950' : 'border-zinc-300 dark:border-zinc-700'}`}>{input[key] ? <CheckIcon className="h-3 w-3" /> : null}</span>{label}</button>)}</div></div> : null}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <label className="space-y-2"><span className="text-xs font-medium text-zinc-500">New clients / month</span><Select value={input.monthlyClients} onChange={(v) => update('monthlyClients', Number(v))}>{[5, 15, 40, 100, 250].map((n) => <option key={n} value={n}>{n === 250 ? '250+' : `~${n}`}</option>)}</Select></label>
-        <label className="space-y-2"><span className="text-xs font-medium text-zinc-500">Service variants</span><Select value={input.serviceVariants} onChange={(v) => update('serviceVariants', Number(v))}>{[1, 3, 6, 12].map((n) => <option key={n} value={n}>{n === 12 ? '12+' : n}</option>)}</Select></label>
-        <label className="space-y-2"><span className="text-xs font-medium text-zinc-500">Accountable owner</span><Select value={input.owner} onChange={(v) => update('owner', v as OnboardingInput['owner'])}><option value="sales">Sales</option><option value="operations">Operations</option><option value="account-management">Account management</option><option value="delivery">Delivery</option><option value="shared">Shared / unclear</option></Select></label>
-      </div>
-      <LevelField label="How repeatable is onboarding?" helper="Automation should follow a stable process, not encode chaos." value={input.processRepeatability} options={LEVEL_COPY.repeatability} onChange={(v) => update('processRepeatability', v)} />
-    </div>
-  )
+function DeliveryStep({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
+  const deliveryRoles = ROLES.slice(3)
+  return <div className="space-y-8">
+    <StepIntro eyebrow="3 · Delivery setup" title="Make the stable path automatic and the exceptions visible." body="The goal is not to remove people from onboarding. It is to stop recreating projects, chasing routine prerequisites and discovering integration failures after a paying client is already waiting." />
+    <section className="border-y border-zinc-200 dark:border-zinc-800">{deliveryRoles.map((role) => <Field key={role.key} label={role.label}><SystemSelect role={role} value={input[role.key]} onChange={(value) => update(role.key, value)} /></Field>)}</section>
+    <section className="border-y border-zinc-200 dark:border-zinc-800">
+      <Field label="Delivery template"><Level value={input.workspaceTemplate} onChange={(value) => update('workspaceTemplate', value)} labels={LEVELS.template} /></Field>
+      <Field label="Kickoff scheduling"><Level value={input.kickoffScheduling} onChange={(value) => update('kickoffScheduling', value)} labels={LEVELS.kickoff} /></Field>
+      <Field label="Owner assignment"><Level value={input.ownerAssignment} onChange={(value) => update('ownerAssignment', value)} labels={LEVELS.owner} /></Field>
+      <Field label="Duplicate / retry safety"><Level value={input.duplicateProtection} onChange={(value) => update('duplicateProtection', value)} labels={LEVELS.duplicate} /></Field>
+      <Field label="Exception handling"><Level value={input.exceptionHandling} onChange={(value) => update('exceptionHandling', value)} labels={LEVELS.exceptions} /></Field>
+      <Field label="Monitoring"><Level value={input.monitoring} onChange={(value) => update('monitoring', value)} labels={LEVELS.monitoring} /></Field>
+      <Field label="Target time to ready"><Select value={input.targetDays} onChange={(value) => update('targetDays', Number(value))}><option value={1}>1 business day</option><option value={3}>3 days</option><option value={5}>5 days</option><option value={7}>1 week</option><option value={14}>2 weeks</option><option value={30}>30 days</option></Select></Field>
+    </section>
+  </div>
 }
 
-function SetupPage({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
-  return <div className="space-y-2"><header className="mb-5 max-w-2xl"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Model the actual handoff.</p><h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-zinc-950 sm:text-3xl dark:text-zinc-50">What must be true before delivery starts?</h2></header><LevelField label="Sales → delivery context" helper="Scope, promises, contacts, dates and commercial context." value={input.handoffData} options={LEVEL_COPY.handoff} onChange={(v) => update('handoffData', v)} /><LevelField label="Client intake" helper="How structured and service-specific is the information request?" value={input.intakeQuality} options={LEVEL_COPY.intake} onChange={(v) => update('intakeQuality', v)} /><div className="py-4 sm:grid sm:grid-cols-[240px_1fr] sm:gap-8"><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Access / credential complexity</p><p className="mt-1 text-xs leading-5 text-zinc-500">This changes how strict the readiness and security model should be.</p></div><Select value={input.accessComplexity} onChange={(v) => update('accessComplexity', v as OnboardingInput['accessComplexity'])}><option value="none">No meaningful access required</option><option value="light">A few files / simple permissions</option><option value="multi">Several tools, accounts or permissions</option><option value="sensitive">Sensitive credentials / privileged access</option></Select></div><LevelField label="Access + asset tracking" helper="Missing access should be a visible state, not a conversation buried in chat." value={input.accessTracking} options={LEVEL_COPY.tracking} onChange={(v) => update('accessTracking', v)} /><LevelField label="Delivery workspace setup" helper="Projects should be created from a stable template, not rebuilt in automation." value={input.workspaceTemplate} options={LEVEL_COPY.template} onChange={(v) => update('workspaceTemplate', v)} /><LevelField label="Welcome communication" helper="Set expectations and next actions immediately." value={input.clientWelcome} options={LEVEL_COPY.communication} onChange={(v) => update('clientWelcome', v)} /><LevelField label="Kickoff scheduling" helper="Kickoff should happen when it can actually move the work forward." value={input.kickoffScheduling} options={LEVEL_COPY.kickoff} onChange={(v) => update('kickoffScheduling', v)} /><LevelField label="Onboarding ownership" helper="One person should be accountable for moving the client to ready." value={input.ownerAssignment} options={LEVEL_COPY.owner} onChange={(v) => update('ownerAssignment', v)} /></div>
-}
-
-function ReliabilityPage({ input, update }: { input: OnboardingInput; update: <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => void }) {
-  return <div className="space-y-2"><header className="mb-5 max-w-2xl"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Now make it survive reality.</p><h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-zinc-950 sm:text-3xl dark:text-zinc-50">What happens when a client is late, an event repeats, or setup fails?</h2></header><LevelField label="Missing-item reminders" helper="Chase only what is missing and stop when it is complete." value={input.reminders} options={LEVEL_COPY.reminders} onChange={(v) => update('reminders', v)} /><LevelField label="Ready-for-delivery gate" helper="Sold is not the same as operationally ready." value={input.readinessGate} options={LEVEL_COPY.gate} onChange={(v) => update('readinessGate', v)} /><LevelField label="Duplicate / retry protection" helper="Payment and webhook events may repeat. Creation actions should be safe to retry." value={input.duplicateProtection} options={LEVEL_COPY.duplicate} onChange={(v) => update('duplicateProtection', v)} /><LevelField label="Exception handling" helper="Partial payment, failed project creation and unusual services need an owned path." value={input.exceptionHandling} options={LEVEL_COPY.exceptions} onChange={(v) => update('exceptionHandling', v)} /><LevelField label="Monitoring" helper="A paying client should never disappear because an integration failed silently." value={input.monitoring} options={LEVEL_COPY.monitoring} onChange={(v) => update('monitoring', v)} /><div className="py-4 sm:grid sm:grid-cols-[240px_1fr] sm:gap-8"><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Target time to ready</p><p className="mt-1 text-xs leading-5 text-zinc-500">From commercial readiness to ready-for-delivery.</p></div><Select value={input.targetDays} onChange={(v) => update('targetDays', Number(v))}><option value={1}>Within 1 day</option><option value={3}>Within 3 days</option><option value={5}>Within 5 days</option><option value={10}>Within 10 days</option><option value={20}>Within 20 days</option></Select></div></div>
-}
-
-function Metric({ label, value }: { label: string; value: number }) {
-  return <div className="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-900/50"><div className="flex items-center justify-between gap-4"><span className="text-xs text-zinc-500">{label}</span><span className="font-mono text-xs font-medium text-zinc-950 dark:text-zinc-50">{value}/100</span></div><div className="mt-3 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"><div className="h-full rounded-full bg-zinc-950 dark:bg-zinc-50" style={{ width: `${value}%` }} /></div></div>
-}
-
-function ResultPage({ input }: { input: OnboardingInput }) {
+function Result({ input, onEdit }: { input: OnboardingInput; onEdit: (step: StepId) => void }) {
   const result = useMemo(() => analyzeOnboarding(input), [input])
-  return <div className="space-y-9 pb-3"><section className="grid gap-6 lg:grid-cols-[1fr_230px]"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Onboarding readiness</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{result.status}</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">{result.summary}</p></div><div className="rounded-2xl bg-zinc-100 p-5 dark:bg-zinc-900"><p className="text-4xl font-medium tracking-[-0.05em] text-zinc-950 dark:text-zinc-50">{result.score}</p><p className="mt-1 text-xs text-zinc-500">health / 100 · {result.confidence}% confidence</p></div></section><section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"><Metric label="Trigger clarity" value={result.metrics.triggerClarity} /><Metric label="Handoff quality" value={result.metrics.handoffQuality} /><Metric label="Client readiness" value={result.metrics.clientReadiness} /><Metric label="Delivery setup" value={result.metrics.deliverySetup} /><Metric label="Reliability" value={result.metrics.reliability} /><Metric label="Ownership" value={result.metrics.ownership} /></section>{result.issues.length ? <section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Fix first</p><div className="mt-4 grid gap-3 lg:grid-cols-2">{result.issues.slice(0, 6).map((issue) => <article key={issue.id} className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/50"><div className="flex items-start justify-between gap-4"><h3 className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{issue.title}</h3><span className="text-[10px] uppercase tracking-[0.12em] text-zinc-500">{issue.severity}</span></div><p className="mt-2 text-xs leading-5 text-zinc-500">{issue.impact}</p><p className="mt-3 text-sm leading-6 text-zinc-700 dark:text-zinc-300">{issue.fix}</p><p className="mt-3 text-[11px] text-zinc-500">Owner: {issue.owner}</p></article>)}</div></section> : null}<section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Recommended flow</p><div className="mt-4 grid gap-2">{result.stages.map((stage, index) => <div key={stage.id} className="grid gap-2 rounded-xl bg-zinc-50 px-4 py-4 sm:grid-cols-[32px_170px_150px_1fr] sm:items-start dark:bg-zinc-900/50"><span className="font-mono text-[10px] text-zinc-400">{String(index + 1).padStart(2, '0')}</span><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{stage.label}</p><p className="mt-1 text-[11px] text-zinc-500">{stage.owner}</p></div><p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{stage.system}</p><div><p className="text-xs leading-5 text-zinc-600 dark:text-zinc-400">{stage.purpose}</p>{stage.gate ? <p className="mt-1 text-[11px] font-medium text-zinc-500">Gate: {stage.gate}</p> : null}</div></div>)}</div></section><section className="grid gap-6 lg:grid-cols-2"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Architecture</p><ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{result.architecture.map((item) => <li key={item}>• {item}</li>)}</ul></div><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Safeguards</p><ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{result.safeguards.map((item) => <li key={item}>• {item}</li>)}</ul></div></section><section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">30-day repair plan</p><div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{result.thirtyDayPlan.map((week) => <div key={week.week} className="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-900/50"><p className="text-[11px] text-zinc-500">{week.week}</p><p className="mt-1 text-sm font-medium text-zinc-950 dark:text-zinc-50">{week.focus}</p><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-500">{week.actions.map((item) => <li key={item}>• {item}</li>)}</ul></div>)}</div></section>{result.nextQuestions.length ? <section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Still worth confirming</p><ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{result.nextQuestions.map((item) => <li key={item}>• {item}</li>)}</ul></section> : null}</div>
+  const topIssues = result.issues.slice(0, 3)
+  const automate = ['Create the delivery workspace from a governed template after readiness.', 'Send routine welcome, intake and missing-item reminders from current state.', 'Write created resource IDs and onboarding status back to the source of truth.', 'Alert an owner when a critical setup step fails or readiness stalls.']
+  const keepHuman = ['Resolve unusual scope, commercial or access exceptions.', 'Own the kickoff conversation, expectations and relationship.', 'Approve sensitive exceptions or uncertain client state before irreversible actions.']
+
+  return <div className="space-y-10">
+    <section className="rounded-[24px] bg-zinc-950 p-6 text-white sm:p-8 dark:bg-zinc-100 dark:text-zinc-950"><div className="flex flex-wrap items-start justify-between gap-6"><div className="max-w-2xl"><p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Onboarding readiness</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">{result.status}</h2><p className="mt-4 text-sm leading-7 text-zinc-300 dark:text-zinc-700">{result.summary}</p></div><div className="text-right"><p className="font-mono text-2xl font-medium">{result.score}/100</p><p className="text-xs text-zinc-400 dark:text-zinc-600">confidence {result.confidence}%</p></div></div><div className="mt-6"><ToolResultActions title={`Client onboarding: ${result.status}`} summary={result.summary} details={topIssues.map((issue) => `${issue.title}: ${issue.fix}`)} /></div></section>
+
+    {topIssues.length ? <section><div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Blocking readiness</p><h3 className="mt-2 text-xl font-medium tracking-[-0.025em] text-zinc-950 dark:text-zinc-50">Fix these before adding more automation.</h3></div><button type="button" onClick={() => onEdit('readiness')} className="text-xs font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4">Edit readiness</button></div><div className="mt-5 grid gap-3 sm:grid-cols-3">{topIssues.map((issue) => <div key={issue.id} className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/55"><p className="font-mono text-[10px] uppercase text-zinc-500">{issue.severity} · {issue.owner}</p><h4 className="mt-2 text-sm font-medium text-zinc-950 dark:text-zinc-50">{issue.title}</h4><p className="mt-2 text-xs leading-5 text-zinc-500">{issue.impact}</p><p className="mt-3 text-xs leading-5 text-zinc-700 dark:text-zinc-300"><span className="font-medium">Do:</span> {issue.fix}</p></div>)}</div></section> : null}
+
+    <section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Target flow</p><h3 className="mt-2 text-lg font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">One visible state transition at a time.</h3><div className="mt-4 border-y border-zinc-200 dark:border-zinc-800">{result.stages.map((stage, index) => <div key={stage.id} className={`grid gap-2 py-4 sm:grid-cols-[36px_160px_1fr] ${index ? 'border-t border-zinc-200 dark:border-zinc-800' : ''}`}><span className="font-mono text-[10px] text-zinc-500">{String(index + 1).padStart(2, '0')}</span><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{stage.label}</p><p className="mt-1 text-[11px] text-zinc-500">{stage.owner}</p></div><div><p className="text-xs leading-5 text-zinc-700 dark:text-zinc-300">{stage.purpose}</p>{stage.gate ? <p className="mt-1 text-[11px] leading-4 text-zinc-500">Gate: {stage.gate}</p> : null}</div></div>)}</div></section>
+
+    <section className="grid gap-5 sm:grid-cols-2"><div className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/55"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Automate</p><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600 dark:text-zinc-400">{automate.map((item) => <li key={item}>• {item}</li>)}</ul></div><div className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/55"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Keep human</p><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600 dark:text-zinc-400">{keepHuman.map((item) => <li key={item}>• {item}</li>)}</ul></div></section>
+
+    <section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">30-day rollout</p><div className="mt-4 grid gap-3 sm:grid-cols-2">{result.thirtyDayPlan.map((week) => <div key={week.week} className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800"><p className="font-mono text-[10px] uppercase text-zinc-500">{week.week}</p><p className="mt-1 text-sm font-medium text-zinc-950 dark:text-zinc-50">{week.focus}</p><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600 dark:text-zinc-400">{week.actions.map((action) => <li key={action}>• {action}</li>)}</ul></div>)}</div></section>
+
+    <section className="grid gap-5 sm:grid-cols-2"><div className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/55"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Architecture rules</p><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600 dark:text-zinc-400">{result.architecture.map((item) => <li key={item}>• {item}</li>)}</ul></div><div className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/55"><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Safeguards</p><ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600 dark:text-zinc-400">{result.safeguards.map((item) => <li key={item}>• {item}</li>)}</ul></div></section>
+
+    <details className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800"><summary className="cursor-pointer text-sm font-medium text-zinc-950 dark:text-zinc-50">Readiness detail</summary><dl className="mt-4 grid gap-3 sm:grid-cols-2">{Object.entries(result.metrics).map(([key, value]) => <div key={key} className="flex items-center justify-between border-t border-zinc-200 pt-3 text-xs dark:border-zinc-800"><dt className="capitalize text-zinc-600 dark:text-zinc-400">{key.replace(/([A-Z])/g, ' $1')}</dt><dd className="font-mono text-zinc-500">{value}/100</dd></div>)}</dl></details>
+  </div>
 }
 
 export function OnboardingPlanner() {
   const [input, setInput] = useState<OnboardingInput>(DEFAULT_ONBOARDING_INPUT)
-  const [page, setPage] = useState<PageId>('systems')
-  const pages: PageId[] = ['systems', 'trigger', 'setup', 'reliability', 'result']
-  const index = pages.indexOf(page)
-  const progress = Math.round((index / (pages.length - 1)) * 100)
-  const canContinue = page !== 'systems' || Boolean(input.crmId)
+  const [step, setStep] = useState<StepId>('commercial')
+  const { rootRef, scrollToStart } = useToolStepNavigation()
+  const index = STEPS.indexOf(step)
+  const progress = step === 'result' ? 100 : Math.round(((index + 1) / 3) * 100)
+  const canContinue = step !== 'commercial' || Boolean(input.crmId)
   const update = <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => setInput((current) => ({ ...current, [key]: value }))
-  const next = () => setPage(pages[Math.min(pages.length - 1, index + 1)])
-  const back = () => setPage(pages[Math.max(0, index - 1)])
-  const reset = () => { setInput(DEFAULT_ONBOARDING_INPUT); setPage('systems') }
+  const goTo = (nextStep: StepId) => { setStep(nextStep); scrollToStart() }
+  const next = () => goTo(STEPS[Math.min(STEPS.length - 1, index + 1)])
+  const back = () => goTo(STEPS[Math.max(0, index - 1)])
+  const reset = () => { setInput(DEFAULT_ONBOARDING_INPUT); goTo('commercial') }
 
-  return <section className="onboarding-planner grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden"><div className="mb-3"><div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"><div className="h-full rounded-full bg-zinc-950 transition-[width] duration-500 dark:bg-zinc-50" style={{ width: `${Math.max(7, progress)}%` }} /></div><div className="mt-3 flex items-center justify-between gap-4"><span className="text-xs font-medium text-zinc-500">{page === 'result' ? 'Plan complete' : `${progress}% complete`}</span><button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50"><RotateCcwIcon className="h-3.5 w-3.5" />Start over</button></div></div><div className="min-h-0 overflow-y-auto overscroll-contain pr-1">{page === 'systems' ? <SystemsPage input={input} update={update} /> : null}{page === 'trigger' ? <TriggerPage input={input} update={update} /> : null}{page === 'setup' ? <SetupPage input={input} update={update} /> : null}{page === 'reliability' ? <ReliabilityPage input={input} update={update} /> : null}{page === 'result' ? <ResultPage input={input} /> : null}</div><div className="mt-3 flex items-center justify-between pt-2">{page !== 'systems' && page !== 'result' ? <button type="button" onClick={back} className="inline-flex min-h-11 items-center gap-2 px-1 text-sm font-medium text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"><ArrowLeftIcon className="h-4 w-4" />Back</button> : <span />}{page !== 'result' ? <button type="button" onClick={next} disabled={!canContinue} className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-zinc-950 px-5 text-sm font-medium text-white hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-35 dark:bg-zinc-50 dark:text-zinc-950">Continue<ArrowRightIcon className="h-4 w-4" /></button> : <button type="button" onClick={() => setPage('systems')} className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"><ArrowLeftIcon className="h-4 w-4" />Edit answers</button>}</div></section>
+  return <section ref={rootRef} className="onboarding-planner mx-auto w-full max-w-5xl scroll-mt-24 sm:scroll-mt-28"><div className="mb-8 rounded-2xl bg-zinc-50 p-4 sm:p-5 dark:bg-zinc-900/55"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Design the readiness state, not a welcome-email sequence.</p><p className="mt-1 max-w-xl text-xs leading-5 text-zinc-500">About 3 minutes. The result gives you the canonical start, blockers, target state flow, what to automate, what to keep human and a 30-day rollout.</p></div><button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50"><RotateCcwIcon className="h-3.5 w-3.5" />Start over</button></div><div role="progressbar" aria-label="Tool progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} className="mt-4 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"><div className="h-full rounded-full bg-zinc-950 transition-[width] duration-500 dark:bg-zinc-50" style={{ width: `${progress}%` }} /></div><div className="mt-2 flex items-center justify-between text-[11px] text-zinc-500"><span aria-live="polite">{step === 'result' ? 'Onboarding plan complete' : `Step ${index + 1} of 3`}</span><span>{progress}%</span></div></div>
+  <div className="min-h-[500px]">{step === 'commercial' ? <CommercialStep input={input} update={update} /> : null}{step === 'readiness' ? <ReadinessStep input={input} update={update} /> : null}{step === 'delivery' ? <DeliveryStep input={input} update={update} /> : null}{step === 'result' ? <Result input={input} onEdit={goTo} /> : null}</div>
+  {step !== 'result' ? <div className="mt-10 flex items-center justify-between border-t border-zinc-200 pt-5 dark:border-zinc-800"><button type="button" onClick={back} disabled={index === 0} className="inline-flex min-h-11 items-center gap-2 px-1 text-sm font-medium text-zinc-600 disabled:invisible dark:text-zinc-400"><ArrowLeftIcon className="h-4 w-4" />Back</button><button type="button" onClick={next} disabled={!canContinue} className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-zinc-950 px-5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-35 dark:bg-zinc-50 dark:text-zinc-950">{step === 'delivery' ? 'See onboarding plan' : 'Continue'}<ArrowRightIcon className="h-4 w-4" /></button></div> : <div className="mt-10 border-t border-zinc-200 pt-5 dark:border-zinc-800"><button type="button" onClick={() => goTo('commercial')} className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300"><ArrowLeftIcon className="h-4 w-4" />Edit inputs</button></div>}
+  </section>
 }

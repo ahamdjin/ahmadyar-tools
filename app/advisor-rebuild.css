@@ -1,6 +1,6 @@
 /* Rebuilt Architecture Advisor layout.
-   This is intentionally ordinary centered flow: no viewport breakout,
-   no transform-based centering, and no dependency on a narrow article column. */
+   Ordinary centered document flow: no viewport breakout, no transform-based
+   centering, and no nested vertical scroller inside the calculator. */
 
 .advisor-viewport {
   position: relative !important;
@@ -10,14 +10,14 @@
   translate: none !important;
   transform: none !important;
   display: grid !important;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto;
   width: 100% !important;
   max-width: 1600px !important;
-  height: calc(100dvh - 9rem);
-  min-height: 640px;
+  height: auto !important;
+  min-height: 0 !important;
   min-width: 0;
   margin: 0 auto !important;
-  overflow: hidden;
+  overflow: visible !important;
   box-sizing: border-box;
 }
 
@@ -42,13 +42,13 @@
   min-width: 0;
   min-height: 0;
   margin: 0 auto !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   box-sizing: border-box;
 }
 
 /* The questionnaire itself stays at the same 960px visual width. The wrapper
-   neutralizes the legacy component positioning so the application stage owns
-   placement and scrolling. */
+   also neutralizes the legacy component positioning so the application stage
+   owns placement while the page owns scrolling. */
 .advisor-workspace > section {
   position: static !important;
   inset: auto !important;
@@ -57,14 +57,14 @@
   translate: none !important;
   transform: none !important;
   display: grid !important;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto;
   width: 100% !important;
   max-width: 960px !important;
-  height: 100%;
+  height: auto !important;
   min-width: 0 !important;
   min-height: 0 !important;
   margin: 0 auto !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   box-sizing: border-box;
   container-type: inline-size;
 }
@@ -86,11 +86,10 @@
 
 .advisor-workspace > section > div:nth-child(2) {
   min-height: 0 !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior: auto !important;
   padding: 12px 8px 28px;
-  scrollbar-width: thin;
 }
 
 .advisor-workspace > section > div:last-child {
@@ -152,8 +151,8 @@
 
 @media (max-width: 639px) {
   .advisor-viewport {
-    height: calc(100dvh - 7rem);
-    min-height: 520px;
+    height: auto !important;
+    min-height: 0 !important;
   }
 
   .advisor-toolbar {
