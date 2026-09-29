@@ -20,8 +20,8 @@ const slugs = [
 test('every tool exposes a reviewed transparent decision model', () => {
   for (const slug of slugs) assert.ok(methodology.includes(`'${slug}'`), slug)
   assert.equal((methodology.match(/reviewedAt: '2026-09-29'/g) ?? []).length, 6)
-  assert.equal((methodology.match(/doesNot:/g) ?? []).length, 6)
-  assert.equal((methodology.match(/relatedWork:/g) ?? []).length, 6)
+  assert.equal((methodology.match(/^    doesNot:/gm) ?? []).length, 6)
+  assert.equal((methodology.match(/^    relatedWork:/gm) ?? []).length, 6)
 
   assert.match(page, /<ToolMethodology slug=\{tool\.slug\} \/>/)
   assert.match(page, /featureList: TOOL_METHODOLOGY\[tool\.slug\]\.evaluates/)
