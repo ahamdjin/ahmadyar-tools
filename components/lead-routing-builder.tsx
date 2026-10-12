@@ -1,5 +1,6 @@
 'use client'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon } from 'lucide-react'
 
@@ -75,7 +76,7 @@ function OperationsForm({ input, update }: { input: LeadRoutingInput; update: <K
 function Result({ input }: { input: LeadRoutingInput }) {
   const result = useMemo(() => analyzeLeadRouting(input), [input])
   const metrics = Object.entries(result.metrics)
-  return <div className="space-y-12 pb-8">
+  return <div className="space-y-12 pb-8"><AssessmentDownload slug="lead-routing-rules-builder" input={input} analysis={result} />
     <header className="grid gap-7 lg:grid-cols-[1fr_260px]"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Routing health · {result.score}/100</p><h2 className="mt-3 max-w-3xl text-3xl font-medium tracking-[-0.045em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{result.status}</h2><p className="mt-4 max-w-2xl text-[15px] leading-7 text-zinc-600 dark:text-zinc-400">{result.summary}</p><p className="mt-5 max-w-2xl text-sm font-medium text-zinc-950 dark:text-zinc-50">Recommended pattern: {result.recommendedPattern}</p></div><div className="rounded-2xl bg-zinc-100 p-5 dark:bg-zinc-900"><p className="text-xs uppercase tracking-[0.12em] text-zinc-500">Confidence</p><p className="mt-2 text-3xl font-medium tracking-[-0.04em] text-zinc-950 dark:text-zinc-50">{result.confidence}%</p><p className="mt-2 text-xs leading-5 text-zinc-500">Confidence reflects how much of the operating model is known, not certainty theater.</p></div></header>
     <section><h3 className="text-lg font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">Routing sequence</h3><div className="mt-5 grid gap-3 lg:grid-cols-2">{result.rules.map((rule) => <article key={rule.order} className="rounded-2xl bg-zinc-100 p-5 dark:bg-zinc-900"><p className="font-mono text-[10px] text-zinc-500">{String(rule.order).padStart(2,'0')}</p><h4 className="mt-2 text-sm font-medium text-zinc-950 dark:text-zinc-50">{rule.label}</h4><p className="mt-2 text-xs font-medium text-zinc-700 dark:text-zinc-300">When: {rule.condition}</p><p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{rule.action}</p><p className="mt-2 text-xs leading-5 text-zinc-500">{rule.reason}</p></article>)}</div></section>
     {result.issues.length ? <section><h3 className="text-lg font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">Risks to fix</h3><div className="mt-5 space-y-3">{result.issues.slice(0,6).map((issue) => <article key={issue.id} className="rounded-2xl bg-zinc-100 p-5 dark:bg-zinc-900"><div className="flex items-start justify-between gap-4"><h4 className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{issue.title}</h4><span className="text-[10px] uppercase tracking-[0.12em] text-zinc-500">{issue.severity}</span></div><p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{issue.impact}</p><p className="mt-3 text-sm leading-6 text-zinc-800 dark:text-zinc-200">Fix: {issue.fix}</p></article>)}</div></section> : null}

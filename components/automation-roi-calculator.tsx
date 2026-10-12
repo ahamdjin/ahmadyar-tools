@@ -1,5 +1,6 @@
 'use client'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import {
@@ -118,7 +119,7 @@ function Result({ input }: { input: AutomationRoiInput }) {
   const conservative = result.conservative
   const payback = expected.paybackMonths === null ? 'No payback' : `${expected.paybackMonths} mo`
   const roi = expected.firstYearRoiPct === null ? 'n/a' : `${expected.firstYearRoiPct}%`
-  return <div className="min-w-0 space-y-10 pb-8">
+  return <div className="min-w-0 space-y-10 pb-8"><AssessmentDownload slug="automation-roi-calculator" input={input} analysis={result} />
     <header><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Automation investment decision · {result.score}/100</p><h2 className="mt-3 text-3xl font-medium tracking-[-0.045em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{result.dispositionLabel}</h2><p className="mt-4 text-[15px] leading-7 text-zinc-600 dark:text-zinc-400">{result.summary}</p><div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500"><span>Confidence {result.confidence}%</span><span>·</span><span>{result.baselineManualHours} baseline hours / month</span></div></header>
 
     <section><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Expected case</p><div className="mt-4 grid min-w-0 gap-3 sm:grid-cols-2"><Metric label="First-year net value" value={money(input.currency, expected.firstYearNetValue)} /><Metric label="Payback" value={payback} /><Metric label="Net hours returned / month" value={`${expected.netHoursReturned} hrs`} detail="After review and exception fallback." /><Metric label="First-year ROI" value={roi} /><Metric label="Monthly value after run cost" value={money(input.currency, expected.monthlyNetValue)} /><Metric label="12-month build ceiling" value={money(input.currency, expected.maxBuildCostFor12MonthPayback)} detail="Approx. maximum one-time build cost for 12-month payback under this expected case." /></div></section>

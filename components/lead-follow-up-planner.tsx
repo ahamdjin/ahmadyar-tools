@@ -1,5 +1,6 @@
 'use client'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon } from 'lucide-react'
 
@@ -82,7 +83,7 @@ function SafetyForm({ input, update }: { input: LeadFollowUpInput; update: <K ex
 
 function Result({ input }: { input: LeadFollowUpInput }) {
   const result = useMemo(() => analyzeLeadFollowUp(input), [input])
-  return <div className="min-w-0 space-y-12 pb-8">
+  return <div className="min-w-0 space-y-12 pb-8"><AssessmentDownload slug="lead-follow-up-automation-planner" input={input} analysis={result} />
     <header><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Follow-up system · {result.score}/100 · {result.confidence}% confidence</p><h2 className="mt-3 text-3xl font-medium tracking-[-0.045em] text-zinc-950 sm:text-4xl dark:text-zinc-50">{result.status}</h2><p className="mt-4 text-[15px] leading-7 text-zinc-600 dark:text-zinc-400">{result.summary}</p><p className="mt-5 text-sm font-medium leading-6 text-zinc-950 dark:text-zinc-50">Recommended pattern: {result.recommendedPattern}</p></header>
 
     <section><h3 className="text-lg font-medium text-zinc-950 dark:text-zinc-50">Follow-up state model</h3><div className="mt-5 space-y-3">{result.stages.map((stage) => <article key={stage.order} className="min-w-0 rounded-2xl bg-zinc-100 p-5 dark:bg-zinc-900"><div className="flex min-w-0 flex-wrap items-start justify-between gap-4"><div className="min-w-0"><p className="font-mono text-[10px] text-zinc-500">{String(stage.order).padStart(2,'0')} · {stage.timing}</p><h4 className="mt-2 text-sm font-medium text-zinc-950 dark:text-zinc-50">{stage.label}</h4></div><span className="text-right text-xs text-zinc-500">{stage.owner}</span></div><p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{stage.action}</p><p className="mt-2 text-xs leading-5 text-zinc-500">Exit: {stage.exit}</p></article>)}</div></section>

@@ -1,5 +1,6 @@
 'use client'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { useMemo, useState } from 'react'
 import {
   ArrowLeftIcon,
@@ -538,6 +539,7 @@ function Result({ input, onEdit }: { input: AssessmentInput; onEdit: (page: Page
 
   return (
     <div className="space-y-12">
+      <AssessmentDownload slug="automation-architecture-advisor" input={input} analysis={{ recommendation: result, operatingModel: operating, stressTests: stress, environment: discovery }} />
       <section>
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div className="max-w-2xl">
