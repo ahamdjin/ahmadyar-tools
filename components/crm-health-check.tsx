@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon, SearchIcon, XIcon } from 'lucide-react'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { ToolResultActions } from '@/components/tool-result-actions'
 import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import { APP_BY_ID, APP_CATALOG, type AppDefinition } from '@/engine/apps'
@@ -160,6 +161,7 @@ function Result({ input, onEdit }: { input: CrmHealthInput; onEdit: (step: StepI
 
   return (
     <div className="space-y-10">
+      <AssessmentDownload slug="crm-automation-health-check" input={input} analysis={result} />
       <section className="rounded-[24px] bg-zinc-950 p-6 text-white sm:p-8 dark:bg-zinc-100 dark:text-zinc-950">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-2xl"><p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">CRM health</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">{result.label}</h2><p className="mt-4 text-sm leading-7 text-zinc-300 dark:text-zinc-700">{result.summary}</p></div>

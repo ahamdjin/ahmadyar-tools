@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon } from 'lucide-react'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { ToolResultActions } from '@/components/tool-result-actions'
 import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import { APP_CATALOG, type AppDefinition } from '@/engine/apps'
@@ -90,6 +91,7 @@ function Result({ input, onEdit }: { input: LeadRoutingInput; onEdit: (step: Ste
   const result = useMemo(() => analyzeLeadRouting(input), [input])
   const topIssues = result.issues.slice(0, 3)
   return <div className="space-y-10 pb-8">
+      <AssessmentDownload slug="lead-routing-rules-builder" input={input} analysis={result} />
     <section className="rounded-[24px] bg-zinc-950 p-6 text-white sm:p-8 dark:bg-zinc-100 dark:text-zinc-950"><div className="flex flex-wrap items-start justify-between gap-6"><div className="max-w-2xl"><p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Routing recommendation</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">{result.status}</h2><p className="mt-3 text-sm font-medium text-zinc-200 dark:text-zinc-800">{result.recommendedPattern}</p><p className="mt-4 text-sm leading-7 text-zinc-300 dark:text-zinc-700">{result.summary}</p></div><div className="text-right"><p className="font-mono text-2xl font-medium">{result.score}/100</p><p className="text-xs text-zinc-400 dark:text-zinc-600">confidence {result.confidence}%</p></div></div><div className="mt-6"><ToolResultActions title={`Lead routing: ${result.status}`} summary={result.summary} details={result.rules.map((rule) => `${rule.order}. ${rule.label}: ${rule.action}`)} /></div></section>
 
     <section><div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Rule order</p><h3 className="mt-2 text-xl font-medium tracking-[-0.025em] text-zinc-950 dark:text-zinc-50">Run these checks in this sequence.</h3></div><button type="button" onClick={() => onEdit('logic')} className="text-xs font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4">Edit logic</button></div><div className="mt-5 border-y border-zinc-200 dark:border-zinc-800">{result.rules.map((rule, index) => <div key={rule.order} className={`grid gap-2 py-4 sm:grid-cols-[36px_190px_1fr] ${index ? 'border-t border-zinc-200 dark:border-zinc-800' : ''}`}><span className="font-mono text-[10px] text-zinc-500">{String(rule.order).padStart(2, '0')}</span><div><p className="text-sm font-medium text-zinc-950 dark:text-zinc-50">{rule.label}</p><p className="mt-1 text-[11px] leading-4 text-zinc-500">{rule.condition}</p></div><div><p className="text-xs leading-5 text-zinc-700 dark:text-zinc-300">{rule.action}</p><p className="mt-1 text-[11px] leading-4 text-zinc-500">{rule.reason}</p></div></div>)}</div></section>

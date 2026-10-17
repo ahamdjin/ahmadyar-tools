@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, RotateCcwIcon } from 'lucide-react'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { ToolResultActions } from '@/components/tool-result-actions'
 import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import {
@@ -109,6 +110,7 @@ function Result({ input, onEdit }: { input: AutomationRoiInput; onEdit: (step: S
   ]
 
   return <div className="space-y-10 pb-8">
+      <AssessmentDownload slug="automation-roi-calculator" input={input} analysis={result} />
     <section className="rounded-[24px] bg-zinc-950 p-6 text-white sm:p-8 dark:bg-zinc-100 dark:text-zinc-950"><div className="flex flex-wrap items-start justify-between gap-6"><div className="max-w-2xl"><p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Investment decision</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">{result.dispositionLabel}</h2><p className="mt-4 text-sm leading-7 text-zinc-300 dark:text-zinc-700">{result.summary}</p></div><div className="text-right"><p className="font-mono text-2xl font-medium">{result.score}/100</p><p className="text-xs text-zinc-400 dark:text-zinc-600">confidence {result.confidence}%</p></div></div><div className="mt-6"><ToolResultActions title={`Automation ROI: ${result.dispositionLabel}`} summary={result.summary} details={[...sensitivity, ...result.nextActions]} /></div></section>
 
     <section><div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Decision numbers</p><h3 className="mt-2 text-xl font-medium tracking-[-0.025em] text-zinc-950 dark:text-zinc-50">Expected case first. Downside right beside it.</h3></div><button type="button" onClick={() => onEdit('capture')} className="text-xs font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4">Edit assumptions</button></div><div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><Metric label="Expected payback" value={payback(expected.paybackMonths)} /><Metric label="Conservative payback" value={payback(conservative.paybackMonths)} /><Metric label="Expected year-one net" value={money(input.currency, expected.firstYearNetValue)} /><Metric label="Conservative year-one net" value={money(input.currency, conservative.firstYearNetValue)} /></div></section>

@@ -11,6 +11,7 @@ import {
   XIcon,
 } from 'lucide-react'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { ToolResultActions } from '@/components/tool-result-actions'
 import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import {
@@ -486,6 +487,7 @@ function Result({ input, onEdit }: { input: AssessmentInput; onEdit: (step: Step
 
   return (
     <div className="space-y-10">
+      <AssessmentDownload slug="automation-architecture-advisor" input={input} analysis={{ recommendation: result, operatingModel: operating, stressTests: stress }} />
       <section className="rounded-[24px] bg-zinc-950 p-6 text-white sm:p-8 dark:bg-zinc-100 dark:text-zinc-950">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-2xl">

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon, RotateCcwIcon } from 'lucide-react'
 
+import { AssessmentDownload } from '@/components/assessment-download'
 import { ToolResultActions } from '@/components/tool-result-actions'
 import { useToolStepNavigation } from '@/components/use-tool-step-navigation'
 import { APP_BY_ID, APP_CATALOG, type AppCategory, type AppDefinition } from '@/engine/apps'
@@ -134,6 +135,7 @@ function Result({ input, onEdit }: { input: OnboardingInput; onEdit: (step: Step
   const keepHuman = ['Resolve unusual scope, commercial or access exceptions.', 'Own the kickoff conversation, expectations and relationship.', 'Approve sensitive exceptions or uncertain client state before irreversible actions.']
 
   return <div className="space-y-10">
+      <AssessmentDownload slug="client-onboarding-automation-planner" input={input} analysis={result} />
     <section className="rounded-[24px] bg-zinc-950 p-6 text-white sm:p-8 dark:bg-zinc-100 dark:text-zinc-950"><div className="flex flex-wrap items-start justify-between gap-6"><div className="max-w-2xl"><p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-400 dark:text-zinc-600">Onboarding readiness</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-4xl">{result.status}</h2><p className="mt-4 text-sm leading-7 text-zinc-300 dark:text-zinc-700">{result.summary}</p></div><div className="text-right"><p className="font-mono text-2xl font-medium">{result.score}/100</p><p className="text-xs text-zinc-400 dark:text-zinc-600">confidence {result.confidence}%</p></div></div><div className="mt-6"><ToolResultActions title={`Client onboarding: ${result.status}`} summary={result.summary} details={topIssues.map((issue) => `${issue.title}: ${issue.fix}`)} /></div></section>
 
     {topIssues.length ? <section><div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Blocking readiness</p><h3 className="mt-2 text-xl font-medium tracking-[-0.025em] text-zinc-950 dark:text-zinc-50">Fix these before adding more automation.</h3></div><button type="button" onClick={() => onEdit('readiness')} className="text-xs font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4">Edit readiness</button></div><div className="mt-5 grid gap-3 sm:grid-cols-3">{topIssues.map((issue) => <div key={issue.id} className="rounded-2xl bg-zinc-50 p-5 dark:bg-zinc-900/55"><p className="font-mono text-[10px] uppercase text-zinc-500">{issue.severity} · {issue.owner}</p><h4 className="mt-2 text-sm font-medium text-zinc-950 dark:text-zinc-50">{issue.title}</h4><p className="mt-2 text-xs leading-5 text-zinc-500">{issue.impact}</p><p className="mt-3 text-xs leading-5 text-zinc-700 dark:text-zinc-300"><span className="font-medium">Do:</span> {issue.fix}</p></div>)}</div></section> : null}
