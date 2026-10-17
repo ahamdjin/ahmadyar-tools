@@ -29,7 +29,7 @@ const questionGuides = [
 test('all tool pages retain canonical SEO metadata and structured data', () => {
   assert.match(page, /alternates: \{ canonical \}/)
   assert.match(page, /authors: \[\{ name: SITE\.name, url: SITE\.origin \}\]/)
-  assert.match(page, /dateModified: '2026-09-16'/)
+  assert.match(page, /dateModified: TOOL_METHODOLOGY\[tool\.slug\]\.reviewedAt/)
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
   assert.match(page, /SoftwareApplication/)

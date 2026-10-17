@@ -126,6 +126,9 @@ export default function ToolsPage() {
         <p className="mt-3 max-w-xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
           The engines are kept separate from the interface so assumptions, platform rules and scenario tests can improve without turning each tool into a pile of one-off conditions. The goal is a useful answer, not a decorative calculator.
         </p>
+        <p className="mt-3 max-w-xl text-xs leading-5 text-zinc-500 dark:text-zinc-500">
+          Every tool now shows what its model evaluates, what it refuses to assume, when the methodology was reviewed, and related real work behind the operating patterns.
+        </p>
       </section>
     </div>
   )
