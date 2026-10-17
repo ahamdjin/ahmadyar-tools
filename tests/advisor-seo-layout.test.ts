@@ -15,7 +15,6 @@ const shell = readFileSync('components/site-shell.tsx', 'utf8')
 const roiCalculator = readFileSync('components/automation-roi-calculator.tsx', 'utf8')
 const followUp = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
 const toolIcon = readFileSync('components/tool-icon.tsx', 'utf8')
-const stepScroll = readFileSync('components/use-step-scroll.ts', 'utf8')
 
 test('tool suite uses normal-flow application stages inside a wide route frame', () => {
   assert.match(page, /className="advisor-workspace"[\s\S]*<ArchitectureAdvisor \/>/)
@@ -81,20 +80,18 @@ test('tool workspaces use one document scroll instead of hidden nested scrolling
   assert.match(visualCss, /floating control/)
 })
 
-test('ROI calculator uses short decision steps and returns to the calculator top on navigation', () => {
-  assert.match(roiCalculator, /type PageId = 'volume' \| 'baseline' \| 'automation' \| 'risk' \| 'cost' \| 'result'/)
-  assert.match(roiCalculator, /pages: PageId\[\] = \['volume', 'baseline', 'automation', 'risk', 'cost', 'result'\]/)
-  assert.match(roiCalculator, /Step \$\{index \+ 1\} of \$\{answerStepCount\}/)
-  assert.match(roiCalculator, /roi-calculator scroll-mt-6 grid min-h-0 min-w-0/)
-  assert.match(roiCalculator, /useStepScroll\(\)/)
-  assert.match(roiCalculator, /const goTo = \(nextPage: PageId\) => \{ setPage\(nextPage\); scrollToStart\(\) \}/)
-  assert.match(stepScroll, /scrollIntoView\(\{ behavior, block: 'start' \}\)/)
+test('ROI calculator uses a focused three-step business-case flow without nested scrolling', () => {
+  assert.match(roiCalculator, /type StepId = 'baseline' \| 'capture' \| 'ownership' \| 'result'/)
+  assert.match(roiCalculator, /const STEPS: StepId\[\] = \['baseline', 'capture', 'ownership', 'result'\]/)
+  assert.match(roiCalculator, /Step \$\{index \+ 1\} of 3/)
+  assert.match(roiCalculator, /roi-calculator mx-auto w-full max-w-5xl/)
+  assert.match(roiCalculator, /Time saved is returned capacity, not automatically cash/)
+  assert.match(roiCalculator, /Expected case first\. Downside right beside it\./)
+  assert.match(roiCalculator, /Conservative payback/)
+  assert.match(roiCalculator, /ToolResultActions/)
   assert.doesNotMatch(roiCalculator, /overflow-y-auto/)
-  assert.match(roiCalculator, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
-  assert.match(roiCalculator, /mt-4 grid min-w-0 gap-3 sm:grid-cols-2/)
-  assert.match(roiCalculator, /break-words[^"\n]*\[overflow-wrap:anywhere\]/)
-  assert.match(roiCalculator, /CircleDollarSignIcon/)
-  assert.match(roiCalculator, /ShieldCheckIcon/)
+  assert.match(roiCalculator, /sm:grid-cols-\[220px_minmax\(0,1fr\)\]/)
+  assert.match(roiCalculator, /sm:grid-cols-2 lg:grid-cols-4/)
 })
 
 test('latest visual pass removes unnecessary question-card chrome across the suite', () => {
@@ -105,11 +102,15 @@ test('latest visual pass removes unnecessary question-card chrome across the sui
   assert.match(visualCss, /selected choices and[\s\S]*output cards keep enough shape/)
 })
 
-test('follow-up planner reflows fields, channels and navigation instead of clipping', () => {
-  assert.match(followUp, /followup-check grid h-full min-h-0 min-w-0/)
-  assert.match(followUp, /sm:grid-cols-\[210px_minmax\(0,1fr\)\]/)
-  assert.match(followUp, /Channels[\s\S]*grid min-w-0 gap-2 sm:grid-cols-2/)
-  assert.match(followUp, /flex min-w-0 flex-wrap items-center justify-between/)
+test('follow-up planner uses a normal-flow state-and-stop design that reflows cleanly', () => {
+  assert.match(followUp, /type StepId = 'response' \| 'cadence' \| 'stops' \| 'result'/)
+  assert.match(followUp, /mx-auto w-full max-w-5xl/)
+  assert.match(followUp, /sm:grid-cols-\[220px_minmax\(0,1fr\)\]/)
+  assert.match(followUp, /Channels[\s\S]*grid grid-cols-2 gap-2 sm:grid-cols-4/)
+  assert.match(followUp, /A follow-up system is defined by its exits/)
+  assert.match(followUp, /Hard stop rules/)
+  assert.match(followUp, /ToolResultActions/)
+  assert.doesNotMatch(followUp, /overflow-y-auto/)
 })
 
 test('tool typography cannot exceed the portfolio display ceiling', () => {
