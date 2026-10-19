@@ -120,8 +120,8 @@ test('routing SLA uses elapsed hours rather than implying a staffed business day
 
   const ui = readFileSync('components/lead-routing-builder.tsx', 'utf8')
   const guide = readFileSync('components/lead-routing-seo-content.tsx', 'utf8')
-  assert.match(ui, /24 hours \\(elapsed\\)/)
-  assert.doesNotMatch(ui, /1 business day<\\/option>/)
+  assert.match(ui, /24 hours \(elapsed\)/)
+  assert.doesNotMatch(ui, /1 business day<\/option>/)
   assert.match(guide, /Does a 24-hour lead response target mean one business day/)
 })
 
