@@ -106,3 +106,31 @@ test('lead routing route is a dedicated product inside the portfolio frame', () 
   assert.match(polish, /grid-template-columns:\s*minmax\(180px, 225px\) minmax\(0, 1fr\)/)
   assert.match(polish, /@container \(max-width: 720px\)/)
 })
+
+test('routing SLA uses elapsed hours rather than implying a staffed business day', () => {
+  const result = analyzeLeadRouting({ ...strong, targetResponseMinutes: 1440, afterHours: 'queue' })
+  const fallback = result.rules.find((rule) => rule.label === 'Fallback + SLA')
+  assert.match(fallback?.action ?? '', /24-hour elapsed response target/)
+  assert.match(result.testCases.find((item) => item.name === 'SLA breach')?.input ?? '', /24-hour elapsed/)
+  assert.ok(result.safeguards.some((item) => /SLA clock runs continuously or only during staffed hours/.test(item)))
+  assert.ok(result.nextQuestions.some((item) => /timezone and holiday calendar/.test(item)))
+  for (const field of ['lead_received_at', 'sla_clock_policy', 'sla_due_at']) {
+    assert.ok(result.observabilityFields.includes(field))
+  }
+
+  const ui = readFileSync('components/lead-routing-builder.tsx', 'utf8')
+  const guide = readFileSync('components/lead-routing-seo-content.tsx', 'utf8')
+  assert.match(ui, /24 hours \\(elapsed\\)/)
+  assert.doesNotMatch(ui, /1 business day<\\/option>/)
+  assert.match(guide, /Does a 24-hour lead response target mean one business day/)
+})
+
+test('after-hours queue and manual account conflicts do not imply actions the user did not select', () => {
+  const manualQueue = analyzeLeadRouting({ ...strong, existingOwnership: 'manual', afterHours: 'queue' })
+  assert.match(manualQueue.rules.find((rule) => rule.order === 2)?.action ?? '', /review queue/)
+  assert.match(manualQueue.testCases.find((item) => item.name === 'Existing account')?.expected ?? '', /manual review/)
+  assert.match(manualQueue.testCases.find((item) => item.name === 'After hours')?.expected ?? '', /without promising an immediate acknowledgement/)
+
+  const acknowledged = analyzeLeadRouting({ ...strong, afterHours: 'acknowledge-queue' })
+  assert.match(acknowledged.testCases.find((item) => item.name === 'After hours')?.expected ?? '', /Acknowledge and queue/)
+})

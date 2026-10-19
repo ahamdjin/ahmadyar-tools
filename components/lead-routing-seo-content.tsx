@@ -22,6 +22,10 @@ export const LEAD_ROUTING_FAQS = [
     answer: 'Use a visible fallback queue or owner, store the failure reason, and alert the operations owner. The fallback should be measurable because frequent fallback use usually means missing data, an incomplete rule hierarchy, or stale ownership configuration.',
   },
   {
+    question: 'Does a 24-hour lead response target mean one business day?',
+    answer: 'No. Twenty-four elapsed hours includes nights and weekends. A staffed-hours SLA needs an explicit timezone, coverage schedule, holiday policy, start event, and due-time calculation. Decide whether an after-hours lead is acknowledged immediately or only queued; do not treat those actions as the same promise.',
+  },
+  {
     question: 'How do you measure lead routing quality?',
     answer: 'Measure more than assignment volume. Track routing reason, fallback rate, time to assignment, first-response SLA, reassignment rate, owner changes, duplicate conflicts, distribution by eligible pool, and the share of leads that required manual intervention.',
   },
