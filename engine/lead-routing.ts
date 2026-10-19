@@ -223,6 +223,12 @@ export function analyzeLeadRouting(input: LeadRoutingInput): LeadRoutingResult {
 
   issues.sort((a, b) => ({ critical: 4, high: 3, medium: 2, low: 1 }[b.severity] - { critical: 4, high: 3, medium: 2, low: 1 }[a.severity]))
 
+  // A 24-hour elapsed target is not a business-day SLA. Staffed-hours
+  // calendars require their own clock policy and cannot be inferred here.
+  const responseTarget = input.targetResponseMinutes === 1440
+    ? '24-hour elapsed'
+    : `${input.targetResponseMinutes}-minute`
+
   const rules: RoutingRule[] = [
     {
       order: 1,
@@ -263,7 +269,7 @@ export function analyzeLeadRouting(input: LeadRoutingInput): LeadRoutingResult {
       order: 6,
       label: 'Fallback + SLA',
       condition: 'No normal rule can assign safely, or the assigned lead exceeds the response target',
-      action: `Send to the fallback path, preserve the failure reason, and enforce the ${input.targetResponseMinutes}-minute response target with escalation.`,
+      action: `Send to the fallback path, preserve the failure reason, and enforce the ${responseTarget} response target with escalation.`,
       reason: 'No lead should disappear because one field or owner state was unexpected.',
     },
   ]
@@ -277,8 +283,11 @@ export function analyzeLeadRouting(input: LeadRoutingInput): LeadRoutingResult {
   if (input.monthlyLeads >= 1000) safeguards.push('Load-test the routing path with bursts, not only monthly averages, and make assignment idempotent so retries cannot double-route.')
   if (input.changeFrequency === 'weekly') safeguards.push('Version the rule set and require a lightweight change/review process; frequent routing edits without versioning make attribution and debugging unreliable.')
   if (input.afterHours === 'on-call-priority') safeguards.push('Define exactly which priority signals are allowed to wake the on-call path and what happens if nobody accepts the lead.')
+  if (input.afterHours !== 'always-live') safeguards.push('Agree whether the response SLA clock runs continuously or only during staffed hours. Persist the coverage timezone, holiday calendar, received timestamp, and calculated SLA due time; queueing must not silently change the clock.')
 
   const observabilityFields = [
+    'lead_received_at',
+    'sla_clock_policy',
     'routing_rule_version',
     'routing_reason',
     'routed_at',
@@ -292,12 +301,12 @@ export function analyzeLeadRouting(input: LeadRoutingInput): LeadRoutingResult {
   ]
 
   const testCases: RoutingTestCase[] = [
-    { name: 'Existing account', input: 'Known contact submits a new inbound form while an account owner already exists.', expected: input.existingOwnership === 're-evaluate' ? 'Re-evaluate under the documented rule and retain an audit reason.' : 'Protect the existing relationship before general routing.' },
+    { name: 'Existing account', input: 'Known contact submits a new inbound form while an account owner already exists.', expected: input.existingOwnership === 're-evaluate' ? 'Re-evaluate under the documented rule and retain an audit reason.' : input.existingOwnership === 'manual' ? 'Hold the ownership conflict for manual review; do not reassign automatically.' : 'Protect the existing relationship before general routing.' },
     { name: 'Duplicate event', input: 'The same lead event is delivered twice.', expected: 'Second event is deduplicated or produces the same owner without duplicate side effects.' },
     { name: 'Missing routing field', input: 'Lead has no usable territory / service / segment value.', expected: 'Fallback path gets the lead and records why normal routing failed.' },
     { name: 'Unavailable rep', input: 'Next round-robin owner is unavailable.', expected: input.availabilityAwareness >= 2 ? 'Skip the unavailable owner and continue in the eligible pool.' : 'Flag this as a design gap before launch.' },
-    { name: 'SLA breach', input: `Assigned lead has no meaningful response after ${input.targetResponseMinutes} minutes.`, expected: input.escalation >= 2 ? 'Escalate/reassign according to policy and retain the original assignment trail.' : 'Flag the breach visibly; add automated escalation before relying on the SLA.' },
-    { name: 'After hours', input: 'Qualified lead arrives outside normal coverage.', expected: input.afterHours === 'on-call-priority' ? 'Acknowledge immediately; only documented priority leads enter on-call routing.' : input.afterHours === 'always-live' ? 'Route through the live eligible pool.' : 'Acknowledge and queue with a clear next-response target.' },
+    { name: 'SLA breach', input: `Assigned lead has no meaningful response after the ${responseTarget} target.`, expected: input.escalation >= 2 ? 'Escalate/reassign according to policy and retain the original assignment trail.' : 'Flag the breach visibly; add automated escalation before relying on the SLA.' },
+    { name: 'After hours', input: 'Qualified lead arrives outside normal coverage.', expected: input.afterHours === 'on-call-priority' ? 'Acknowledge immediately; only documented priority leads enter on-call routing.' : input.afterHours === 'always-live' ? 'Route through the live eligible pool.' : input.afterHours === 'queue' ? 'Queue for the next coverage period without promising an immediate acknowledgement; retain the agreed SLA clock and due time.' : 'Acknowledge and queue with a clear next-response target under the agreed SLA clock.' },
   ]
 
   const crm = crmLabel(input.crmId)
@@ -319,6 +328,7 @@ export function analyzeLeadRouting(input: LeadRoutingInput): LeadRoutingResult {
   if (input.serviceLines > 2 && input.precedenceClarity < 2) nextQuestions.push('If territory and product/service rules disagree, which one wins?')
   if (input.reps >= 8 && input.capacityAwareness < 2) nextQuestions.push('Should routing optimize only for fairness, or also current workload / availability?')
   if (input.existingOwnership === 're-evaluate') nextQuestions.push('Which exact event is allowed to move an already-owned account to a new seller?')
+  if (input.afterHours !== 'always-live') nextQuestions.push('Does the response SLA run 24/7 from lead arrival or only during staffed hours, and which timezone and holiday calendar defines that clock?')
 
   const status = score >= 82 ? 'Routing is operationally strong' : score >= 66 ? 'Solid foundation with a few failure paths' : score >= 48 ? 'Routing works, but important controls are fragile' : 'High risk of missed, duplicated, or misrouted leads'
   const recommendedPattern = complexity >= 68 ? 'Centralized rules engine with explicit eligibility, matching, distribution, SLA and audit layers' : complexity >= 42 ? 'Single authoritative hybrid router with ordered rules and a protected fallback path' : 'Native CRM routing with one explicit precedence hierarchy and SLA fallback'
