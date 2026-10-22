@@ -8,27 +8,27 @@ import { TOOLS } from '@/lib/tools'
 const TOOL_META: Record<(typeof TOOLS)[number]['slug'], { eyebrow: string; note: string }> = {
   'automation-architecture-advisor': {
     eyebrow: 'Architecture',
-    note: 'Choose the operating model before you choose the automation platform.',
+    note: 'Decide whether a workflow belongs in your CRM, Zapier, n8n, or custom software.',
   },
   'crm-automation-health-check': {
     eyebrow: 'CRM',
-    note: 'Find the leaks between lead capture, ownership, follow-up, data and reporting.',
+    note: 'See where leads get lost, duplicated, or forgotten after they reach your CRM.',
   },
   'client-onboarding-automation-planner': {
     eyebrow: 'Onboarding',
-    note: 'Turn a sold client into a reliable delivery-ready handoff.',
+    note: 'Plan what happens after a client signs or pays, so delivery can start smoothly.',
   },
   'lead-routing-rules-builder': {
     eyebrow: 'Revenue operations',
-    note: 'Build assignment logic that survives overlap, capacity, SLAs and exceptions.',
+    note: 'Decide who gets each new lead, including when the usual owner is unavailable.',
   },
   'automation-roi-calculator': {
     eyebrow: 'Business case',
-    note: 'Stress-test whether an automation is worth building before the build starts.',
+    note: 'Compare the time you might save with build, software, and maintenance costs.',
   },
   'lead-follow-up-automation-planner': {
     eyebrow: 'Follow-up',
-    note: 'Design a cadence that knows when to continue, stop or hand back to a human.',
+    note: 'Plan when to follow up with a lead—and when to stop or hand over to a person.',
   },
 }
 
@@ -79,38 +79,35 @@ export default function ToolsPage() {
         </div>
       </section>
 
-      <section className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Automation tools">
+      <section className="mt-12 grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2" aria-label="Automation tools">
         {TOOLS.map((tool, index) => {
           const meta = TOOL_META[tool.slug]
           return (
             <Link
               key={tool.slug}
               href={`/${tool.slug}`}
-              className="tool-index-card group relative flex min-h-[228px] flex-col overflow-hidden rounded-[22px] bg-zinc-50 p-5 transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_55px_rgba(24,24,27,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:bg-zinc-900/55 dark:hover:bg-zinc-900 dark:hover:shadow-[0_20px_55px_rgba(0,0,0,0.24)]"
+              className="tool-index-card group relative flex h-full min-h-[220px] min-w-0 flex-col overflow-hidden rounded-xl bg-zinc-100/70 p-5 transition-colors duration-200 hover:bg-zinc-200/65 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-500 dark:bg-zinc-900/80 dark:hover:bg-zinc-800/90"
             >
               <div className="flex items-start justify-between gap-4">
-                <span className="tool-index-icon flex h-10 w-10 items-center justify-center rounded-xl bg-white text-zinc-700 shadow-[0_1px_0_rgba(24,24,27,0.06)] transition-[transform,background-color,color] duration-300 group-hover:-rotate-2 group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white dark:bg-zinc-950 dark:text-zinc-300 dark:group-hover:bg-zinc-50 dark:group-hover:text-zinc-950">
+                <span className="tool-index-icon flex h-9 w-9 items-center justify-center rounded-lg bg-white/85 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                   <ToolIcon slug={tool.slug} className="h-[18px] w-[18px]" />
                 </span>
-                <ArrowUpRightIcon aria-hidden="true" className="h-4 w-4 text-zinc-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-zinc-900 dark:text-zinc-600 dark:group-hover:text-zinc-100" />
+                <ArrowUpRightIcon aria-hidden="true" className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
               </div>
 
-              <div className="mt-7">
+              <div className="mt-6">
                 <p className="text-[10px] font-medium uppercase tracking-[0.17em] text-zinc-400 dark:text-zinc-600">
                   {String(index + 1).padStart(2, '0')} · {meta.eyebrow}
                 </p>
-                <h2 className="mt-2 max-w-[15rem] text-lg font-medium tracking-[-0.03em] text-zinc-950 dark:text-zinc-50">
+                <h2 className="mt-2 text-base font-medium tracking-[-0.02em] text-zinc-950 dark:text-zinc-50">
                   {tool.shortTitle}
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
+                <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
                   {meta.note}
                 </p>
               </div>
 
-              <div className="mt-auto flex items-center gap-1.5 pt-6 text-xs font-medium text-zinc-500 transition-colors group-hover:text-zinc-950 dark:text-zinc-500 dark:group-hover:text-zinc-100">
-                Open tool
-                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-              </div>
+
             </Link>
           )
         })}
