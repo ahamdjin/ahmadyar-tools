@@ -1,3 +1,5 @@
+import { ArrowUpRight, BookOpenCheck } from 'lucide-react'
+
 type EvidenceItem = { label: string; href: string; note: string }
 
 const EVIDENCE_BY_TOOL: Record<string, EvidenceItem[]> = {
@@ -34,15 +36,25 @@ export function ToolEvidence({ slug }: { slug: string }) {
 
   return (
     <aside className="advisor-guide pb-10 pt-2 sm:pb-14" aria-label="Research and evidence">
-      <div className="rounded-2xl border border-zinc-200/80 p-6 sm:p-8 dark:border-zinc-800">
+      <div className="rounded-2xl bg-zinc-50 p-6 sm:p-8 dark:bg-zinc-900/50">
         <p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-500">Research & evidence</p>
         <h2 className="mt-3 text-xl font-medium tracking-[-0.03em] text-zinc-950 sm:text-2xl dark:text-zinc-50">What informed this tool</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">Reviewed 28 September 2026. These sources support the operating concerns the tool asks about; vendor claims and survey statistics are not silently converted into scoring rules.</p>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+        <div className="mt-6 grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2">
           {items.map((item) => (
-            <a key={item.href} href={item.href} target="_blank" rel="noreferrer" className="group block">
-              <span className="text-sm font-medium text-zinc-950 underline decoration-zinc-300 underline-offset-4 transition-opacity group-hover:opacity-70 dark:text-zinc-50 dark:decoration-zinc-700">{item.label} ↗</span>
-              <span className="mt-2 block text-sm leading-6 text-zinc-600 dark:text-zinc-400">{item.note}</span>
+            <a
+              key={item.href}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-full min-w-0 flex-col items-start rounded-xl bg-white p-4 transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-500 dark:bg-zinc-950 dark:hover:bg-zinc-800"
+            >
+              <span className="flex w-full items-center justify-between gap-3">
+                <BookOpenCheck aria-hidden="true" strokeWidth={1.6} className="h-[18px] w-[18px] text-zinc-600 dark:text-zinc-300" />
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
+              </span>
+              <span className="mt-4 text-sm font-medium leading-6 text-zinc-950 dark:text-zinc-50">{item.label}</span>
+              <span className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{item.note}</span>
             </a>
           ))}
         </div>
