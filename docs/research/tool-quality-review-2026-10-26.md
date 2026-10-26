@@ -2,7 +2,7 @@
 
 ## Scope and decision rule
 
-Reviewed the six tools on `main` for operator questions, competing-platform capabilities, input and result logic, UX, evidence, metadata, and internal links. Changes were limited to two demonstrable gaps: (1) Zapier implementation constraints that the Architecture Advisor did not expose conditionally, and (2) a mathematically understated whole-case break-even volume in the ROI Calculator. No vendor benchmark was converted into a score, ranking, or threshold.
+Reviewed the six tools on `main` for operator questions, competing-platform capabilities, input and result logic, UX, evidence, metadata, and internal links. The focused product pass addressed two demonstrable gaps: (1) Zapier implementation constraints that the Architecture Advisor did not expose conditionally, and (2) a mathematically understated whole-case break-even volume in the ROI Calculator. CI then exposed a third, independent issue: the pinned Next.js release had a critical production dependency advisory. No vendor benchmark was converted into a score, ranking, or threshold.
 
 ## Operator questions and findings by tool
 
@@ -25,6 +25,13 @@ Reviewed the six tools on `main` for operator questions, competing-platform capa
 - HubSpot, **Manage workflow enrollment settings** (updated June 23, 2026): https://knowledge.hubspot.com/workflows/manage-workflow-enrollment-settings — enrollment and suppression behavior is configurable and conditional.
 - OpenStax, **Calculate a break-even point in units**: https://openstax.org/books/principles-managerial-accounting/pages/3-2-calculate-a-break-even-point-in-units-and-dollars — fixed costs divided by per-unit contribution gives the break-even quantity; a required whole-case threshold must not be rounded down.
 - Google, **General structured data guidelines**: https://developers.google.com/search/docs/appearance/structured-data/sd-policies — markup must match visible content; structured data does not guarantee rich results.
+
+## CI-discovered security issue
+
+The first pull-request run passed typecheck, tests and lint, but its production security audit failed on pinned `next@15.5.27`. The official Next.js advisories published October 14, 2026 identify 15.5.28 as the patched release for an SVG image-optimization RCE and an App Router Server Actions denial of service. Exposure depends on runtime features and hosting, so the audit failure is evidence of a vulnerable package version, not proof of exploitation. Pinned `next` and matching `eslint-config-next` were both upgraded to `15.5.28` without changing framework major/minor versions. The repository already overrides `sharp` to `0.35.5`.
+
+- https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw
+- https://github.com/vercel/next.js/security/advisories/GHSA-p3m5-59mp-jv5r
 
 ## Product surfaces reviewed and left unchanged
 
