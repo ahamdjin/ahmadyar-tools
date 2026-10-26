@@ -86,6 +86,34 @@ test('critical duplicate-unsafe flows produce safeguards', () => {
   assert.ok(result.metrics.reliabilityRisk >= 70)
 })
 
+test('Zapier advice exposes documented branching and approval constraints only when relevant', () => {
+  const simple = analyzeArchitecture({
+    ...DEFAULT_ASSESSMENT,
+    branching: 'none',
+    humanApprovals: false,
+  }).ranking.find((item) => item.id === 'zapier')
+  assert.ok(simple)
+  assert.equal(simple.cautions.some((item) => /matching branch|Human in the Loop/i.test(item)), false)
+
+  const conditional = analyzeArchitecture({
+    ...DEFAULT_ASSESSMENT,
+    branching: 'simple',
+    humanApprovals: true,
+  }).ranking.find((item) => item.id === 'zapier')
+  assert.ok(conditional)
+  assert.ok(conditional.cautions.some((item) => /more than one matching branch/i.test(item)))
+  assert.ok(conditional.cautions.some((item) => /paid plan and reviewer access/i.test(item)))
+
+  const approvalsOnly = analyzeArchitecture({
+    ...DEFAULT_ASSESSMENT,
+    branching: 'none',
+    humanApprovals: true,
+  }).ranking.find((item) => item.id === 'zapier')
+  assert.ok(approvalsOnly)
+  assert.equal(approvalsOnly.cautions.some((item) => /matching branch/i.test(item)), false)
+  assert.ok(approvalsOnly.cautions.some((item) => /Human in the Loop/i.test(item)))
+})
+
 test('portfolio plan can recommend different tools for different workflow lanes', () => {
   const result = analyzeArchitecture({
     ...DEFAULT_ASSESSMENT,

@@ -120,8 +120,10 @@ function calculateScenario(input: AutomationRoiInput): RoiScenario {
   const paybackMonths = monthlyNetValue > 0 ? buildCost / monthlyNetValue : null
   const maxBuildCostFor12MonthPayback = Math.max(0, monthlyNetValue * 12)
   const grossValuePerCase = monthlyCases > 0 ? grossMonthlyValue / monthlyCases : 0
+  // A case is indivisible: rounding to the nearest whole case can report a
+  // volume that still loses money. Round the required threshold upward.
   const breakEvenCasesPerMonth = grossValuePerCase > 0
-    ? (recurringMonthlyCost + buildCost / 12) / grossValuePerCase
+    ? Math.ceil((recurringMonthlyCost + buildCost / 12) / grossValuePerCase)
     : null
 
   return {

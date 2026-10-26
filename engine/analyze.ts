@@ -270,6 +270,12 @@ function scorePlatform(platform: PlatformProfile, input: AssessmentInput, discov
     score -= 11
     cautions.push('The estimated successful-action volume makes per-action economics worth comparing carefully.')
   }
+  if (platform.id === 'zapier' && input.branching !== 'none') {
+    cautions.push('Zapier Paths can run more than one matching branch. Make ownership-changing paths mutually exclusive and test overlapping conditions; sequential execution does not make them exclusive.')
+  }
+  if (platform.id === 'zapier' && input.humanApprovals) {
+    cautions.push('Zapier Human in the Loop approvals require a paid plan and reviewer access. Verify reviewer permissions, decline and timeout behavior before choosing the implementation.')
+  }
   if (platform.id === 'make' && (input.branching !== 'none' || input.loopsOrBatching) && complexity >= 42 && input.technicalOwner !== 'none') {
     score += 10
     reasons.push('Visual branching and transformations fit the workflow shape without forcing a developer-only operating model.')
