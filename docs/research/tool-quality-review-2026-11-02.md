@@ -17,10 +17,11 @@ Scope: all six AhmadYar tools on main, with a focused implementation in the Lead
 2. The 1,440-minute option and result now say 24 elapsed hours, not a business-hours SLA. No calendar logic or working-hours calculation was invented.
 3. HighLevel guidance distinguishes workflow-scoped Stop on Response from global suppression and manual handoff. Official October 2026 HighLevel and June 2026 HubSpot documentation is linked in the public evidence section.
 4. Only the follow-up tool's methodology review date was updated. Other five tools' scoring, metadata, internal links, and UX were left untouched because no additional independent change was justified.
+5. CI identified the existing critical Next.js advisory on main (15.5.27). The same 15.5.28 patch already proposed in PR #19 was applied here as a necessary security fix; tests now allow per-tool review dates rather than incorrectly requiring all six dates to match.
 
 ## Verification
 
-Regression tests cover empty channels, the channel-picker guard and accessible selected state, elapsed-hour labeling, and HighLevel scope. CI should verify typecheck, unit tests, lint, production build and dependency audit. Do not merge without passing checks.
+Regression tests cover empty channels, the channel-picker guard and accessible selected state, elapsed-hour labeling, and HighLevel scope. Methodology tests allow independently updated review dates. CI should verify typecheck, unit tests, lint, production build and dependency audit. Do not merge without passing checks.
 
 ## Sources (checked 2026-11-02)
 
