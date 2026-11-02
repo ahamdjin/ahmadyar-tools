@@ -25,6 +25,8 @@ const EVIDENCE_BY_TOOL: Record<string, EvidenceItem[]> = {
     { label: 'AhmadYar — ROI model assumptions', href: 'https://github.com/ahamdjin/ahmadyar-tools/blob/main/docs/research/roi-model-assumptions.md', note: 'Documents the calculator’s own assumptions so the result can be audited instead of treated as a universal benchmark.' },
   ],
   'lead-follow-up-automation-planner': [
+    { label: 'HighLevel — Stop on Response and voicemail detection (12 Oct 2026)', href: 'https://help.gohighlevel.com/support/solutions/articles/155000006910/create_ticket', note: 'Confirms that Stop on Response is scoped to messages sent by that workflow and documents voicemail/call detection interactions. Do not assume a global stop across workflows.' },
+    { label: 'HubSpot — workflow enrollment settings (23 Jun 2026)', href: 'https://knowledge.hubspot.com/workflows/manage-workflow-enrollment-settings', note: 'Documents re-enrollment, unenrollment and suppression controls, reinforcing the need to test state changes before every follow-up.' },
     { label: 'HubSpot — lead follow-up automation', href: 'https://www.hubspot.com/automate-lead-follow-up-nurturing', note: 'Supports systematic follow-up, consistent timing, and keeping leads from falling through manual gaps.' },
     { label: 'Zapier — dropped-lead survey', href: 'https://zapier.com/blog/dropped-leads-survey/', note: 'Supports the planner’s focus on handoff gaps, repeated follow-up, routing, and connected systems; survey claims are not used as scoring constants.' },
   ],
