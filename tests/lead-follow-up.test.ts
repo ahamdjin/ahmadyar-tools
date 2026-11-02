@@ -77,6 +77,7 @@ test('an outbound cadence cannot be rated ready with no contact channel', () => 
   assert.ok(result.score <= 49)
   assert.match(result.status, /Not ready/)
   assert.ok(result.issues.some((issue) => issue.id === 'no-channels' && issue.severity === 'critical'))
+  assert.match(result.stages[1].action, /do not send automated acknowledgement/)
   assert.match(result.stages[2].action, /Do not schedule outbound touches/)
   assert.doesNotMatch(result.stages[2].action, /mix of\s+without/)
   assert.match(result.recommendedPattern, /Manual owner tasks/)
