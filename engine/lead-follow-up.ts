@@ -232,7 +232,9 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
   issues.sort((a, b) => ({ critical: 4, high: 3, medium: 2, low: 1 }[b.severity] - { critical: 4, high: 3, medium: 2, low: 1 }[a.severity]))
 
   const crm = crmLabel(input.crmId)
-  const firstTouch = input.firstResponseMode === 'human'
+  const firstTouch = noChannels
+    ? 'Create an owner task/notification; do not send automated acknowledgement without a configured eligible contact channel.'
+    : input.firstResponseMode === 'human'
     ? 'Create an immediate owner task/notification; the first meaningful response stays human.'
     : input.firstResponseMode === 'automated'
       ? 'Send an immediate acknowledgement only when channel eligibility is known, then move into the planned cadence.'
