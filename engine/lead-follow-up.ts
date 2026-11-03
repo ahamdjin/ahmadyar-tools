@@ -128,6 +128,7 @@ function channelLabel(channels: FollowUpChannel[]) {
 }
 
 export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResult {
+  const noChannels = input.channels.length === 0
   const speed = clamp(
     level(input.ownerAssignment) * 0.36 +
       (input.targetResponseMinutes <= 5 ? 100 : input.targetResponseMinutes <= 15 ? 90 : input.targetResponseMinutes <= 60 ? 70 : input.targetResponseMinutes <= 240 ? 45 : 25) * 0.38 +
@@ -146,6 +147,8 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
   if (input.monthlyLeads >= 2000 && input.monitoring <= 1) score = clamp(score - 6)
   if (input.plannedTouches >= 12 && input.lifecycleStopRules <= 1) score = clamp(score - 7)
   if (input.replyDetection === 0) score = clamp(score - 8)
+  // A cadence with no outbound channel cannot be considered launch-ready.
+  if (noChannels) score = Math.min(score, 49)
 
   const issues: FollowUpIssue[] = []
   const add = (id: string, risk: number, title: string, impact: string, fix: string) => {
@@ -218,10 +221,20 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
     'Deduplicate identity before enrollment and define re-entry around a real new opportunity or a deliberate cooldown, not repeated trigger events.',
   )
 
+  if (noChannels) issues.push({
+    id: 'no-channels',
+    severity: 'critical',
+    title: 'No outbound follow-up channel is selected',
+    impact: 'A scheduled outbound cadence cannot run without an email, SMS, call, or WhatsApp channel.',
+    fix: 'Choose at least one eligible channel with response handling, or use manual owner tasks instead.',
+  })
+
   issues.sort((a, b) => ({ critical: 4, high: 3, medium: 2, low: 1 }[b.severity] - { critical: 4, high: 3, medium: 2, low: 1 }[a.severity]))
 
   const crm = crmLabel(input.crmId)
-  const firstTouch = input.firstResponseMode === 'human'
+  const firstTouch = noChannels
+    ? 'Create an owner task/notification; do not send automated acknowledgement without a configured eligible contact channel.'
+    : input.firstResponseMode === 'human'
     ? 'Create an immediate owner task/notification; the first meaningful response stays human.'
     : input.firstResponseMode === 'automated'
       ? 'Send an immediate acknowledgement only when channel eligibility is known, then move into the planned cadence.'
@@ -229,8 +242,8 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
 
   const stages: FollowUpStage[] = [
     { order: 1, label: 'Qualify enrollment', timing: 'At lead creation', owner: 'System', action: 'Normalize identity, check duplicate/re-entry rules, consent/channel eligibility, current lifecycle state, and owner.', exit: 'Do not enroll if suppressed, duplicate, already active, disqualified, or otherwise ineligible.' },
-    { order: 2, label: 'First response', timing: `Target ≤ ${input.targetResponseMinutes} min`, owner: input.firstResponseMode === 'automated' ? 'Automation' : 'Lead owner + automation', action: firstTouch, exit: 'Reply, booking, disqualification, active opportunity, opt-out, or manual takeover.' },
-    { order: 3, label: 'Early follow-up', timing: input.cadenceStyle === 'fast' ? 'First 1–2 days' : 'First 2–3 days', owner: 'Lead owner + cadence', action: `Use the highest-value mix of ${channelLabel(input.channels)} without repeating the same generic message. Change the reason to respond, not just the wording.`, exit: 'Evaluate stop conditions before every scheduled touch.' },
+    { order: 2, label: 'First response', timing: input.targetResponseMinutes === 1440 ? 'Target: 24 elapsed hours (not a business-hours SLA)' : `Target ≤ ${input.targetResponseMinutes} min`, owner: input.firstResponseMode === 'automated' ? 'Automation' : 'Lead owner + automation', action: firstTouch, exit: 'Reply, booking, disqualification, active opportunity, opt-out, or manual takeover.' },
+    { order: 3, label: 'Early follow-up', timing: input.cadenceStyle === 'fast' ? 'First 1–2 days' : 'First 2–3 days', owner: 'Lead owner + cadence', action: noChannels ? 'Do not schedule outbound touches without an eligible contact channel; use manual owner tasks until one is configured.' : `Use the highest-value mix of ${channelLabel(input.channels)} without repeating the same generic message. Change the reason to respond, not just the wording.`, exit: 'Evaluate stop conditions before every scheduled touch.' },
     { order: 4, label: 'Value follow-up', timing: `Through day ${Math.max(3, Math.round(input.cadenceDays * 0.65))}`, owner: 'Lead owner + cadence', action: 'Use context, proof, a useful resource, or a clear next step. Keep manual tasks visible when judgment is more useful than another automated send.', exit: 'Any engagement or lifecycle transition moves the lead out of prospecting cadence.' },
     { order: 5, label: 'Close the active cadence', timing: `By day ${input.cadenceDays}`, owner: 'System + owner', action: 'Finish with a clear outcome: engaged, booked, disqualified, nurture, recycle/cooldown, or no-response. Never leave the record in an ambiguous active-follow-up state.', exit: 'Write the outcome and next eligible date/state back to the CRM.' },
   ]
@@ -269,7 +282,7 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
   const architecture = [
     `${crm}: keep identity, lifecycle state, ownership, suppression state, cadence outcome, and next action visible in the CRM source of truth.`,
     input.crmId === 'gohighlevel'
-      ? 'GoHighLevel: native workflows are a strong first choice when messaging, conversations, opportunities, calendars and follow-up already live there; configure stop-on-response behavior carefully and test voicemail/call edge cases.'
+      ? 'GoHighLevel: native workflows are a strong first choice when messaging, conversations, opportunities, calendars and follow-up already live there. Stop on Response is workflow-scoped; do not assume it suppresses other workflows or detects manual conversations. Test voicemail/call edge cases and central suppression before launch.'
       : input.crmId === 'hubspot'
         ? 'HubSpot: keep lifecycle/ownership and standard CRM follow-up native where your edition supports the needed workflow/sequence behavior; verify enrollment and unenrollment criteria against the current product before launch.'
         : input.crmId === 'salesforce'
@@ -289,6 +302,7 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
   ]
 
   const nextQuestions: string[] = []
+  if (noChannels) nextQuestions.push('Which eligible outbound channel will the team use, or should this remain a manual task-only process?')
   if (!input.crmId) nextQuestions.push('Which CRM is the authoritative lead/owner system?')
   if (input.replyDetection < 2) nextQuestions.push('What event proves a real lead reply across every channel you plan to use?')
   if (input.bookingDetection < 2) nextQuestions.push('Which calendar/appointment state should immediately stop prospecting follow-up?')
@@ -299,8 +313,8 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
   const confidenceSignals = [input.crmId ? 1 : 0, input.replyDetection >= 2 ? 1 : 0, input.bookingDetection >= 2 ? 1 : 0, input.lifecycleStopRules >= 2 ? 1 : 0, input.consentControl >= 2 ? 1 : 0, input.ownerAssignment >= 2 ? 1 : 0, input.monitoring >= 2 ? 1 : 0]
   const confidence = clamp(42 + (confidenceSignals.reduce((sum, item) => sum + item, 0) / confidenceSignals.length) * 48 - Math.min(10, issues.filter((issue) => issue.severity === 'critical').length * 5))
 
-  const status = score >= 84 ? 'Ready for controlled automation' : score >= 68 ? 'Good foundation with a few important gaps' : score >= 50 ? 'Fix the stop and ownership model before scaling' : 'Do not scale this cadence yet'
-  const recommendedPattern = input.firstResponseMode === 'human'
+  const status = noChannels ? 'Not ready: select a follow-up channel' : score >= 84 ? 'Ready for controlled automation' : score >= 68 ? 'Good foundation with a few important gaps' : score >= 50 ? 'Fix the stop and ownership model before scaling' : 'Do not scale this cadence yet'
+  const recommendedPattern = noChannels ? 'Manual owner tasks until a contact channel is configured' : input.firstResponseMode === 'human'
     ? 'SLA-driven human first response with automated tasking, reminders and bounded nurture'
     : input.firstResponseMode === 'automated'
       ? 'Eligibility-gated acknowledgement followed by a state-aware multi-touch cadence'
@@ -310,7 +324,9 @@ export function analyzeLeadFollowUp(input: LeadFollowUpInput): LeadFollowUpResul
     score,
     confidence,
     status,
-    summary: `Design the system around state changes, not a fixed sequence of messages. For ${input.monthlyLeads.toLocaleString()} leads/month, the biggest risks are usually continuing after engagement, unclear ownership, weak channel eligibility, and follow-up failures that nobody sees.`,
+    summary: noChannels
+      ? 'No outbound channel is selected, so an automated follow-up cadence cannot launch. Choose an eligible channel or use manual owner tasks; keep reply, booking, suppression, and ownership exits intact.'
+      : `Design the system around state changes, not a fixed sequence of messages. For ${input.monthlyLeads.toLocaleString()} leads/month, the biggest risks are usually continuing after engagement, unclear ownership, weak channel eligibility, and follow-up failures that nobody sees.`,
     recommendedPattern,
     metrics: { speed, stopSafety, channelSafety, ownership, relevance, operability },
     issues,

@@ -144,7 +144,7 @@ export const TOOL_METHODOLOGY: Record<ToolSlug, Methodology> = {
     ],
   },
   'lead-follow-up-automation-planner': {
-    reviewedAt: '2026-09-29',
+    reviewedAt: '2026-11-02',
     principle:
       'Automate state transitions and routine timing while making replies, bookings, suppression and human takeover hard exits from generic prospecting.',
     evaluates: [
