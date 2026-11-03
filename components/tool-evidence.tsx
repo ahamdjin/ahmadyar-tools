@@ -7,6 +7,8 @@ const EVIDENCE_BY_TOOL: Record<string, EvidenceItem[]> = {
     { label: 'n8n — idempotency and retry safety', href: 'https://blog.n8n.io/idempotency-api/', note: 'Supports the tool’s emphasis on deduplication, bounded retries, and safe recovery for higher-impact workflows.' },
     { label: 'Zapier — business automation patterns', href: 'https://zapier.com/automations/business-owners', note: 'Shows the common owner problems the advisor models: handoffs, follow-up, disconnected systems, approvals, and onboarding.' },
     { label: 'Make — workflow automation guide (2026)', href: 'https://www.make.com/en/blog/workflow-automation', note: 'Reinforces an important architecture boundary: predictable business processes are usually best kept deterministic, adding AI only where inputs genuinely require judgment.' },
+    { label: 'Zapier — Paths and conditional branching (July 2026)', href: 'https://help.zapier.com/hc/en-us/articles/8496288555917-Add-branching-logic-to-Zap-workflows-with-Paths', note: 'Documents that more than one path can match, so owner-changing branches need exclusive conditions and overlap tests.' },
+    { label: 'Zapier — Human in the Loop approvals (October 2026)', href: 'https://help.zapier.com/hc/en-us/articles/38731463206029-Request-approval-to-keep-your-workflow-running-with-Human-in-the-Loop', note: 'Documents paid-plan, reviewer-account, and approval-handling constraints for workflows requiring a person to decide.' },
   ],
   'crm-automation-health-check': [
     { label: 'HubSpot — CRM data management', href: 'https://blog.hubspot.com/marketing/keep-customer-data-up-to-date-everywhere', note: 'Supports prevention-first checks for duplicate detection, validation, clean records, and documented data standards.' },
@@ -23,6 +25,7 @@ const EVIDENCE_BY_TOOL: Record<string, EvidenceItem[]> = {
   'automation-roi-calculator': [
     { label: 'Zapier — business automation patterns', href: 'https://zapier.com/automations/business-owners', note: 'Grounds the calculator in repetitive operational work such as routing, reminders, record updates, payments, and onboarding.' },
     { label: 'AhmadYar — ROI model assumptions', href: 'https://github.com/ahamdjin/ahmadyar-tools/blob/main/docs/research/roi-model-assumptions.md', note: 'Documents the calculator’s own assumptions so the result can be audited instead of treated as a universal benchmark.' },
+    { label: 'OpenStax — break-even in whole units', href: 'https://openstax.org/books/principles-managerial-accounting/pages/3-2-calculate-a-break-even-point-in-units-and-dollars', note: 'Explains the fixed-cost and per-unit contribution relationship; the calculator rounds up required whole cases rather than understating the threshold.' },
   ],
   'lead-follow-up-automation-planner': [
     { label: 'HubSpot — lead follow-up automation', href: 'https://www.hubspot.com/automate-lead-follow-up-nurturing', note: 'Supports systematic follow-up, consistent timing, and keeping leads from falling through manual gaps.' },
@@ -39,7 +42,7 @@ export function ToolEvidence({ slug }: { slug: string }) {
       <div className="rounded-2xl bg-zinc-50 p-6 sm:p-8 dark:bg-zinc-900/50">
         <p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-500">Research & evidence</p>
         <h2 className="mt-3 text-xl font-medium tracking-[-0.03em] text-zinc-950 sm:text-2xl dark:text-zinc-50">What informed this tool</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">Reviewed 28 September 2026. These sources support the operating concerns the tool asks about; vendor claims and survey statistics are not silently converted into scoring rules.</p>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">Reviewed 26 October 2026. These sources support the operating concerns the tool asks about; vendor claims and survey statistics are not silently converted into scoring rules.</p>
         <div className="mt-6 grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2">
           {items.map((item) => (
             <a
