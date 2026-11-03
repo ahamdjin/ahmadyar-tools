@@ -113,8 +113,6 @@ export default async function ToolPage({ params }: Props) {
   if (!tool) notFound()
 
   const canonical = `${SITE.origin}${SITE.toolsPath}/${tool.slug}`
-  const dedicated = dedicatedMetadata(tool.slug)
-  const description = dedicated?.description ?? tool.description
   if (tool.slug === 'automation-architecture-advisor') {
     const webpageJsonLd = {
       '@context': 'https://schema.org',
