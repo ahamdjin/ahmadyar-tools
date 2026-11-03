@@ -47,6 +47,7 @@ test('tool interaction, original URLs and SEO evidence remain available', () => 
   assert.ok(page.includes('<AutomationRoiCalculator />'))
   assert.ok(page.includes('<LeadFollowUpPlanner />'))
   assert.ok(page.includes('alternates: { canonical }'))
-  assert.ok(page.includes("applicationCategory: 'BusinessApplication'"))
+  assert.ok(page.includes("'@type': 'WebPage'"))
+  assert.ok(!page.includes("'@type': 'SoftwareApplication'"))
   assert.ok(methodology.includes('SITE.origin'))
 })

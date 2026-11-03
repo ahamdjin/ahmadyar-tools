@@ -24,7 +24,8 @@ test('every tool exposes a reviewed transparent decision model', () => {
   assert.equal((methodology.match(/^    relatedWork:/gm) ?? []).length, 6)
 
   assert.match(page, /<ToolMethodology slug=\{tool\.slug\} \/>/)
-  assert.match(page, /featureList: TOOL_METHODOLOGY\[tool\.slug\]\.evaluates/)
+  assert.match(page, /<ToolMethodology slug=\{tool\.slug\} \/>/)
+  assert.doesNotMatch(page, /'@type': 'SoftwareApplication'/)
   assert.match(page, /dateModified: TOOL_METHODOLOGY\[tool\.slug\]\.reviewedAt/)
 })
 

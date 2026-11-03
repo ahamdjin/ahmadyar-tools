@@ -32,7 +32,8 @@ test('all tool pages retain canonical SEO metadata and structured data', () => {
   assert.match(page, /dateModified: TOOL_METHODOLOGY\[tool\.slug\]\.reviewedAt/)
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
-  assert.match(page, /SoftwareApplication/)
+  assert.doesNotMatch(page, /SoftwareApplication/)
+  assert.match(page, /'@type': 'WebPage'/)
 })
 
 test('tool titles and descriptions stay concise and intent-specific', () => {

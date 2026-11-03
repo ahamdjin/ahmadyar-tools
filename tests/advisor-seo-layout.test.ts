@@ -120,10 +120,11 @@ test('tool typography cannot exceed the portfolio display ceiling', () => {
 test('guidance uses a restrained editorial layout instead of large SEO slabs', () => {
   assert.match(page, /<AdvisorSeoContent \/>/)
   assert.ok(page.indexOf('<AdvisorSeoContent />') > page.indexOf('<ArchitectureAdvisor />'))
-  assert.match(page, /SoftwareApplication/)
+  assert.doesNotMatch(page, /SoftwareApplication/)
+  assert.match(page, /WebPage/)
   assert.match(page, /FAQPage/)
   assert.match(page, /BreadcrumbList/)
-  assert.match(page, /price:\s*'0'/)
+  assert.equal((page.match(/jsonLd\(webpageJsonLd\)/g) ?? []).length, 6)
   assert.match(experienceCss, /counter-increment:\s*guide-section/)
   assert.match(experienceCss, /text-wrap:\s*balance/)
   assert.match(experienceCss, /text-wrap:\s*pretty/)
