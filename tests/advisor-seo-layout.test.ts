@@ -25,7 +25,9 @@ test('tool suite uses normal-flow application stages inside a wide route frame',
   assert.doesNotMatch(routeFrame, /max-w-screen-sm/)
   assert.match(routeFrame, /site-main min-w-0 w-full flex-1/)
   assert.match(routeFrame, /<SiteHeader \/>/)
-  assert.match(routeFrame, /<SiteFooter \/>/)
+  assert.match(routeFrame, /<PreFooterLaunchBadge \/>[\s\S]*<SiteFooter \/>/)
+  assert.match(shell, /rel="nofollow noopener noreferrer"/)
+  assert.match(shell, /fazier\.com\/api\/v1/)
 
   assert.match(css, /\.advisor-viewport,[\s\S]*\.followup-viewport\s*\{[^}]*width:\s*100%/)
   assert.doesNotMatch(css, /^\s*left:\s*50%/m)

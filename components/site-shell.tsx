@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeftIcon, ArrowUpRightIcon } from 'lucide-react'
 
@@ -32,9 +33,32 @@ export function SiteHeader() {
   )
 }
 
+export function PreFooterLaunchBadge() {
+  return (
+    <div className="mx-auto flex w-full max-w-screen-sm justify-end pt-20 sm:pt-24">
+      <a
+        href="https://fazier.com"
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+        aria-label="Visit Fazier"
+        className="inline-flex rounded-sm opacity-75 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-500"
+      >
+        <Image
+          src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark"
+          alt="Launched on Fazier"
+          width={120}
+          height={40}
+          unoptimized
+          className="h-auto w-[120px]"
+        />
+      </a>
+    </div>
+  )
+}
+
 export function SiteFooter() {
   return (
-    <footer className="site-footer mx-auto mt-auto w-full max-w-screen-sm pt-20 sm:pt-24">
+    <footer className="site-footer mx-auto mt-auto w-full max-w-screen-sm pt-4 sm:pt-5">
       <div className="flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-2xl bg-zinc-50 px-4 py-4 text-xs text-zinc-500 dark:bg-zinc-900/55 dark:text-zinc-500">
         <span>Ahmad Yar · Practical automation tools.</span>
         <a
