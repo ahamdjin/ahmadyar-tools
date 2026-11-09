@@ -134,6 +134,40 @@ test('conservative stress case never improves the modeled economics', () => {
   }
 })
 
+test('break-even volume rounds UP to the first whole case that covers modeled costs', () => {
+  const scenario = input({
+    monthlyCases: 100,
+    manualMinutesPerCase: 60,
+    loadedHourlyCost: 100,
+    automatablePct: 100,
+    humanReviewPct: 0,
+    reviewMinutes: 0,
+    exceptionPct: 0,
+    valueCapturePct: 100,
+    currentErrorPct: 0,
+    avoidableErrorPct: 0,
+    costPerError: 0,
+    buildCost: 1320,
+    monthlySoftwareCost: 0,
+    maintenanceHoursPerMonth: 0,
+    maintenanceHourlyCost: 0,
+  })
+  const result = analyzeAutomationRoi(scenario)
+  // Each case contributes 100; amortized build cost is 110/month.
+  // One case loses 10; two cases cover the monthly equivalent.
+  assert.equal(result.expected.breakEvenCasesPerMonth, 2)
+  assert.ok(1 * 100 < 1320 / 12)
+  assert.ok(2 * 100 >= 1320 / 12)
+
+  // A positive but sub-one-case threshold must never be displayed as zero.
+  const smallCost = analyzeAutomationRoi({ ...scenario, buildCost: 120 })
+  assert.equal(smallCost.expected.breakEvenCasesPerMonth, 1)
+
+  // With no fixed costs, zero cases is a valid break-even volume.
+  const zeroCost = analyzeAutomationRoi({ ...scenario, buildCost: 0 })
+  assert.equal(zeroCost.expected.breakEvenCasesPerMonth, 0)
+})
+
 test('ROI route is a dedicated portfolio-framed product with crawlable guidance', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const frame = readFileSync('components/route-frame.tsx', 'utf8')
