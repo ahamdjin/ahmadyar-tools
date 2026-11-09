@@ -61,6 +61,54 @@ test('high volume follow-up requires observable operations', () => {
   }
 })
 
+test('an outbound cadence cannot be rated ready with no contact channel', () => {
+  const result = analyzeLeadFollowUp(input({
+    crmId: 'gohighlevel',
+    channels: [],
+    replyDetection: 3,
+    bookingDetection: 3,
+    lifecycleStopRules: 3,
+    consentControl: 3,
+    optOutControl: 3,
+    ownerAssignment: 3,
+    humanHandoff: 3,
+    monitoring: 3,
+  }))
+  assert.ok(result.score <= 49)
+  assert.match(result.status, /Not ready/)
+  assert.ok(result.issues.some((issue) => issue.id === 'no-channels' && issue.severity === 'critical'))
+  assert.match(result.stages[1].action, /do not send automated acknowledgement/)
+  assert.match(result.stages[2].action, /Do not schedule outbound touches/)
+  assert.doesNotMatch(result.stages[2].action, /mix of\s+without/)
+  assert.match(result.recommendedPattern, /Manual owner tasks/)
+})
+
+test('24 elapsed hours is not misrepresented as one business day', () => {
+  const result = analyzeLeadFollowUp(input({ targetResponseMinutes: 1440 }))
+  assert.match(result.stages[1].timing, /24 elapsed hours/)
+  assert.match(result.stages[1].timing, /not a business-hours SLA/)
+  const component = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
+  assert.match(component, /24 elapsed hours \(not business hours\)/)
+  assert.doesNotMatch(component, /<option value=\{1440\}>1 business day/)
+})
+
+test('channel picker retains one usable channel and exposes selected state', () => {
+  const component = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
+  assert.match(component, /input\.channels\.length === 1 && input\.channels\.includes\(channel\)\) return/)
+  assert.match(component, /aria-pressed=\{input\.channels\.includes\(channel\)\}/)
+  assert.match(component, /disabled=\{input\.channels\.length === 1 && input\.channels\.includes\(channel\)\}/)
+})
+
+test('GoHighLevel advice explains workflow-scoped stops rather than global suppression', () => {
+  const result = analyzeLeadFollowUp(input({ crmId: 'gohighlevel' }))
+  assert.match(result.architecture.join(' '), /workflow-scoped/)
+  assert.match(result.architecture.join(' '), /manual conversations/)
+  const evidence = readFileSync('components/tool-evidence.tsx', 'utf8')
+  assert.match(evidence, /155000006910/)
+  const guide = readFileSync('components/lead-follow-up-seo-content.tsx', 'utf8')
+  assert.match(guide, /cross-workflow suppression/)
+})
+
 test('lead follow-up route is a dedicated viewport-sized planner with crawlable guidance', () => {
   const page = readFileSync('app/[slug]/page.tsx', 'utf8')
   const component = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')

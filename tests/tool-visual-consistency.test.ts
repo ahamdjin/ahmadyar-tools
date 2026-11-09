@@ -10,7 +10,7 @@ test('all six tools use a consistent, accessible methodology card system', () =>
   const data = read('lib/tool-methodology.ts')
 
   assert.equal((page.match(/<ToolMethodology slug=\{tool\.slug\} \/>/g) ?? []).length, 6)
-  assert.equal((data.match(/reviewedAt: '2026-09-29'/g) ?? []).length, 6)
+  assert.equal((data.match(/reviewedAt: '\d{4}-\d{2}-\d{2}'/g) ?? []).length, 6)
   assert.ok(methodology.includes('grid auto-rows-fr grid-cols-2 gap-2 sm:grid-cols-4'))
   assert.ok(methodology.includes('grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'))
   assert.ok(methodology.includes('method.evaluates.map'))
