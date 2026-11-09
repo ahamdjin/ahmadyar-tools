@@ -96,3 +96,13 @@ test('lead follow-up has current research for response stops, engagement transit
   assert.match(research, /Human handoff should have an owner/i)
   assert.match(research, /not legal advice/i)
 })
+
+
+test('follow-up choice controls expose their selected state accessibly', () => {
+  const component = readFileSync('components/lead-follow-up-planner.tsx', 'utf8')
+  // These are toggle buttons, not navigation actions. Screen-reader users need
+  // the selected state for levels, the CRM, and permitted contact channels.
+  assert.match(component, /aria-pressed=\{value === index\}/)
+  assert.match(component, /aria-pressed=\{active\}/)
+  assert.match(component, /aria-pressed=\{input\.channels\.includes\(channel\)\}/)
+})
