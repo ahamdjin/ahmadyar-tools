@@ -120,7 +120,7 @@ export default async function ToolPage({ params }: Props) {
       name: ADVISOR_TITLE,
       url: canonical,
       description: ADVISOR_DESCRIPTION,
-      dateModified: TOOL_METHODOLOGY[tool.slug].reviewedAt,
+      
       about: [
         { '@type': 'Thing', name: 'Automation architecture' },
         { '@type': 'Thing', name: 'Workflow automation' },
@@ -152,7 +152,7 @@ export default async function ToolPage({ params }: Props) {
 
   if (tool.slug === 'crm-automation-health-check') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: CRM_HEALTH_TITLE, url: canonical, description: CRM_HEALTH_DESCRIPTION, dateModified: TOOL_METHODOLOGY[tool.slug].reviewedAt,
+      '@context': 'https://schema.org', '@type': 'WebPage', name: CRM_HEALTH_TITLE, url: canonical, description: CRM_HEALTH_DESCRIPTION, 
       about: [{ '@type': 'Thing', name: 'CRM automation' }, { '@type': 'Thing', name: 'Lead management' }, { '@type': 'Thing', name: 'Revenue operations' }, { '@type': 'Thing', name: 'CRM data quality' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM', 'Close', 'Attio'].map((name) => ({ '@type': 'Thing', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
@@ -162,7 +162,7 @@ export default async function ToolPage({ params }: Props) {
 
   if (tool.slug === 'client-onboarding-automation-planner') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: ONBOARDING_TITLE, url: canonical, description: ONBOARDING_DESCRIPTION, dateModified: TOOL_METHODOLOGY[tool.slug].reviewedAt,
+      '@context': 'https://schema.org', '@type': 'WebPage', name: ONBOARDING_TITLE, url: canonical, description: ONBOARDING_DESCRIPTION, 
       about: [{ '@type': 'Thing', name: 'Client onboarding automation' }, { '@type': 'Thing', name: 'Sales to delivery handoff' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Customer onboarding workflow' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce', 'Stripe', 'DocuSign', 'Asana', 'ClickUp', 'monday.com', 'Typeform', 'Zapier', 'Make', 'n8n'].map((name) => ({ '@type': 'Thing', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
@@ -172,7 +172,7 @@ export default async function ToolPage({ params }: Props) {
 
   if (tool.slug === 'lead-routing-rules-builder') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_ROUTING_TITLE, url: canonical, description: LEAD_ROUTING_DESCRIPTION, dateModified: TOOL_METHODOLOGY[tool.slug].reviewedAt,
+      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_ROUTING_TITLE, url: canonical, description: LEAD_ROUTING_DESCRIPTION, 
       about: [{ '@type': 'Thing', name: 'Lead routing' }, { '@type': 'Thing', name: 'Lead assignment' }, { '@type': 'Thing', name: 'Revenue operations' }, { '@type': 'Thing', name: 'Sales automation' }],
       mentions: ['HubSpot', 'Salesforce', 'GoHighLevel', 'Microsoft Dynamics 365', 'Pipedrive', 'Zoho CRM'].map((name) => ({ '@type': 'Thing', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
@@ -182,7 +182,7 @@ export default async function ToolPage({ params }: Props) {
 
   if (tool.slug === 'automation-roi-calculator') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: AUTOMATION_ROI_TITLE, url: canonical, description: AUTOMATION_ROI_DESCRIPTION, dateModified: TOOL_METHODOLOGY[tool.slug].reviewedAt,
+      '@context': 'https://schema.org', '@type': 'WebPage', name: AUTOMATION_ROI_TITLE, url: canonical, description: AUTOMATION_ROI_DESCRIPTION, 
       about: [{ '@type': 'Thing', name: 'Automation ROI' }, { '@type': 'Thing', name: 'Business process automation' }, { '@type': 'Thing', name: 'Automation payback period' }, { '@type': 'Thing', name: 'Automation business case' }],
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
     }
@@ -191,7 +191,7 @@ export default async function ToolPage({ params }: Props) {
 
   if (tool.slug === 'lead-follow-up-automation-planner') {
     const webpageJsonLd = {
-      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_FOLLOW_UP_TITLE, url: canonical, description: LEAD_FOLLOW_UP_DESCRIPTION, dateModified: TOOL_METHODOLOGY[tool.slug].reviewedAt,
+      '@context': 'https://schema.org', '@type': 'WebPage', name: LEAD_FOLLOW_UP_TITLE, url: canonical, description: LEAD_FOLLOW_UP_DESCRIPTION, 
       about: [{ '@type': 'Thing', name: 'Lead follow-up automation' }, { '@type': 'Thing', name: 'Sales cadence' }, { '@type': 'Thing', name: 'Speed to lead' }, { '@type': 'Thing', name: 'CRM automation' }],
       mentions: ['HubSpot', 'GoHighLevel', 'Salesforce'].map((name) => ({ '@type': 'Thing', name })),
       isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.origin },
