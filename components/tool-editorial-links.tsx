@@ -2,6 +2,8 @@ import { ArrowUpRight, BookOpen } from 'lucide-react'
 
 import { SITE } from '@/lib/site'
 import { ToolEvidence } from '@/components/tool-evidence'
+import Link from 'next/link'
+import { relatedUtilities } from '@/lib/related-tools'
 
 const READING_BY_TOOL: Record<string, Array<{ href: string; label: string; note: string }>> = {
   'automation-architecture-advisor': [
@@ -37,6 +39,10 @@ export function ToolEditorialLinks({ slug }: { slug: string }) {
   return (
     <>
       <ToolEvidence slug={slug} />
+      <nav className="advisor-guide pb-10 text-sm" aria-label="Related browser utilities">
+        <h2 className="mb-4 text-balance text-lg font-medium">Prepare your workflow data</h2>
+        <div className="grid auto-rows-fr gap-3 sm:grid-cols-2">{relatedUtilities(slug).map((tool) => <Link key={tool.slug} href={`/${tool.slug}`} className="flex items-start justify-between gap-4 rounded-xl bg-zinc-50 p-5 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800"><span><span className="block font-medium">{tool.shortTitle}</span><span className="mt-2 block text-pretty text-xs leading-6 text-zinc-600 dark:text-zinc-400">{tool.description}</span></span><ArrowUpRight size={16} className="mt-1 shrink-0" aria-hidden /></Link>)}</div>
+      </nav>
       <aside className="advisor-guide pb-16 pt-4 sm:pb-24" aria-label="Related reading">
         <div className="rounded-2xl bg-zinc-50 p-6 sm:p-8 dark:bg-zinc-900/50">
           <p className="text-xs font-medium uppercase tracking-[0.13em] text-zinc-500">Related reading</p>

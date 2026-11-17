@@ -1,8 +1,13 @@
 import { SITE } from '@/lib/site'
+import { UTILITIES } from '@/lib/utilities/catalog'
 
 const root = `${SITE.origin}${SITE.toolsPath}`
 
 const body = `# Ahmad Yar Automation Tools
+
+## Browser utilities
+${UTILITIES.map((tool) => `- ${tool.title}: ${SITE.origin}${SITE.toolsPath}/${tool.slug}\n  ${tool.description}`).join('\n')}
+All utility inputs are processed locally in disposable Web Workers, with a 200,000-character input limit and a three-second execution timeout. No API requests are executed by these utilities.
 
 Canonical site: ${SITE.origin}
 Tools hub: ${root}

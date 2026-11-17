@@ -20,6 +20,9 @@ import { ToolRouteHeading } from '@/components/tool-route-heading'
 import { SITE } from '@/lib/site'
 import { TOOL_METHODOLOGY } from '@/lib/tool-methodology'
 import { TOOLS, getTool } from '@/lib/tools'
+import { UTILITIES, getUtility } from '@/lib/utilities/catalog'
+import { UtilityPage } from '@/components/utilities/utility-page'
+import { toolImage, utilityMetadata } from '@/lib/tools-seo'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -41,7 +44,7 @@ function jsonLd(value: unknown) {
 }
 
 export function generateStaticParams() {
-  return TOOLS.map((tool) => ({ slug: tool.slug }))
+  return [...TOOLS, ...UTILITIES].map((tool) => ({ slug: tool.slug }))
 }
 
 function dedicatedMetadata(slug: string) {
@@ -56,6 +59,10 @@ function dedicatedMetadata(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
+  const utility = getUtility(slug)
+  if (utility) {
+    return utilityMetadata(utility.slug)
+  }
   const tool = getTool(slug)
   if (!tool) return {}
   const canonical = `${SITE.origin}${SITE.toolsPath}/${tool.slug}`
@@ -80,8 +87,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           'max-video-preview': -1,
         },
       },
-      openGraph: { title: dedicated.title, description: dedicated.description, url: canonical, type: 'website', siteName: SITE.name },
-      twitter: { card: 'summary', title: dedicated.title, description: dedicated.description },
+      openGraph: { title: dedicated.title, description: dedicated.description, url: canonical, type: 'website', siteName: SITE.name, images: [toolImage(tool.slug)] },
+      twitter: { card: 'summary_large_image', title: dedicated.title, description: dedicated.description, images: [toolImage(tool.slug)] },
     }
   }
 
@@ -109,6 +116,8 @@ function faqJsonLd(items: ReadonlyArray<{ question: string; answer: string }>) {
 
 export default async function ToolPage({ params }: Props) {
   const { slug } = await params
+  const utility = getUtility(slug)
+  if (utility) return <UtilityPage slug={utility.slug} />
   const tool = getTool(slug)
   if (!tool) notFound()
 

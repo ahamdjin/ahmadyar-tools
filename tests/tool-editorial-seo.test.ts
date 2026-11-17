@@ -51,7 +51,7 @@ test('tool titles and descriptions stay concise and intent-specific', () => {
 })
 
 test('tools hub has useful metadata, favicon and collection schema', () => {
-  assert.match(layout, /Free Automation Planning Tools \| Ahmad Yar/)
+  assert.match(layout, /Free Automation & Browser Tools \| Ahmad Yar/)
   assert.match(layout, /icons:/)
   assert.match(hub, /CollectionPage/)
   assert.match(hub, /ItemList/)
