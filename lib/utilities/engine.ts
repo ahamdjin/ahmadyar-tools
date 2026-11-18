@@ -7,12 +7,13 @@ import { parse as shellParse } from 'shell-quote'
 export const MAX_INPUT = 200_000
 export type Mapping = { column: string; path: string; type: 'string' | 'number' | 'boolean' | 'json'; empty: 'string' | 'null' | 'omit' }
 export type Job =
+  | { kind: 'query' | 'ndjson'; input: string }
   | { kind: 'compare'; input: string; updated: string }
   | { kind: 'timestamp'; input: string; format: 'seconds' | 'milliseconds' | 'iso'; zone: string }
   | { kind: 'json'; input: string }
   | { kind: 'schedule'; input: string; zone: string; compareZone: string; format: 'standard' | 'seconds'; start: string }
   | { kind: 'curl'; input: string; target: 'javascript' | 'python' | 'n8n' }
-  | { kind: 'csv'; input: string; mappings?: Mapping[]; batchSize: number }
+  | { kind: 'csv'; input: string; plain?: boolean; mappings?: Mapping[]; batchSize: number }
   | { kind: 'regex'; input: string; pattern: string; flags: string }
 export type Result = { text: string; summary: string; warnings: string[]; rows?: string[][]; columns?: string[]; paths?: { pointer: string; expression: string; value: string }[]; original?: string; csv?: string }
 
@@ -27,7 +28,11 @@ function inspectJson(input: string): Result {
   let value: unknown
   let normalized = input
   try { value = JSON.parse(input) } catch { normalized = jsonrepair(input); value = JSON.parse(normalized); repaired = true }
-  // JSON.parse loses duplicate keys and unsafe integers; reject these before exporting.
+  validateTokens(normalized, true)
+  return inspectionResult(value, input, repaired)
+}
+
+export function validateTokens(normalized: string, checkNumbers: boolean) {
   const scopes: (Set<string> | null)[] = []
   const tokens = /"(?:\\.|[^"\\])*"|[{}\[\]]|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g
   for (const token of normalized.matchAll(tokens)) {
@@ -42,11 +47,14 @@ function inspectJson(input: string): Result {
         if (keys?.has(key)) throw new Error(`Duplicate key ${JSON.stringify(key)}. Resolve it in the original before formatting or repairing.`)
         keys?.add(key)
       }
-    } else {
+    } else if (checkNumbers) {
       const n = Number(text)
       if (!Number.isFinite(n) || (Number.isInteger(n) && !Number.isSafeInteger(n))) throw new Error('A number exceeds safe JavaScript precision. Quote large identifiers or use a lossless JSON tool before continuing.')
     }
   }
+}
+
+function inspectionResult(value: unknown, input: string, repaired: boolean): Result {
   const paths: NonNullable<Result['paths']> = []
   function walk(node: unknown, pointer: string, expression: string, depth: number) {
     if (depth > 40) throw new Error('JSON nesting exceeds the 40-level inspection limit.')
@@ -92,6 +100,10 @@ function csvPayload(job: Extract<Job, { kind: 'csv' }>): Result {
   if (columns.length > 100 || rows.length > 3000) throw new Error('Use at most 100 columns and 3,000 data rows.')
   if (rows.some((row) => row.length !== columns.length)) throw new Error('Each CSV row must have the same number of fields as the header.')
   if (!rows.length) throw new Error('Add at least one data row below the header.')
+  if (job.plain) {
+    const records = rows.map(row => Object.fromEntries(columns.map((key,i) => [key,row[i]])))
+    return {text: pretty(records), summary: rows.length + ' records · ' + columns.length + ' columns', warnings: ['Values are strings. Use API payload options to change field types or create batches.']}
+  }
   const mappings = job.mappings ?? columns.map((column) => ({ column, path: column, type: 'string' as const, empty: 'string' as const }))
   if (mappings.some((m) => !columns.includes(m.column)) || new Set(mappings.map((m) => m.column)).size !== mappings.length) throw new Error('Mapping columns are duplicated or no longer match this CSV. Inspect columns again.')
   const paths = mappings.filter((m) => m.path.trim()).map((m) => m.path.trim().split('.'))
@@ -147,6 +159,34 @@ function regexExtract(job: Extract<Job, { kind: 'regex' }>): Result {
 export function runJob(job: Job): Result {
   guard(job.input)
   switch (job.kind) {
+    case 'query': {
+      const input = job.input.trim()
+      const query = /^https?:\/\//i.test(input) ? new URL(input).search : input.split('#')[0]
+      const fields: Record<string, string[]> = Object.create(null)
+      const params = new URLSearchParams(query)
+      for (const [key, value] of params) (fields[key] ??= []).push(value)
+      const warnings: string[] = []
+      try { decodeURIComponent(query) } catch {
+        warnings.push('Malformed percent encoding or invalid UTF-8 detected. The result shows how a browser interprets it; check the original URL before reusing it.')
+      }
+      const keys = Object.keys(fields).length
+      return { text: pretty(fields), summary: params.size ? params.size + ' values across ' + keys + ' distinct names.' + (warnings.length ? ' Check encoding in Notes & limitations.' : '') : 'No query parameters found.', warnings }
+    }
+    case 'ndjson': {
+      const records: string[] = []
+      let blanks = 0
+      if (job.input.startsWith('\uFEFF')) throw new Error('Line 1: Remove the byte order mark before converting JSON Lines.')
+      for (const [i, line] of job.input.split('\n').entries()) {
+        if (!line.trim()) { blanks++; continue }
+        try {
+          JSON.parse(line)
+          validateTokens(line, false)
+          records.push(line.trim())
+        } catch (error) { throw new Error('Line ' + (i + 1) + ': ' + (error instanceof Error ? error.message : 'Invalid JSON')) }
+      }
+      if (job.input.endsWith('\n')) blanks--
+      return { text: '[\n' + records.join(',\n') + '\n]', summary: records.length + ' records converted.' + (blanks ? ' Skipped blank lines: ' + blanks + '.' : ''), warnings: ['Number literals are preserved exactly in the export. The application importing the array must support the precision you need.'] }
+    }
     case 'compare': return compareJson(job)
     case 'timestamp': return convertTimestamp(job)
     case 'json': return inspectJson(job.input)
@@ -206,8 +246,11 @@ function convertTimestamp(job: Extract<Job, { kind: 'timestamp' }>): Result {
     const parsed = Date.parse(input)
     if (!Number.isFinite(parsed)) throw new Error('Date is outside the supported range.')
     ms = BigInt(parsed)
+  } else if (job.format === 'seconds' && /^[+-]?\d{1,16}\.\d{1,3}$/.test(input)) {
+    const [whole, fraction] = input.split('.')
+    ms = BigInt(whole + fraction.padEnd(3, '0'))
   } else {
-    if (!/^[+-]?\d+$/.test(input)) throw new Error('Enter a whole-number Unix timestamp in the selected unit.')
+    if (!/^[+-]?\d+$/.test(input)) throw new Error(job.format === 'seconds' ? 'Enter Unix seconds with at most three fractional digits.' : 'Enter whole-number Unix milliseconds.')
     if (input.length > 20) throw new Error('Timestamp is outside the supported date range.')
     ms = BigInt(input) * BigInt(job.format === 'seconds' ? 1000 : 1)
   }

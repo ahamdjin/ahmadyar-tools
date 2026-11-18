@@ -1,0 +1,2293 @@
+{
+  "/ai-automation": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself",
+        "title": "Automation ROI: How to Calculate Payback Without Fooling Yourself",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/ai-automation/crm": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/ai-automation/marketing": {
+    "reading": [
+      {
+        "href": "/blog/ai-marketing-automation-small-business-what-actually-helps",
+        "title": "AI Marketing Automation: Practical Examples for Small Business",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/gohighlevel-automation-what-gets-difficult-when-workflows-get-real",
+        "title": "GoHighLevel Automation: What Gets Difficult When Workflows Get Real",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/ai-automation/operations": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/ai-automation/revenue": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself",
+        "title": "Automation ROI: How to Calculate Payback Without Fooling Yourself",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/ai-automation/sales": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break",
+        "title": "Lead Routing Rules: How to Build a System That Does Not Break",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/ai-automation/seo": {
+    "reading": [
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-marketing-automation-small-business-what-actually-helps",
+        "title": "AI Marketing Automation: Practical Examples for Small Business",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/gohighlevel-automation-what-gets-difficult-when-workflows-get-real",
+        "title": "GoHighLevel Automation: What Gets Difficult When Workflows Get Real",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/github",
+        "title": "Connect Claude and GitHub",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/ai-apps",
+        "title": "AI application work",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/models-research",
+        "title": "AI model and research news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/ai-automation-for-small-business-what-should-you-automate-first": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-roi-calculator",
+        "title": "Automation ROI Calculator",
+        "kind": "tool"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": []
+  },
+  "/blog/ai-marketing-automation-small-business-what-actually-helps": {
+    "reading": [
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/gohighlevel-automation-what-gets-difficult-when-workflows-get-real",
+        "title": "GoHighLevel Automation: What Gets Difficult When Workflows Get Real",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation/marketing",
+        "title": "Marketing automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/ai-seo-automation-workflows-what-to-automate": {
+    "reading": [
+      {
+        "href": "/blog/ai-marketing-automation-small-business-what-actually-helps",
+        "title": "AI Marketing Automation: Practical Examples for Small Business",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/gohighlevel-automation-what-gets-difficult-when-workflows-get-real",
+        "title": "GoHighLevel Automation: What Gets Difficult When Workflows Get Real",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/case-studies/local-seo-augusta-towing",
+        "title": "Local SEO case study",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation/seo",
+        "title": "SEO automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-roi-calculator",
+        "title": "Automation ROI Calculator",
+        "kind": "tool"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": []
+  },
+  "/blog/client-onboarding-automation-what-to-automate-keep-human": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/notion",
+        "title": "Connect Claude and Notion",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/client-onboarding-automation-planner",
+        "title": "Client Onboarding Automation Planner",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/crm-automation-health-check-what-to-fix-first": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/hubspot",
+        "title": "HubSpot CRM systems",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/crm-automation-health-check",
+        "title": "CRM Automation Health Check",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/enterprise-software",
+        "title": "Enterprise software news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/does-time-saved-count-as-automation-roi": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself",
+        "title": "Automation ROI: How to Calculate Payback Without Fooling Yourself",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-roi-calculator",
+        "title": "Automation ROI Calculator",
+        "kind": "tool"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": []
+  },
+  "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system": {
+    "reading": [
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break",
+        "title": "Lead Routing Rules: How to Build a System That Does Not Break",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/lead-routing-rules-builder",
+        "title": "Lead Routing Rules Builder",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/gohighlevel-automation-what-gets-difficult-when-workflows-get-real": {
+    "reading": [
+      {
+        "href": "/blog/ai-marketing-automation-small-business-what-actually-helps",
+        "title": "AI Marketing Automation: Practical Examples for Small Business",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation/marketing",
+        "title": "Marketing automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/how-far-ive-come": {
+    "reading": [
+      {
+        "href": "/blog/why-i-stopped-trying-to-learn-everything",
+        "title": "Why I Stopped Trying to Learn Everything",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-small-business-work-taught-me",
+        "title": "What Small Business Work Taught Me",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/experience",
+        "title": "Experience behind these notes",
+        "kind": "work"
+      }
+    ],
+    "news": []
+  },
+  "/blog/how-fast-should-you-follow-up-with-a-new-lead": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/lead-routing-rules-builder",
+        "title": "Lead Routing Rules Builder",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/how-hard-is-n8n-to-learn-what-i-learned-building-real-automations": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/how-to-automate-ad-leads-into-your-crm": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break",
+        "title": "Lead Routing Rules: How to Build a System That Does Not Break",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/lead-routing-rules-builder",
+        "title": "Lead Routing Rules Builder",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/how-to-automate-lead-follow-up-without-losing-human-touch": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/lead-routing-rules-builder",
+        "title": "Lead Routing Rules Builder",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/how-to-choose-an-automation-stack-without-overengineering": {
+    "reading": [
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/how-to-clean-up-a-messy-crm": {
+    "reading": [
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/hubspot",
+        "title": "HubSpot CRM systems",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/crm-automation-health-check",
+        "title": "CRM Automation Health Check",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/enterprise-software",
+        "title": "Enterprise software news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/is-gohighlevel-hard-to-learn-what-actually-takes-time": {
+    "reading": [
+      {
+        "href": "/blog/ai-marketing-automation-small-business-what-actually-helps",
+        "title": "AI Marketing Automation: Practical Examples for Small Business",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation/marketing",
+        "title": "Marketing automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/is-n8n-overkill-for-a-small-business": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/is-this-the-right-time-to-learn-ai": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/github",
+        "title": "Connect Claude and GitHub",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/ai-apps",
+        "title": "AI application work",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/models-research",
+        "title": "AI model and research news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/is-zapier-hard-to-learn-real-learning-curve": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/lead-routing-rules-builder",
+        "title": "Lead Routing Rules Builder",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/n8n-vs-zapier-business-automation": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/n8n-webhook-duplicates-idempotency-guide": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/should-you-use-round-robin-lead-routing": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/gohighlevel",
+        "title": "GoHighLevel systems library",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/lead-routing-rules-builder",
+        "title": "Lead Routing Rules Builder",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part": {
+    "reading": [
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/github",
+        "title": "Connect Claude and GitHub",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/ai-apps",
+        "title": "AI application work",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/models-research",
+        "title": "AI model and research news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/what-i-learned-building-ai-automations-that-have-to-work": {
+    "reading": [
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/what-is-crm-automation-simple-guide-small-business": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/hubspot",
+        "title": "Connect Claude and HubSpot",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/hubspot",
+        "title": "HubSpot CRM systems",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/crm-automation-health-check",
+        "title": "CRM Automation Health Check",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/enterprise-software",
+        "title": "Enterprise software news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/what-is-revenue-operations-revops-plain-english": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-roi-calculator",
+        "title": "Automation ROI Calculator",
+        "kind": "tool"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": []
+  },
+  "/blog/what-should-happen-after-a-client-signs": {
+    "reading": [
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/notion",
+        "title": "Connect Claude and Notion",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/client-onboarding-automation-planner",
+        "title": "Client Onboarding Automation Planner",
+        "kind": "tool"
+      }
+    ],
+    "news": []
+  },
+  "/blog/what-small-business-work-taught-me": {
+    "reading": [
+      {
+        "href": "/blog/how-far-ive-come",
+        "title": "How Far I've Come",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/why-i-stopped-trying-to-learn-everything",
+        "title": "Why I Stopped Trying to Learn Everything",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/experience",
+        "title": "Experience behind these notes",
+        "kind": "work"
+      }
+    ],
+    "news": []
+  },
+  "/blog/when-is-automation-worth-it": {
+    "reading": [
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself",
+        "title": "Automation ROI: How to Calculate Payback Without Fooling Yourself",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/work/case-studies/c4i-operating-architecture",
+        "title": "C4I operating architecture case study",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-roi-calculator",
+        "title": "Automation ROI Calculator",
+        "kind": "tool"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": []
+  },
+  "/blog/when-should-you-stop-using-zapier-or-n8n": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/when-to-use-ai-in-automation-and-when-to-use-rules": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/github",
+        "title": "Connect Claude and GitHub",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/ai-apps",
+        "title": "AI application work",
+        "kind": "work"
+      },
+      {
+        "href": "/ai-automation",
+        "title": "AI automation consulting",
+        "kind": "service"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/models-research",
+        "title": "AI model and research news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/blog/why-i-like-clean-systems": {
+    "reading": [
+      {
+        "href": "/blog/how-far-ive-come",
+        "title": "How Far I've Come",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/why-i-stopped-trying-to-learn-everything",
+        "title": "Why I Stopped Trying to Learn Everything",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/experience",
+        "title": "Experience behind these notes",
+        "kind": "work"
+      }
+    ],
+    "news": []
+  },
+  "/blog/why-i-stopped-trying-to-learn-everything": {
+    "reading": [
+      {
+        "href": "/blog/how-far-ive-come",
+        "title": "How Far I've Come",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-small-business-work-taught-me",
+        "title": "What Small Business Work Taught Me",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/experience",
+        "title": "Experience behind these notes",
+        "kind": "work"
+      }
+    ],
+    "news": []
+  },
+  "/blog/zapier-automation-examples-practical-workflows-for-business": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [
+      {
+        "href": "/integrations/claude/n8n",
+        "title": "Connect Claude and n8n",
+        "kind": "integration"
+      },
+      {
+        "href": "/work/platforms/n8n",
+        "title": "n8n workflow examples",
+        "kind": "work"
+      },
+      {
+        "href": "/tool/automation-architecture-advisor",
+        "title": "Automation Architecture Advisor",
+        "kind": "tool"
+      }
+    ],
+    "news": [
+      {
+        "href": "/news/topics/apps-platforms",
+        "title": "AI apps and platforms news",
+        "kind": "news"
+      }
+    ]
+  },
+  "/experience": {
+    "reading": [
+      {
+        "href": "/blog/how-far-ive-come",
+        "title": "How Far I've Come",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/why-i-stopped-trying-to-learn-everything",
+        "title": "Why I Stopped Trying to Learn Everything",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-small-business-work-taught-me",
+        "title": "What Small Business Work Taught Me",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/airtable": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/github": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/google-drive": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/google-sheets": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/hubspot": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/linear": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/n8n": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/notion": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/slack": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/integrations/claude/zapier": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/news/topics/apps-platforms": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/news/topics/enterprise-software": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/news/topics/models-research": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/api-request-converter": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/automation-architecture-advisor": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/automation-roi-calculator": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself",
+        "title": "Automation ROI: How to Calculate Payback Without Fooling Yourself",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/automation-schedule-builder": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/client-onboarding-automation-planner": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/crm-automation-health-check": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/csv-to-api-payload": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/json-compare": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/json-repair-payload-inspector": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/lead-follow-up-automation-planner": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break",
+        "title": "Lead Routing Rules: How to Build a System That Does Not Break",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/lead-routing-rules-builder": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break",
+        "title": "Lead Routing Rules: How to Build a System That Does Not Break",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/regex-extraction-workbench": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/tool/timestamp-converter": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work": {
+    "reading": [
+      {
+        "href": "/blog/how-far-ive-come",
+        "title": "How Far I've Come",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/why-i-stopped-trying-to-learn-everything",
+        "title": "Why I Stopped Trying to Learn Everything",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-small-business-work-taught-me",
+        "title": "What Small Business Work Taught Me",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/ai-apps": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/ai-websites": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/case-studies": {
+    "reading": [
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/does-time-saved-count-as-automation-roi",
+        "title": "Does Time Saved Count as Automation ROI?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/automation-roi-how-to-calculate-payback-without-fooling-yourself",
+        "title": "Automation ROI: How to Calculate Payback Without Fooling Yourself",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/case-studies/c4i-operating-architecture": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-is-automation-worth-it",
+        "title": "When Is Automation Worth It? A Practical Test Before You Build",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/case-studies/lead-generation-website-and-ai-intake-system": {
+    "reading": [
+      {
+        "href": "/blog/from-lead-form-to-crm-to-follow-up-what-i-learned-connecting-the-whole-system",
+        "title": "From Lead Form to CRM to Follow-Up: What I Learned Connecting the Whole System",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/how-to-automate-ad-leads-into-your-crm",
+        "title": "How to Automate Meta and Google Ads Leads Into Your CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/lead-routing-rules-how-to-design-a-system-that-does-not-break",
+        "title": "Lead Routing Rules: How to Build a System That Does Not Break",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/case-studies/local-seo-augusta-towing": {
+    "reading": [
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-marketing-automation-small-business-what-actually-helps",
+        "title": "AI Marketing Automation: Practical Examples for Small Business",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/gohighlevel-automation-what-gets-difficult-when-workflows-get-real",
+        "title": "GoHighLevel Automation: What Gets Difficult When Workflows Get Real",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/case-studies/social-activity-enrichment-workflow": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-i-learned-building-ai-automations-that-have-to-work",
+        "title": "What I Learned Building AI Automations That Have to Work",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-webhook-duplicates-idempotency-guide",
+        "title": "How to Prevent Duplicate Webhooks in n8n (Without Losing Real Events)",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/citescope": {
+    "reading": [
+      {
+        "href": "/blog/ai-seo-automation-workflows-what-to-automate",
+        "title": "AI SEO Automation Workflows: What to Automate and What to Keep Human",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/flowcordia": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/open-source": {
+    "reading": [
+      {
+        "href": "/blog/what-i-learned-building-ai-apps-the-llm-was-not-the-hardest-part",
+        "title": "What I Learned Building AI Apps: The LLM Was Not the Hardest Part",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/ai-app-prototype-vs-production-app-what-changes-after-the-demo-works",
+        "title": "AI App Prototype vs Production App: What Changes After the Demo Works",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-to-use-ai-in-automation-and-when-to-use-rules",
+        "title": "When Should You Use AI in an Automation, and When Should You Use Rules?",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms/clickup": {
+    "reading": [
+      {
+        "href": "/blog/what-should-happen-after-a-client-signs",
+        "title": "What Should Happen After a Client Signs?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/client-onboarding-automation-what-to-automate-keep-human",
+        "title": "Client Onboarding Automation: Examples & What to Automate",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms/gohighlevel": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms/hubspot": {
+    "reading": [
+      {
+        "href": "/blog/how-to-clean-up-a-messy-crm",
+        "title": "How to Clean Up a Messy CRM",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/what-is-crm-automation-simple-guide-small-business",
+        "title": "What Is CRM Automation? Examples for Small Businesses",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/crm-automation-health-check-what-to-fix-first",
+        "title": "CRM Automation Health Check: What to Fix Before Adding More Workflows",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms/make": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms/n8n": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  },
+  "/work/platforms/zapier": {
+    "reading": [
+      {
+        "href": "/blog/how-to-choose-an-automation-stack-without-overengineering",
+        "title": "How to Choose an Automation Stack Without Overengineering It",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/when-should-you-stop-using-zapier-or-n8n",
+        "title": "When Should You Stop Using Zapier or n8n?",
+        "kind": "blog"
+      },
+      {
+        "href": "/blog/n8n-vs-zapier-business-automation",
+        "title": "n8n vs Zapier for Business Automation: How I Choose",
+        "kind": "blog"
+      }
+    ],
+    "practical": [],
+    "news": []
+  }
+}

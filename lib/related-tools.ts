@@ -3,10 +3,10 @@ import { UTILITIES, type UtilitySlug } from './utilities/catalog'
 
 // Contextual bridges between planning a workflow and preparing its data.
 export const WORKFLOW_UTILITIES: Record<ToolSlug, readonly UtilitySlug[]> = {
-  'automation-architecture-advisor': ['api-request-converter', 'automation-schedule-builder'],
-  'crm-automation-health-check': ['csv-to-api-payload', 'json-compare'],
+  'automation-architecture-advisor': ['retry-budget-calculator', 'query-string-to-json', 'api-request-converter', 'automation-schedule-builder'],
+  'crm-automation-health-check': ['json-to-csv', 'ndjson-to-json', 'csv-to-api-payload', 'json-compare'],
   'client-onboarding-automation-planner': ['csv-to-api-payload', 'json-repair-payload-inspector'],
-  'lead-routing-rules-builder': ['regex-extraction-workbench', 'json-compare'],
+  'lead-routing-rules-builder': ['queue-recovery-calculator', 'regex-extraction-workbench', 'json-compare'],
   'automation-roi-calculator': ['csv-to-api-payload', 'automation-schedule-builder'],
   'lead-follow-up-automation-planner': ['automation-schedule-builder', 'timestamp-converter'],
 }

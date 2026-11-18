@@ -39,7 +39,10 @@ test('timestamp formats represent the same instant with exact negative milliseco
 })
 test('timestamps reject invalid calendar values, offsets, units and zones', () => {
   for (const value of ['2026-02-29T09:00Z', '2026-04-31T09:00Z', '2026-11-17T24:00Z', '2026-11-17T09:00+24:00', '2026-11-17T09:00']) assert.throws(() => timestamp(value, 'iso'))
-  assert.throws(() => timestamp('1.5'), /whole-number/)
+  assert.equal(timestamp('1.5').unixMilliseconds, '1500')
+  assert.equal(timestamp('-0.001').unixMilliseconds, '-1')
+  assert.throws(() => timestamp('1.0001'))
+  assert.throws(() => timestamp('1.5', 'milliseconds'))
   assert.throws(() => timestamp('8640000000000001', 'milliseconds'), /supported date range/)
   assert.throws(() => timestamp('0', 'seconds', 'Invalid/Zone'), /valid IANA/)
 })

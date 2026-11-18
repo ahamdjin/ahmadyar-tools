@@ -25,6 +25,11 @@
 .utility-options { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:12px; }
 .utility-regex-options { grid-template-columns:minmax(0,1fr) 80px; }
 .utility-compact .utility-layout { align-items:start; }
+.retry-workbench .utility-options { align-items:end; }
+.retry-workbench .retry-verdict { font-size:1.125rem; font-weight:500; line-height:1.45; text-wrap:balance; }
+.retry-workbench dl > div { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:baseline; gap:1rem; }
+.retry-workbench dt { color:var(--u-muted); font-size:.875rem; }
+.retry-workbench dd { text-align:right; }
 .utility-empty { padding:20px; color:var(--u-muted); font-size:13px; line-height:1.8; }
 .utility-values { display:grid; gap:0; }
 .utility-values > div { padding:16px 0; border-bottom:1px solid var(--u-border); }

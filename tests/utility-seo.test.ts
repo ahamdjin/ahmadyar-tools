@@ -24,8 +24,8 @@ test('each browser utility has unique metadata and matching canonical/social URL
     assert(toolImage(tool.slug).alt.includes(tool.title))
     assert(sitemap().some((item) => item.url === url))
   }
-  assert.equal(titles.size, 7); assert.equal(descriptions.size, 7)
-  assert.equal(sitemap().length, 14)
+  assert.equal(titles.size, UTILITIES.length); assert.equal(descriptions.size, UTILITIES.length)
+  assert.equal(sitemap().length, 7 + UTILITIES.length)
   assert(!sitemap().some((entry) => entry.url.includes('share-image')))
 })
 

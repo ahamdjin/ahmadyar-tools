@@ -19,7 +19,7 @@ test('all planners link to existing relevant utilities, with reciprocal planning
 test('tools sitemap contains every canonical route exactly once with reviewed modification dates', () => {
   const entries = sitemap()
   const urls = entries.map((entry) => entry.url)
-  assert.equal(new Set(urls).size, 14)
+  assert.equal(new Set(urls).size, 1 + TOOLS.length + UTILITIES.length)
   for (const tool of [...TOOLS, ...UTILITIES]) assert(urls.includes(`https://www.ahmadyar.co/tool/${tool.slug}`))
   for (const entry of entries) assert.equal(new Date(entry.lastModified!).toISOString(), '2026-11-17T00:00:00.000Z')
 })

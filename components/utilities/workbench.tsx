@@ -3,8 +3,10 @@
 import { cloneElement, useEffect, useId, useRef, useState, type ReactElement } from 'react'
 import { Check, Copy, Download, Play, X } from 'lucide-react'
 import { getUtility, type UtilitySlug } from '@/lib/utilities/catalog'
+import { runJob } from '@/lib/utilities/engine'
 import type { Job, Mapping, Result } from '@/lib/utilities/engine'
 import './workbench.css'
+import { ImportFile } from './import-file'
 
 export function Field({ label, children, hint }: { label: string; children: ReactElement<{ id?: string; 'aria-describedby'?: string }>; hint?: string }) {
   const id = useId()
@@ -27,8 +29,10 @@ export function ExportActions({ text, filename, mime = 'application/json', forma
 
 export function UtilityWorkbench({ slug }: { slug: UtilitySlug }) {
   const tool = getUtility(slug)!
-  const [input, setInput] = useState('')
-  const [result, setResult] = useState<Result | null>(null)
+  const csvExample = slug === 'csv-to-api-payload' ? tool.example : ''
+  const [apiOptions,setApiOptions] = useState(false)
+  const [input, setInput] = useState<string>(csvExample)
+  const [result, setResult] = useState<Result | null>(() => csvExample ? runJob({kind: 'csv', input: csvExample, plain: true, batchSize: 100}) : null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [zone, setZone] = useState('UTC')
@@ -56,7 +60,9 @@ export function UtilityWorkbench({ slug }: { slug: UtilitySlug }) {
     const job: Job = slug === 'json-repair-payload-inspector' ? { kind: 'json', input }
       : slug === 'automation-schedule-builder' ? { kind: 'schedule', input, zone, compareZone, format, start: start || new Date().toISOString() }
       : slug === 'api-request-converter' ? { kind: 'curl', input, target }
-      : slug === 'csv-to-api-payload' ? { kind: 'csv', input, batchSize, mappings: !inspectColumns && mappings.length ? mappings : undefined }
+      : slug === 'csv-to-api-payload' ? { kind: 'csv', input, plain: !apiOptions, batchSize, mappings: !inspectColumns && mappings.length ? mappings : undefined }
+      : slug === 'ndjson-to-json' ? { kind: 'ndjson', input }
+      : slug === 'query-string-to-json' ? { kind: 'query', input }
       : { kind: 'regex', input, pattern, flags }
     try {
       setBusy(true)
@@ -86,12 +92,13 @@ export function UtilityWorkbench({ slug }: { slug: UtilitySlug }) {
     {isRegex && <div className="utility-options utility-regex-options mb-5"><Field label="Pattern" hint="JavaScript syntax, without / delimiters."><input value={pattern} disabled={busy} onChange={(e) => { setPattern(e.target.value); invalidate() }} spellCheck={false} /></Field><Field label="Flags"><input value={flags} disabled={busy} onChange={(e) => { setFlags(e.target.value); invalidate() }} spellCheck={false} /></Field></div>}
     <div className="utility-layout">
       <section className="utility-panel" aria-labelledby="utility-input-title">
-        <header className="utility-panel-heading"><h2 id="utility-input-title">{isCron ? 'Schedule' : 'Input'}</h2><button type="button" disabled={busy} onClick={() => updateInput(tool.example)}>Load example</button></header>
+        <header className="utility-panel-heading"><h2 id="utility-input-title">{isCron ? 'Schedule' : isCsv ? 'CSV input' : 'Input'}</h2><button type="button" disabled={busy} onClick={() => updateInput(tool.example)}>Load example</button></header>
         <div className="utility-panel-body">
-          <Field label={isCron ? 'Cron expression' : isCurl ? 'cURL command' : isCsv ? 'CSV with a header row' : isRegex ? 'Text to search' : 'JSON payload'}>
+          <Field label={isCron ? 'Cron expression' : isCurl ? 'cURL command' : isCsv ? 'CSV with a header row' : isRegex ? 'Text to search' : slug === 'ndjson-to-json' ? 'One JSON record per line' : slug === 'query-string-to-json' ? 'URL or query string' : 'JSON payload'}>
             {isCron ? <input value={input} disabled={busy} onChange={(e) => updateInput(e.target.value)} placeholder="0 9 * * 1-5" spellCheck={false} maxLength={200} className="font-mono" /> : <textarea value={input} rows={10} disabled={busy} onChange={(e) => updateInput(e.target.value)} placeholder="Paste your input here, or load the example." spellCheck={false} autoCapitalize="off" autoCorrect="off" maxLength={200001} />}
           </Field>
           {!isCron && <div className="utility-input-meta"><span className="tabular-nums">{input.length.toLocaleString()} / 200,000 characters</span><button type="button" disabled={busy || !input} onClick={() => updateInput('')}>Clear input</button></div>}
+          {isCsv && <ImportFile format="csv" disabled={busy} onLoad={updateInput}/>}
           {isCron && <>
             <div className="utility-options"><Field label="Cron format"><select disabled={busy} value={format} onChange={(e) => { setFormat(e.target.value as typeof format); invalidate() }}><option value="standard">Standard - 5 fields</option><option value="seconds">6 fields - seconds fixed at 0</option></select></Field><Field label="Start from (ISO date/time)" hint="Leave empty for now. Include Z or an explicit UTC offset."><input disabled={busy} value={start} onChange={(e) => { setStart(e.target.value); invalidate() }} placeholder="2026-11-17T00:00:00Z" /></Field></div>
             <div className="utility-options"><Field label="Schedule time zone"><input disabled={busy} value={zone} onChange={(e) => { setZone(e.target.value); invalidate() }} placeholder="Asia/Karachi" list="utility-timezones" /></Field><Field label="Compare with"><input disabled={busy} value={compareZone} onChange={(e) => { setCompareZone(e.target.value); invalidate() }} list="utility-timezones" /></Field></div>
@@ -99,16 +106,16 @@ export function UtilityWorkbench({ slug }: { slug: UtilitySlug }) {
             <p className="utility-help">Use numeric fields, lists, ranges and steps. Choose day-of-month or day-of-week, not both. Quartz and AWS formats are not supported.</p>
           </>}
           {isCurl && <Field label="Output language"><select disabled={busy} value={target} onChange={(e) => { setTarget(e.target.value as typeof target); invalidate() }}><option value="javascript">JavaScript fetch (server-side)</option><option value="python">Python requests</option><option value="n8n">n8n HTTP Request node</option></select></Field>}
-          {isCsv && <>
+          {isCsv && <details className="utility-disclosure" open={apiOptions} onToggle={e => {const open=e.currentTarget.open; if(open!==apiOptions){stop();setApiOptions(open);invalidate()}}}><summary>API payload options</summary><div className="grid gap-4 pt-3">
             <div className="utility-options"><Field label="Records per batch"><input disabled={busy} type="number" min={1} max={1000} value={batchSize} onChange={(e) => { setBatchSize(Number(e.target.value)); invalidate() }} /></Field><button type="button" className="utility-secondary utility-option-action" disabled={busy || !input.trim()} onClick={() => run(true)}>Inspect columns</button></div>
             {mappings.length > 0 && <fieldset className="utility-mappings"><legend>Field mapping</legend><p className="utility-help">Use contact.email for nested objects. Leave an output path empty to skip that column. Arrays inside paths are not supported.</p>{mappings.map((mapping, i) => <div key={mapping.column} className="utility-mapping"><span>{mapping.column}</span><Field label={`Output path for ${mapping.column}`}><input disabled={busy} value={mapping.path} onChange={(e) => { setMappings((all) => all.map((m, j) => i === j ? { ...m, path: e.target.value } : m)); invalidate() }} /></Field><Field label={`Type for ${mapping.column}`}><select disabled={busy} value={mapping.type} onChange={(e) => { setMappings((all) => all.map((m, j) => i === j ? { ...m, type: e.target.value as Mapping['type'] } : m)); invalidate() }}>{['string', 'number', 'boolean', 'json'].map((t) => <option key={t}>{t}</option>)}</select></Field><Field label={`Empty cells for ${mapping.column}`}><select disabled={busy} value={mapping.empty} onChange={(e) => { setMappings((all) => all.map((m, j) => i === j ? { ...m, empty: e.target.value as Mapping['empty'] } : m)); invalidate() }}><option value="string">Keep empty</option><option value="null">Use null</option><option value="omit">Omit field</option></select></Field></div>)}</fieldset>}
-          </>}
-          <div className="utility-run-row"><button type="button" className="utility-primary" disabled={busy || !input.trim()} onClick={() => run()}><Play size={14} aria-hidden />{busy ? 'Processing locally...' : tool.action}</button>{busy && <button type="button" onClick={() => { stop(); setError('Processing cancelled.') }}><X size={14} aria-hidden />Cancel</button>}</div>
+            </div></details>}
+          <div className="utility-run-row"><button type="button" className="utility-primary" disabled={busy || !input.trim()} onClick={() => run()}><Play size={14} aria-hidden />{busy ? 'Processing locally...' : isCsv && apiOptions ? 'Build API payload' : tool.action}</button>{busy && <button type="button" onClick={() => { stop(); setError('Processing cancelled.') }}><X size={14} aria-hidden />Cancel</button>}</div>
           {error && <p role="alert" className="utility-error">{error}</p>}
         </div>
       </section>
       <section className="utility-panel utility-output" aria-labelledby="utility-output-title" ref={output} tabIndex={-1}>
-        <header className="utility-panel-heading"><h2 id="utility-output-title">{isCron ? 'Upcoming runs' : 'Output'}</h2></header>
+        <header className="utility-panel-heading"><h2 id="utility-output-title">{isCron ? 'Upcoming runs' : isCsv ? 'JSON output' : 'Output'}</h2></header>
         {!result ? <div className="utility-panel-body">{isCron ? <p className="utility-help">Load the example or enter a cron expression, then choose Preview schedule to compare the next eight runs.</p> : <Field label={isCurl ? `Generated ${target}` : 'Result JSON'}><textarea rows={10} readOnly value="" placeholder={busy ? 'Processing...' : ''} spellCheck={false} /></Field>}{busy && <p role="status" className="utility-help">Processing...</p>}</div> : <div className="utility-panel-body">
           {!isCron && <><Field label={isCurl ? `Generated ${target}` : 'Result JSON'}><textarea rows={10} readOnly value={result.text} spellCheck={false} /></Field><ExportActions key={result.text} text={result.text} filename={`${slug}.${extension}`} mime={extension === 'json' ? 'application/json' : 'text/plain'} format={extension === 'json' ? 'JSON' : 'code'} /></>}
           <p className="utility-summary" role="status">{result.summary}</p>

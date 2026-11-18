@@ -7,12 +7,18 @@ const body = `# Ahmad Yar Automation Tools
 
 ## Browser utilities
 ${UTILITIES.map((tool) => `- ${tool.title}: ${SITE.origin}${SITE.toolsPath}/${tool.slug}\n  ${tool.description}`).join('\n')}
-All utility inputs are processed locally in disposable Web Workers, with a 200,000-character input limit and a three-second execution timeout. No API requests are executed by these utilities.
+Utility inputs are processed locally in disposable Web Workers, with an overall maximum of 200,000 characters and a three-second execution timeout. Lower tool-specific limits also apply. No API requests are executed by these utilities.
 
 Canonical site: ${SITE.origin}
 Tools hub: ${root}
+Sitemap: ${root}/sitemap.xml
+Portfolio reading index: ${SITE.origin}/llms.txt
+Integration handbook: ${SITE.origin}/integrations
+Integration reading index: ${SITE.origin}/integrations/llms.txt
+Automation blog: ${SITE.origin}/blog
+AI news: ${SITE.origin}/news/latest
 
-These are free, interactive business-automation decision tools. The visible guidance below each interactive tool is the canonical explanatory content; this file is only a compact machine-readable index.
+This collection includes browser utilities and free, interactive business-automation planning tools. The visible guidance below each interactive tool is the canonical explanatory content; this file is only a compact machine-readable index.
 
 ## Automation Architecture Advisor
 URL: ${root}/automation-architecture-advisor
@@ -56,7 +62,7 @@ export function GET() {
   return new Response(body, {
     headers: {
       'content-type': 'text/plain; charset=utf-8',
-      'cache-control': 'public, max-age=3600, s-maxage=86400',
+      'cache-control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=3600',
     },
   })
 }
