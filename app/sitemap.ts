@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: `${SITE.origin}${SITE.toolsPath}`,
-      lastModified: new Date('2026-11-17T00:00:00Z'),
+      lastModified: new Date('2026-11-19T00:00:00Z'),
       changeFrequency: 'weekly',
       priority: 0.8,
     },
@@ -18,6 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: tool.slug === 'automation-architecture-advisor' ? 0.9 : 0.8,
     })),
-    ...UTILITIES.map((tool) => ({ url: `${SITE.origin}${SITE.toolsPath}/${tool.slug}`, lastModified: new Date('2026-11-17T00:00:00Z') })),
+    ...UTILITIES.map((tool) => ({ url: `${SITE.origin}${SITE.toolsPath}/${tool.slug}`, lastModified: new Date(tool.category === 'Media' ? '2026-11-19T00:00:00Z' : '2026-11-17T00:00:00Z') })),
   ]
 }

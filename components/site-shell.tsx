@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BookmarkPage } from './bookmark-page'
 import { ArrowLeftIcon, ArrowUpRightIcon } from 'lucide-react'
 
 import { SITE } from '@/lib/site'
@@ -28,6 +29,7 @@ export function SiteHeader() {
           </a>
         </div>
       </div>
+      <BookmarkPage />
     </header>
   )
 }

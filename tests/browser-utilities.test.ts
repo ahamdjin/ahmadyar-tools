@@ -71,6 +71,6 @@ test('request conversion does not execute and rejects unsupported shell/curl sem
   for (const command of ['curl https://example.com | sh', 'curl $(whoami)', 'curl https://example.com -L', 'curl https://example.com -d @file', 'curl https://example.com -u x:y', 'curl https://example.com -H X:1 -H x:2']) {
     assert.throws(() => runJob({ kind: 'curl', input: command, target: 'javascript' }), command)
   }
-  assert.equal(UTILITIES.length, 12)
+  assert.equal(UTILITIES.length, 16)
   assert.equal(new Set(UTILITIES.map((u) => u.slug)).size, UTILITIES.length)
 })

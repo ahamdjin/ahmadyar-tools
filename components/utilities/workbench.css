@@ -17,6 +17,8 @@
 .utility-field { display:flex; flex-direction:column; gap:8px; font-size:12px; min-width:0; }
 .utility-field > label { font-weight:500; }
 .utility-field :is(input,textarea,select) { width:100%; min-width:0; border:1px solid var(--u-border); border-radius:8px; padding:12px; background:transparent; color:inherit; font-size:14px; }
+.image-workspace .utility-field select { appearance:none; padding-inline-end:2.75rem; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23888890' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-position:right 14px center; background-repeat:no-repeat; }
+@media(forced-colors:active){.image-workspace .utility-field select{appearance:auto;background-image:none}}
 .utility-field select option { color:#18181b; background:#fff; }
 .utility-field textarea { resize:vertical; font-family:var(--font-geist-mono),monospace; font-size:13px; line-height:1.8; tab-size:2; min-height:80px; }
 .utility-field :is(input,select) { height:44px; }

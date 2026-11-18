@@ -1,3 +1,4 @@
+import ToolSearch from '@/components/tool-search'
 import Link from 'next/link'
 import { ArrowUpRightIcon } from 'lucide-react'
 
@@ -65,25 +66,26 @@ export default function ToolsPage() {
       />
       <section className="max-w-xl">
         <h1 className="max-w-lg text-balance text-3xl font-medium text-zinc-950 dark:text-zinc-50">
-          Automation tools
+          Free tools
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-          Work with JSON, schedules, API requests, CSV and text. Or plan the systems behind your workflows.
+          Inspect and prepare images, convert data, or plan an automation workflow.
         </p>
+        <ToolSearch entries={[...UTILITIES.map(t=>({name:t.title,slug:t.slug,keywords:t.category+' '+t.description})),...TOOLS.map(t=>({name:t.title,slug:t.slug,keywords:'Planning '+TOOL_META[t.slug].note}))]}/>
         <nav aria-label="Tool categories" className="mt-5 flex flex-wrap gap-6 text-xs text-zinc-500"><a className="inline-flex min-h-11 items-center hover:text-zinc-950 dark:hover:text-zinc-50" href="#utilities-heading">Browser utilities <span className="ml-2 tabular-nums text-zinc-400">{UTILITIES.length}</span></a><a className="inline-flex min-h-11 items-center hover:text-zinc-950 dark:hover:text-zinc-50" href="#planning-heading">Planning tools <span className="ml-2 tabular-nums text-zinc-400">{TOOLS.length}</span></a></nav>
       </section>
 
       <section className="mt-12" aria-labelledby="utilities-heading">
         <h2 id="utilities-heading" className="mb-5 text-balance text-lg font-medium">Browser utilities</h2>
-        <div className="grid auto-rows-fr gap-3">
-          {UTILITIES.map((tool) => {
+        <div className="grid gap-5">
+          {Array.from(new Set(UTILITIES.map(t=>t.category))).map(category=><section key={category}><h3 className="my-3 font-semibold">{category}</h3><div className="grid gap-3">{UTILITIES.filter(t=>t.category===category).map((tool) => {
             const Icon = UTILITY_ICONS[tool.slug]
             return <Link key={tool.slug} href={`/${tool.slug}`} className="group grid min-w-0 grid-cols-[24px_minmax(0,1fr)_16px] items-start gap-4 rounded-xl bg-zinc-100/70 p-5 hover:bg-zinc-200/65 focus-visible:outline-2 focus-visible:outline-offset-2 dark:bg-zinc-900/80 dark:hover:bg-zinc-800">
               <Icon size={18} className="mt-1" aria-hidden />
               <div><h3 className="text-balance text-base font-medium">{tool.shortTitle}</h3><p className="mt-2 text-pretty text-sm leading-6 text-zinc-600 dark:text-zinc-400">{tool.description}</p></div>
               <ArrowUpRightIcon size={16} className="mt-1" aria-hidden />
             </Link>
-          })}
+          })}</div></section>)}
         </div>
       </section>
       <h2 id="planning-heading" className="mt-12 text-balance text-lg font-medium">Planning & decisions</h2>
